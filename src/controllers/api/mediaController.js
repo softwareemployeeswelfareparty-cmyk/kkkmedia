@@ -1,5 +1,6 @@
 const prisma = require('../../config/db');
 const { logAction } = require('../../services/auditService');
+const supabase = require('../../config/supabase');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,8 +10,39 @@ const uploadImage = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'No image file uploaded or invalid format.' });
     }
 
-    const fileUrl = `/uploads/${req.file.filename}`;
+    let fileUrl = `/uploads/${req.file.filename}`;
     const altText = req.body.altText || req.file.originalname;
+
+    // If Supabase Storage is configured, upload to Supabase bucket
+    if (supabase) {
+      try {
+        const bucket = process.env.SUPABASE_STORAGE_BUCKET || 'kkkmedia';
+        const fileContent = fs.readFileSync(req.file.path);
+        const storagePath = `articles/${Date.now()}-${req.file.filename}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from(bucket)
+          .upload(storagePath, fileContent, {
+            contentType: req.file.mimetype,
+            upsert: true,
+          });
+
+        if (!uploadError && uploadData) {
+          const { data: publicUrlData } = supabase.storage
+            .from(bucket)
+            .getPublicUrl(storagePath);
+
+          if (publicUrlData && publicUrlData.publicUrl) {
+            fileUrl = publicUrlData.publicUrl;
+            console.log(`[Supabase Storage] Image uploaded to cloud: ${fileUrl}`);
+          }
+        } else {
+          console.warn('[Supabase Storage] Cloud upload failed, falling back to local file:', uploadError?.message);
+        }
+      } catch (storageErr) {
+        console.warn('[Supabase Storage] Error during cloud upload:', storageErr.message);
+      }
+    }
 
     const mediaAsset = await prisma.mediaAsset.create({
       data: {

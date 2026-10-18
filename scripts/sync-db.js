@@ -6,6 +6,11 @@ require('dotenv').config();
 const dbUrl = process.env.DATABASE_URL || 'file:./dev.db';
 const isPostgres = dbUrl.startsWith('postgres://') || dbUrl.startsWith('postgresql://');
 
+// If Postgres but DIRECT_URL not set, default DIRECT_URL to DATABASE_URL
+if (isPostgres && !process.env.DIRECT_URL) {
+  process.env.DIRECT_URL = dbUrl;
+}
+
 console.log(`[Database Sync] Detected database URL: ${dbUrl.replace(/:[^:]*@/, ':****@')}`);
 console.log(`[Database Sync] Provider: ${isPostgres ? 'PostgreSQL' : 'SQLite'}`);
 
