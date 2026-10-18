@@ -1,0 +1,137 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">தள அமைப்புகள் (Site Settings)</h1>
+    <p class="page-subtitle">வலைத்தளத்தின் அடையாளங்கள், தொடர்புகள், சமூக ஊடகங்கள் மற்றும் விளம்பர அமைப்புகள்.</p>
+  </div>
+</div>
+
+<form id="settingsForm">
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.75rem;">
+    
+    <!-- Branding & SEO -->
+    <div class="admin-card">
+      <div class="card-header-padded">
+        <h2 style="font-size:1.1rem; font-weight:700;">அடையாளம் & அடிப்படை (Branding)</h2>
+      </div>
+      <div class="card-body-padded">
+        
+        <div class="form-group">
+          <label class="form-label">தளத்தின் பெயர் (Site Name)</label>
+          <input type="text" name="site_name" class="form-control" value="<%= settings.site_name || 'KKK Media' %>" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">தளத்தின் தமிழ் முழக்கம் (Tagline)</label>
+          <input type="text" name="site_tagline" class="form-control" value="<%= settings.site_tagline || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">தள விவரிப்பு (Site Meta Description)</label>
+          <textarea name="site_description" class="form-control" style="min-height:80px;"><%= settings.site_description || '' %></textarea>
+        </div>
+
+        <div class="form-group">
+          <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
+            <input type="checkbox" name="breaking_news_enabled" id="breaking_news_enabled" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= settings.breaking_news_enabled === 'true' ? 'checked' : '' %>>
+            <span><strong>முக்கிய செய்திகள் டிக்கரை இயக்கு (Enable Breaking Ticker)</strong></span>
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="admin-card">
+      <div class="card-header-padded">
+        <h2 style="font-size:1.1rem; font-weight:700;">தொடர்பு விவரங்கள் (Contact Details)</h2>
+      </div>
+      <div class="card-body-padded">
+        
+        <div class="form-group">
+          <label class="form-label">அலுவலக மின்னஞ்சல் (Contact Email)</label>
+          <input type="email" name="contact_email" class="form-control" value="<%= settings.contact_email || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">தொலைபேசி எண் (Contact Phone)</label>
+          <input type="text" name="contact_phone" class="form-control" value="<%= settings.contact_phone || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">அலுவலக முகவரி (Office Address)</label>
+          <textarea name="contact_address" class="form-control" style="min-height:80px;"><%= settings.contact_address || '' %></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Social Media Links -->
+    <div class="admin-card">
+      <div class="card-header-padded">
+        <h2 style="font-size:1.1rem; font-weight:700;">சமூக ஊடக இணைப்புகள் (Social Channels)</h2>
+      </div>
+      <div class="card-body-padded">
+        
+        <div class="form-group">
+          <label class="form-label">Facebook Page URL</label>
+          <input type="url" name="social_facebook" class="form-control" value="<%= settings.social_facebook || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">X (Twitter) Profile URL</label>
+          <input type="url" name="social_twitter" class="form-control" value="<%= settings.social_twitter || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">YouTube Channel URL</label>
+          <input type="url" name="social_youtube" class="form-control" value="<%= settings.social_youtube || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Telegram Channel URL</label>
+          <input type="url" name="social_telegram" class="form-control" value="<%= settings.social_telegram || '' %>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">WhatsApp Channel URL</label>
+          <input type="url" name="social_whatsapp" class="form-control" value="<%= settings.social_whatsapp || '' %>">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Google AdSense Settings -->
+    <div class="admin-card">
+      <div class="card-header-padded">
+        <h2 style="font-size:1.1rem; font-weight:700;">கூகுள் அட்சென்ஸ் விளம்பரங்கள் (Google AdSense)</h2>
+      </div>
+      <div class="card-body-padded">
+        
+        <div class="form-group">
+          <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem; margin-bottom:1rem;">
+            <input type="checkbox" name="adsense_enabled" id="adsense_enabled" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= settings.adsense_enabled ? 'checked' : '' %>>
+            <span><strong>விளம்பர இடங்களை இயக்கு (Enable Ad Units)</strong></span>
+          </label>
+          <div class="form-help">இயக்கினால், தலைப்பு பகுதி, செய்திக்கு உள்ளே மற்றும் பக்கவாட்டில் விளம்பர இடங்கள் தோன்றும்.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Google AdSense Publisher ID</label>
+          <input type="text" name="adsense_client_id" class="form-control" placeholder="ca-pub-1234567890123456" value="<%= settings.adsense_client_id || '' %>">
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:1.5rem; text-align:right;">
+    <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:1rem;">
+      தள அமைப்புகளைச் சேமி (Save Settings)
+    </button>
+  </div>
+</form>
+
+<%- include('layout-footer') %>

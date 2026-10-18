@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding-top: 3rem; padding-bottom: 5rem; text-align: center;">
+  <div style="background-color: var(--white); max-width: 650px; margin: 0 auto; padding: 3.5rem 2rem; border-radius: var(--border-radius-md); border: 1px solid var(--grey-200); box-shadow: var(--box-shadow-sm);">
+    <div style="font-size: 5rem; font-weight: 900; color: var(--primary-red); line-height: 1; margin-bottom: 1rem;">
+      <%= typeof statusCode !== 'undefined' ? statusCode : 404 %>
+    </div>
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--charcoal-900); margin-bottom: 0.75rem;">
+      <%= typeof title !== 'undefined' ? title : 'பக்கம் கிடைக்கவில்லை' %>
+    </h1>
+    <p style="color: var(--grey-600); margin-bottom: 2rem; font-size: 1rem;">
+      <%= typeof message !== 'undefined' ? message : 'நீங்கள் தேடும் பக்கம் நீக்கப்பட்டிருக்கலாம் அல்லது முகவரி மாற்றப்பட்டிருக்கலாம்.' %>
+    </p>
+    <div style="display:flex; justify-content:center; gap:1rem;">
+      <a href="/" class="search-submit-btn" style="text-decoration:none; display:inline-flex; align-items:center; padding:0.65rem 1.5rem;">
+        முகப்புக்குச் செல்
+      </a>
+      <a href="/search" class="page-btn" style="text-decoration:none; display:inline-flex; align-items:center;">
+        செய்திகள் தேடுக
+      </a>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

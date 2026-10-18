@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>நிர்வாகி உள்நுழைவு (Admin Login) | KKK Media CMS</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <style>
+    body {
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+    .login-card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+    .login-header {
+      background-color: #1a1d24;
+      padding: 2rem;
+      text-align: center;
+      color: #fff;
+      border-bottom: 3px solid var(--admin-primary);
+    }
+    .login-body {
+      padding: 2.25rem 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-header">
+    <div style="display:inline-flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem;">
+      <span class="sidebar-logo-badge" style="font-size:1.2rem; padding:0.25rem 0.65rem;">KKK</span>
+      <span style="font-weight:900; font-size:1.4rem; letter-spacing:-0.5px;">MEDIA CMS</span>
+    </div>
+    <div style="font-size:0.85rem; color:#9ca3af;">
+      செய்தி ஆசிரியர் நிர்வாக தளம் (Editorial Portal)
+    </div>
+  </div>
+
+  <div class="login-body">
+    <div id="loginAlert" style="display:none; padding:0.75rem 1rem; border-radius:var(--radius-sm); font-size:0.875rem; margin-bottom:1.25rem;"></div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div style="background-color:#fee2e2; border-left:4px solid #ef4444; color:#991b1b; padding:0.75rem 1rem; border-radius:var(--radius-sm); font-size:0.875rem; margin-bottom:1.25rem;">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form id="adminLoginForm">
+      <div class="form-group">
+        <label for="loginEmail" class="form-label">மின்னஞ்சல் (Email Address)</label>
+        <input type="email" id="loginEmail" class="form-control" placeholder="admin@kkkmedia.com" required value="admin@kkkmedia.com">
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword" class="form-label">கடவுச்சொல் (Password)</label>
+        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••••••" required value="Admin@KKKMedia2026!">
+      </div>
+
+      <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+        உள்நுழைக (Sign In)
+      </button>
+    </form>
+
+    <div style="margin-top:1.5rem; text-align:center; font-size:0.8rem; color:#6b7280;">
+      இயல்புநிலை நிர்வாகி: <code>admin@kkkmedia.com</code> / <code>Admin@KKKMedia2026!</code>
+    </div>
+
+    <div style="margin-top:1.25rem; text-align:center;">
+      <a href="/" style="font-size:0.85rem; color:var(--admin-primary); font-weight:600;">&larr; பொது வலைத்தளத்திற்குச் செல்</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('loginSubmitBtn');
+    const alertBox = document.getElementById('loginAlert');
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    btn.disabled = true;
+    btn.innerHTML = 'சரிபார்க்கப்படுகிறது...';
+    alertBox.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        alertBox.style.display = 'block';
+        alertBox.style.backgroundColor = '#d1fae5';
+        alertBox.style.borderLeft = '4px solid #10b981';
+        alertBox.style.color = '#065f46';
+        alertBox.innerHTML = '✓ வெற்றி! நிர்வாக தளத்திற்கு அழைத்துச் செல்லப்படுகிறீர்கள்...';
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard';
+        }, 600);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = 'உள்நுழைக (Sign In)';
+        alertBox.style.display = 'block';
+        alertBox.style.backgroundColor = '#fee2e2';
+        alertBox.style.borderLeft = '4px solid #ef4444';
+        alertBox.style.color = '#991b1b';
+        alertBox.innerHTML = data.message || 'உள்நுழைவு தோல்வி அடைந்தது.';
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = 'உள்நுழைக (Sign In)';
+      alertBox.style.display = 'block';
+      alertBox.style.backgroundColor = '#fee2e2';
+      alertBox.style.borderLeft = '4px solid #ef4444';
+      alertBox.style.color = '#991b1b';
+      alertBox.innerHTML = 'சேவையக இணைப்பு பிழை ஏற்பட்டது.';
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">பிரிவுகள் மேலாண்மை (Categories)</h1>
+    <p class="page-subtitle">செய்திப் பிரிவுகளை உருவாக்க, திருத்த மற்றும் மறுவரிசைப்படுத்தலாம்.</p>
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 2fr; gap:1.75rem;">
+  
+  <!-- Add Category Form -->
+  <div class="admin-card">
+    <div class="card-header-padded">
+      <h2 style="font-size:1.1rem; font-weight:700;">புதிய பிரிவு சேர்க்க (Add Category)</h2>
+    </div>
+    <div class="card-body-padded">
+      <form id="categoryForm" data-is-edit="false">
+        <div class="form-group">
+          <label for="categoryNameTamil" class="form-label">பிரிவு பெயர் (தமிழ்) <span style="color:#ef4444;">*</span></label>
+          <input type="text" id="categoryNameTamil" class="form-control" placeholder="எ.கா: தமிழ்நாடு அரசியல்" required>
+        </div>
+
+        <div class="form-group">
+          <label for="categoryNameEnglish" class="form-label">பிரிவு பெயர் (English)</label>
+          <input type="text" id="categoryNameEnglish" class="form-control" placeholder="e.g. Tamil Nadu Politics">
+        </div>
+
+        <div class="form-group">
+          <label for="categorySlug" class="form-label">URL Slug</label>
+          <input type="text" id="categorySlug" class="form-control" placeholder="e.g. tamil-nadu-politics">
+        </div>
+
+        <div class="form-group">
+          <label for="categoryDesc" class="form-label">விளக்கம் (Description)</label>
+          <textarea id="categoryDesc" class="form-control" style="min-height:70px;" placeholder="பிரிவு பற்றிய சிறு விளக்கம்..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="categoryOrder" class="form-label">காட்சி வரிசை (Display Order)</label>
+          <input type="number" id="categoryOrder" class="form-control" value="0">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.65rem;">
+          + பிரிவைச் சேமி (Save Category)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Categories Table -->
+  <div class="admin-card">
+    <div class="card-header-padded">
+      <h2 style="font-size:1.1rem; font-weight:700;">தற்போதுள்ள பிரிவுகள் (All Categories)</h2>
+      <span style="font-size:0.85rem; color:var(--admin-text-muted);">மொத்தம்: <%= categories.length %></span>
+    </div>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th style="width:50px;">வரிசை</th>
+            <th>பெயர் (தமிழ் & English)</th>
+            <th>Slug</th>
+            <th>செய்திகள் எண்ணிக்கை</th>
+            <th>நிலை</th>
+            <th style="text-align:right;">செயல்கள்</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(function(cat) { %>
+              <tr id="cat-row-<%= cat.id %>">
+                <td><strong><%= cat.displayOrder %></strong></td>
+                <td>
+                  <div style="font-weight:700; color:var(--admin-dark-bg);"><%= cat.nameTamil %></div>
+                  <div style="font-size:0.75rem; color:var(--admin-text-muted);"><%= cat.nameEnglish %></div>
+                </td>
+                <td style="font-family:monospace; font-size:0.8rem;"><%= cat.slug %></td>
+                <td>
+                  <span class="badge" style="background-color:#e0e7ff; color:#3730a3;">
+                    <%= cat._count ? cat._count.articles : 0 %> செய்திகள்
+                  </span>
+                </td>
+                <td>
+                  <span class="badge <%= cat.isActive ? 'badge-published' : 'badge-draft' %>">
+                    <%= cat.isActive ? 'Active' : 'Disabled' %>
+                  </span>
+                </td>
+                <td style="text-align:right; white-space:nowrap;">
+                  <button type="button" 
+                          class="btn btn-secondary btn-sm" 
+                          onclick="populateCategoryEdit('<%= cat.id %>', '<%= cat.nameTamil %>', '<%= cat.nameEnglish %>', '<%= cat.slug %>', '<%= cat.description || '' %>', '<%= cat.displayOrder %>')">
+                    திருத்து
+                  </button>
+                  <button type="button" 
+                          class="btn btn-danger btn-sm btn-delete-category" 
+                          data-id="<%= cat.id %>" 
+                          data-name="<%= cat.nameTamil %>">
+                    நீக்கு
+                  </button>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="6" style="text-align:center; padding:2rem; color:var(--admin-text-muted);">பிரிவுகள் எதுவும் இல்லை.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function populateCategoryEdit(id, nameTamil, nameEnglish, slug, desc, order) {
+    const form = document.getElementById('categoryForm');
+    form.setAttribute('data-is-edit', 'true');
+    form.setAttribute('data-category-id', id);
+
+    document.getElementById('categoryNameTamil').value = nameTamil;
+    document.getElementById('categoryNameEnglish').value = nameEnglish;
+    document.getElementById('categorySlug').value = slug;
+    document.getElementById('categoryDesc').value = desc;
+    document.getElementById('categoryOrder').value = order;
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = 'பிரிவை புதுப்பி (Update Category)';
+    submitBtn.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+<%- include('layout-footer') %>

@@ -1,0 +1,264 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding-top: 1.5rem;">
+  
+  <!-- Top Leaderboard Ad Slot -->
+  <%- include('../partials/ad-slot') %>
+
+  <!-- Featured News Hero Section -->
+  <% if (typeof featured !== 'undefined' && featured.length > 0) { %>
+    <section class="featured-hero-grid" aria-label="தலைப்புச் செய்திகள்">
+      <!-- Main Large Featured Card -->
+      <article class="featured-main-card">
+        <a href="/news/<%= featured[0].slug %>">
+          <img src="<%= featured[0].featuredImage || 'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&w=1200&q=80' %>" 
+               alt="<%= featured[0].imageAlt || featured[0].title %>" 
+               loading="eager" />
+          <div class="featured-overlay">
+            <span class="category-tag"><%= featured[0].category.nameTamil %></span>
+            <h1 class="featured-main-title"><%= featured[0].title %></h1>
+            <div class="meta-row">
+              <span><%= formatTamilDate(featured[0].publishedAt) %></span>
+              <span>•</span>
+              <span><%= calculateReadingTime(featured[0].fullContent) %></span>
+            </div>
+          </div>
+        </a>
+      </article>
+
+      <!-- Side Hero Cards -->
+      <div class="featured-side-cards">
+        <% if (featured.length > 1) { %>
+          <article class="side-hero-card">
+            <a href="/news/<%= featured[1].slug %>">
+              <img src="<%= featured[1].featuredImage || 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?auto=format&fit=crop&w=800&q=80' %>" 
+                   alt="<%= featured[1].imageAlt || featured[1].title %>" 
+                   loading="lazy" />
+              <div class="side-hero-overlay">
+                <span class="category-tag"><%= featured[1].category.nameTamil %></span>
+                <h2 class="side-hero-title"><%= featured[1].title %></h2>
+                <div class="meta-row" style="font-size:0.75rem;">
+                  <span><%= formatTamilDate(featured[1].publishedAt) %></span>
+                </div>
+              </div>
+            </a>
+          </article>
+        <% } %>
+
+        <% if (featured.length > 2) { %>
+          <article class="side-hero-card">
+            <a href="/news/<%= featured[2].slug %>">
+              <img src="<%= featured[2].featuredImage || 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80' %>" 
+                   alt="<%= featured[2].imageAlt || featured[2].title %>" 
+                   loading="lazy" />
+              <div class="side-hero-overlay">
+                <span class="category-tag"><%= featured[2].category.nameTamil %></span>
+                <h2 class="side-hero-title"><%= featured[2].title %></h2>
+                <div class="meta-row" style="font-size:0.75rem;">
+                  <span><%= formatTamilDate(featured[2].publishedAt) %></span>
+                </div>
+              </div>
+            </a>
+          </article>
+        <% } %>
+      </div>
+    </section>
+  <% } %>
+
+  <!-- Main Content Layout Grid -->
+  <div class="main-layout-grid">
+    <!-- Left Column (Primary News Feed) -->
+    <div class="primary-feed">
+
+      <!-- Latest News Section -->
+      <section class="section-block" style="margin-bottom:2.5rem;">
+        <div class="section-header">
+          <h2 class="section-title">சமீபத்திய செய்திகள் (Latest News)</h2>
+          <a href="/category/tamil-nadu-politics" class="section-more-link">
+            <span>மேலும் பார்க்க</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="news-cards-grid">
+          <% if (typeof latest !== 'undefined' && latest.length > 0) { %>
+            <% latest.slice(0, 6).forEach(function(article) { %>
+              <article class="news-card">
+                <div class="card-thumb-wrap">
+                  <a href="/news/<%= article.slug %>">
+                    <img src="<%= article.featuredImage || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=600&q=80' %>" 
+                         alt="<%= article.imageAlt || article.title %>" 
+                         loading="lazy" />
+                  </a>
+                  <span class="card-category-pill"><%= article.category.nameTamil %></span>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-title">
+                    <a href="/news/<%= article.slug %>"><%= article.title %></a>
+                  </h3>
+                  <p class="card-excerpt"><%= article.shortDescription %></p>
+                  <div class="card-footer">
+                    <span><%= formatTamilDate(article.publishedAt) %></span>
+                    <span><%= calculateReadingTime(article.fullContent) %></span>
+                  </div>
+                </div>
+              </article>
+            <% }); %>
+          <% } %>
+        </div>
+      </section>
+
+      <!-- Mid-Content Ad Slot -->
+      <%- include('../partials/ad-slot') %>
+
+      <!-- TVK News Special Section -->
+      <% if (typeof tvkNews !== 'undefined' && tvkNews.length > 0) { %>
+        <section class="section-block" style="margin-bottom:2.5rem;">
+          <div class="section-header">
+            <h2 class="section-title">தவெக சிறப்புச் செய்திகள் (TVK News)</h2>
+            <a href="/category/tvk-news" class="section-more-link">அனைத்தும் பார்க்க &rarr;</a>
+          </div>
+
+          <div class="horizontal-news-list">
+            <% tvkNews.forEach(function(art) { %>
+              <article class="horizontal-news-card">
+                <div class="h-thumb-wrap">
+                  <a href="/news/<%= art.slug %>">
+                    <img src="<%= art.featuredImage || 'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&w=400&q=80' %>" 
+                         alt="<%= art.imageAlt || art.title %>" 
+                         loading="lazy" />
+                  </a>
+                </div>
+                <div class="h-content">
+                  <span class="category-tag" style="align-self:flex-start; margin-bottom:0.25rem;"><%= art.category.nameTamil %></span>
+                  <h3 class="h-title">
+                    <a href="/news/<%= art.slug %>"><%= art.title %></a>
+                  </h3>
+                  <div class="meta-row dark">
+                    <span><%= formatTamilDate(art.publishedAt) %></span>
+                  </div>
+                </div>
+              </article>
+            <% }); %>
+          </div>
+        </section>
+      <% } %>
+
+      <!-- Cinema & Sports 2-Column Section -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
+        <!-- Cinema -->
+        <% if (typeof cinemaNews !== 'undefined' && cinemaNews.length > 0) { %>
+          <div>
+            <div class="section-header">
+              <h3 class="section-title">சினிமா (Cinema)</h3>
+              <a href="/category/cinema-celebrity" class="section-more-link">&rarr;</a>
+            </div>
+            <div class="horizontal-news-list">
+              <% cinemaNews.slice(0, 3).forEach(function(art) { %>
+                <article class="horizontal-news-card" style="grid-template-columns: 100px 1fr;">
+                  <div class="h-thumb-wrap">
+                    <a href="/news/<%= art.slug %>">
+                      <img src="<%= art.featuredImage %>" alt="<%= art.title %>" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="h-content">
+                    <h4 class="h-title" style="font-size:0.95rem;">
+                      <a href="/news/<%= art.slug %>"><%= art.title %></a>
+                    </h4>
+                    <span style="font-size:0.75rem; color:var(--grey-500);"><%= formatTamilDate(art.publishedAt) %></span>
+                  </div>
+                </article>
+              <% }); %>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Sports / Cricket -->
+        <% if (typeof sportsNews !== 'undefined' && sportsNews.length > 0) { %>
+          <div>
+            <div class="section-header">
+              <h3 class="section-title">கிரிக்கெட் & விளையாட்டு</h3>
+              <a href="/category/cricket-sports" class="section-more-link">&rarr;</a>
+            </div>
+            <div class="horizontal-news-list">
+              <% sportsNews.slice(0, 3).forEach(function(art) { %>
+                <article class="horizontal-news-card" style="grid-template-columns: 100px 1fr;">
+                  <div class="h-thumb-wrap">
+                    <a href="/news/<%= art.slug %>">
+                      <img src="<%= art.featuredImage %>" alt="<%= art.title %>" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="h-content">
+                    <h4 class="h-title" style="font-size:0.95rem;">
+                      <a href="/news/<%= art.slug %>"><%= art.title %></a>
+                    </h4>
+                    <span style="font-size:0.75rem; color:var(--grey-500);"><%= formatTamilDate(art.publishedAt) %></span>
+                  </div>
+                </article>
+              <% }); %>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar -->
+    <aside class="sidebar">
+      
+      <!-- Trending Stories Widget -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">
+          <span>அதிகம் வாசிக்கப்பட்டவை</span>
+          <span style="color:var(--primary-red); font-size:0.9rem;">🔥 Trending</span>
+        </h3>
+        <div class="trending-list">
+          <% if (typeof trending !== 'undefined' && trending.length > 0) { %>
+            <% trending.forEach(function(item, idx) { %>
+              <div class="trending-item">
+                <span class="trending-rank">0<%= idx + 1 %></span>
+                <div class="trending-title">
+                  <a href="/news/<%= item.slug %>"><%= item.title %></a>
+                  <div style="font-size:0.75rem; color:var(--grey-500); margin-top:0.25rem;">
+                    <%= item.category.nameTamil %>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Social Follow Widget -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">சமூக வலைதளங்களில் இணைந்திருங்கள்</h3>
+        <div class="social-buttons-grid">
+          <a href="https://facebook.com" target="_blank" rel="noopener" class="social-btn fb">Facebook</a>
+          <a href="https://x.com" target="_blank" rel="noopener" class="social-btn tw">X (Twitter)</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn yt">YouTube</a>
+          <a href="https://whatsapp.com" target="_blank" rel="noopener" class="social-btn wa">WhatsApp</a>
+        </div>
+      </div>
+
+      <!-- Categories Widget -->
+      <div class="sidebar-widget">
+        <h3 class="widget-title">அனைத்து செய்திப் பிரிவுகள்</h3>
+        <div class="category-badges-widget">
+          <% if (typeof categories !== 'undefined') { %>
+            <% categories.forEach(function(cat) { %>
+              <a href="/category/<%= cat.slug %>" class="category-badge-link">
+                <%= cat.nameTamil %>
+              </a>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Sticky Sidebar Ad Slot -->
+      <%- include('../partials/ad-slot') %>
+
+    </aside>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

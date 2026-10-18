@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment & SQLite database
+.env
+dev.db
+dev.db-journal
+
+# Uploaded files (keep placeholder files)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,95 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding-top: 1.5rem;">
+  
+  <nav class="article-breadcrumbs">
+    <a href="/">முகப்பு</a>
+    <span class="separator">/</span>
+    <span style="color:var(--charcoal-900); font-weight:600;">தேடல் (Search)</span>
+  </nav>
+
+  <!-- Search Input Header -->
+  <div style="background-color:var(--white); border-radius:var(--border-radius-md); padding:2rem; border:1px solid var(--grey-200); margin-bottom:2rem;">
+    <h1 style="font-size:1.6rem; font-weight:800; color:var(--charcoal-900); margin-bottom:1rem;">
+      செய்திகள் தேடல் (News Search)
+    </h1>
+    <form action="/search" method="GET" style="display:flex; gap:0.75rem; max-width:700px;">
+      <input type="text" name="q" value="<%= query %>" class="search-input" placeholder="தேட விரும்பும் செய்தியின் தலைப்பு அல்லது சொல்லை உள்ளிடவும்..." required>
+      <button type="submit" class="search-submit-btn">தேடு</button>
+    </form>
+    <% if (query) { %>
+      <div style="margin-top:0.75rem; font-size:0.9rem; color:var(--grey-600);">
+        "<strong><%= query %></strong>" என்ற சொல்லுக்கு <strong><%= pagination.total %></strong> செய்திகள் கண்டறியப்பட்டுள்ளன.
+      </div>
+    <% } %>
+  </div>
+
+  <div class="main-layout-grid">
+    <div class="primary-feed">
+      <% if (articles && articles.length > 0) { %>
+        <div class="news-cards-grid">
+          <% articles.forEach(function(article) { %>
+            <article class="news-card">
+              <div class="card-thumb-wrap">
+                <a href="/news/<%= article.slug %>">
+                  <img src="<%= article.featuredImage || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=600&q=80' %>" 
+                       alt="<%= article.title %>" loading="lazy" />
+                </a>
+                <span class="card-category-pill"><%= article.category.nameTamil %></span>
+              </div>
+              <div class="card-body">
+                <h2 class="card-title" style="font-size:1.15rem;">
+                  <a href="/news/<%= article.slug %>"><%= article.title %></a>
+                </h2>
+                <p class="card-excerpt"><%= article.shortDescription %></p>
+                <div class="card-footer">
+                  <span><%= formatTamilDate(article.publishedAt) %></span>
+                  <span><%= calculateReadingTime(article.fullContent) %></span>
+                </div>
+              </div>
+            </article>
+          <% }); %>
+        </div>
+
+        <% if (pagination.totalPages > 1) { %>
+          <div class="pagination-wrap">
+            <% if (pagination.page > 1) { %>
+              <a href="/search?q=<%= encodeURIComponent(query) %>&page=<%= pagination.page - 1 %>" class="page-btn">&laquo; முந்தையது</a>
+            <% } %>
+            <% for (let p = 1; p <= pagination.totalPages; p++) { %>
+              <a href="/search?q=<%= encodeURIComponent(query) %>&page=<%= p %>" class="page-btn <%= p === pagination.page ? 'active' : '' %>"><%= p %></a>
+            <% } %>
+            <% if (pagination.page < pagination.totalPages) { %>
+              <a href="/search?q=<%= encodeURIComponent(query) %>&page=<%= pagination.page + 1 %>" class="page-btn">அடுத்தது &raquo;</a>
+            <% } %>
+          </div>
+        <% } %>
+      <% } else if (query) { %>
+        <div style="background-color:var(--white); padding:3rem; border-radius:var(--border-radius-md); text-align:center; border:1px solid var(--grey-200);">
+          <h3 style="color:var(--grey-600); margin-bottom:0.5rem;">முடிவுகள் எதுவும் கிடைக்கவில்லை</h3>
+          <p style="color:var(--grey-400);">வேறு சொற்களைப் பயன்படுத்தி மீண்டும் தேட முயற்சிக்கவும்.</p>
+        </div>
+      <% } %>
+    </div>
+
+    <aside class="sidebar">
+      <div class="sidebar-widget">
+        <h3 class="widget-title">அதிகம் வாசிக்கப்பட்டவை</h3>
+        <div class="trending-list">
+          <% if (typeof trending !== 'undefined' && trending.length > 0) { %>
+            <% trending.forEach(function(item, idx) { %>
+              <div class="trending-item">
+                <span class="trending-rank">0<%= idx + 1 %></span>
+                <div class="trending-title">
+                  <a href="/news/<%= item.slug %>"><%= item.title %></a>
+                </div>
+              </div>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

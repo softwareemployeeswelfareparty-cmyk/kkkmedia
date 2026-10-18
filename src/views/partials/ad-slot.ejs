@@ -1,0 +1,11 @@
+<% if (typeof settings !== 'undefined' && settings.adsense_enabled) { %>
+  <div class="ad-banner-slot" role="region" aria-label="Advertisement">
+    <div class="ad-box">
+      <span class="ad-label">விளம்பரம் / SPONSORED CONTENT</span>
+      <!-- Google AdSense Placement Placeholder (Complies with publisher policy) -->
+      <div style="font-size:0.85rem; color:#888; padding:0.5rem 0;">
+        [ Google AdSense Responsive Unit: <%= settings.adsense_client_id || 'ca-pub-1234567890123456' %> ]
+      </div>
+    </div>
+  </div>
+<% } %>

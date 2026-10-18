@@ -1,0 +1,64 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">சுயவிவரம் & பாதுகாப்பு (My Profile & Security)</h1>
+    <p class="page-subtitle">நிர்வாக கணக்கின் விவரங்கள் மற்றும் கடவுச்சொல்லை மாற்றலாம்.</p>
+  </div>
+</div>
+
+<div class="admin-card" style="max-width: 650px;">
+  <div class="card-header-padded">
+    <h2 style="font-size:1.1rem; font-weight:700;">சுயவிவர தகவல்கள் (Account Profile)</h2>
+  </div>
+  <div class="card-body-padded">
+    
+    <form id="profileForm">
+      <div class="form-group">
+        <label class="form-label">மின்னஞ்சல் (Email - மாற்ற முடியாது)</label>
+        <input type="email" class="form-control" value="<%= profileUser.email %>" disabled style="background-color:#f3f4f6; cursor:not-allowed;">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">பங்கு (Role)</label>
+        <input type="text" class="form-control" value="<%= profileUser.role %>" disabled style="background-color:#f3f4f6; cursor:not-allowed;">
+      </div>
+
+      <div class="form-group">
+        <label for="profileName" class="form-label">பெயர் (Full Name)</label>
+        <input type="text" id="profileName" class="form-control" value="<%= profileUser.name %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="profileBio" class="form-label">சுயவிவரக் குறிப்பு (Author Bio)</label>
+        <textarea id="profileBio" class="form-control" style="min-height:80px;"><%= profileUser.bio || '' %></textarea>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--admin-border); margin:1.5rem 0;">
+
+      <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem; color:var(--admin-dark-bg);">
+        கடவுச்சொல் மாற்றுதல் (Change Password)
+      </h3>
+
+      <div class="form-group">
+        <label for="currentPassword" class="form-label">தற்போதைய கடவுச்சொல் (Current Password)</label>
+        <input type="password" id="currentPassword" class="form-control" placeholder="தற்போதைய கடவுச்சொல்லை உள்ளிடவும்...">
+        <div class="form-help">கடவுச்சொல்லை மாற்ற விரும்பினால் மட்டுமே இதை நிரப்பவும்.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword" class="form-label">புதிய கடவுச்சொல் (New Password)</label>
+        <input type="password" id="newPassword" class="form-control" placeholder="குறைந்தது 8 எழுத்துகள்...">
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <button type="submit" class="btn btn-primary" style="padding:0.75rem 1.5rem;">
+          சுயவிவரத்தை புதுப்பி (Save Profile)
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<%- include('layout-footer') %>

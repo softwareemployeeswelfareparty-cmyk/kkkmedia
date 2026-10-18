@@ -1,0 +1,9 @@
+# Netlify Configuration for KKK Media
+# Netlify can act as an Edge CDN / Reverse Proxy in front of your free Render backend
+
+[[redirects]]
+  from = "/*"
+  to = "https://YOUR-RENDER-APP-NAME.onrender.com/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}

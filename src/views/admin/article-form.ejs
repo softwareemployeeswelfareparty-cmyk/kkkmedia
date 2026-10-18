@@ -1,0 +1,266 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">
+      <%= isEdit ? 'செய்தி திருத்துதல் (Edit Article)' : 'புதிய செய்தி உருவாக்குதல் (Create Article)' %>
+    </h1>
+    <p class="page-subtitle">
+      <%= isEdit ? `செய்தி ஐடி: #${article.id}` : 'KKK Media தளத்தில் புதிய செய்தியை வெளியிடவும் அல்லது வரைவாக சேமிக்கவும்.' %>
+    </p>
+  </div>
+  <div>
+    <a href="/admin/articles" class="btn btn-secondary">
+      &larr; செய்திகள் பட்டியலுக்குச் செல்
+    </a>
+  </div>
+</div>
+
+<form id="articleForm" 
+      data-is-edit="<%= isEdit %>" 
+      data-article-id="<%= isEdit ? article.id : '' %>">
+
+  <div class="form-grid">
+    <!-- Left Column: Primary Content & SEO -->
+    <div>
+      <div class="admin-card">
+        <div class="card-body-padded">
+          
+          <!-- Article Title -->
+          <div class="form-group">
+            <label for="articleTitle" class="form-label">
+              செய்தி தலைப்பு (Headline) <span style="color:#ef4444;">*</span>
+            </label>
+            <input type="text" 
+                   id="articleTitle" 
+                   class="form-control" 
+                   style="font-size:1.15rem; font-weight:700; font-family:'Mukta Malar', sans-serif;"
+                   placeholder="வாசகர்களை ஈர்க்கும் தலைப்பை உள்ளிடவும்..." 
+                   value="<%= isEdit ? article.title : '' %>" 
+                   required>
+          </div>
+
+          <!-- URL Slug -->
+          <div class="form-group">
+            <label for="articleSlug" class="form-label">
+              வலைத்தள முகவரி (URL Slug)
+            </label>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span style="font-size:0.85rem; color:var(--admin-text-muted); font-family:monospace;">/news/</span>
+              <input type="text" 
+                     id="articleSlug" 
+                     class="form-control" 
+                     style="font-family:monospace; font-size:0.85rem;"
+                     placeholder="tvk-vijay-meeting-update-2026" 
+                     value="<%= isEdit ? article.slug : '' %>">
+            </div>
+            <div class="form-help">தலைப்பை உள்ளிட்டு வெளியே கிளிக் செய்தால் தானாகவே நிரப்பப்படும்.</div>
+          </div>
+
+          <!-- Short Description / Excerpt -->
+          <div class="form-group">
+            <label for="shortDescription" class="form-label">
+              சுருக்க உரை (Short Description / Excerpt) <span style="color:#ef4444;">*</span>
+            </label>
+            <textarea id="shortDescription" 
+                      class="form-control" 
+                      style="min-height:75px;" 
+                      placeholder="செய்தியின் முக்கிய 2-3 வரிகள் சுருக்கம்..." 
+                      required><%= isEdit ? article.shortDescription : '' %></textarea>
+            <div class="form-help">முகப்பு அட்டை மற்றும் சமூக வலைதளப் பகிர்வுகளில் இது தோன்றும்.</div>
+          </div>
+
+          <!-- Full Content Editor -->
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <label for="fullContent" class="form-label" style="margin:0;">
+                முழு செய்தி விவரம் (Full Content - HTML & Text) <span style="color:#ef4444;">*</span>
+              </label>
+              <!-- Quick Formatting Helper Pills -->
+              <div style="display:flex; gap:0.35rem;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<h2>', '</h2>')">H2</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<h3>', '</h3>')">H3</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<strong>', '</strong>')"><b>B</b></button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<em>', '</em>')"><i>I</i></button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<blockquote>', '</blockquote>')">Quote</button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<ul>\n  <li>', '</li>\n</ul>')">List</button>
+              </div>
+            </div>
+            <textarea id="fullContent" 
+                      class="form-control" 
+                      style="min-height:380px; font-family:'Mukta Malar', sans-serif; font-size:1.05rem; line-height:1.7;" 
+                      placeholder="செய்தியின் முழுமையான கட்டுரையை இங்கு எழுதவும். பத்திகள், தலைப்புகள் மற்றும் மேற்கோள்களை சேர்க்கலாம்..." 
+                      required><%= isEdit ? article.fullContent : '' %></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SEO & Social Media Metadata Section -->
+      <div class="admin-card">
+        <div class="card-header-padded">
+          <h2 style="font-size:1.1rem; font-weight:700;">கூகுள் தேடுபொறி & சமூக ஊடக அமைப்புகள் (SEO & Social Sharing)</h2>
+        </div>
+        <div class="card-body-padded">
+          
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between;">
+              <label for="seoTitle" class="form-label">SEO Meta Title</label>
+              <span id="seoTitleCount" style="font-size:0.75rem; color:var(--admin-text-muted);">0/60 எழுத்துகள்</span>
+            </div>
+            <input type="text" id="seoTitle" class="form-control" placeholder="கூகுளில் தோன்றும் முதன்மை தலைப்பு..." value="<%= isEdit && article.seoTitle ? article.seoTitle : '' %>">
+          </div>
+
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between;">
+              <label for="seoDescription" class="form-label">SEO Meta Description</label>
+              <span id="seoDescCount" style="font-size:0.75rem; color:var(--admin-text-muted);">0/160 எழுத்துகள்</span>
+            </div>
+            <textarea id="seoDescription" class="form-control" style="min-height:70px;" placeholder="கூகுள் தேடல் முடிவுகளின் கீழே காட்டப்படும் சுருக்க விளக்கம்..."><%= isEdit && article.seoDescription ? article.seoDescription : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="seoKeywords" class="form-label">முக்கிய தேடல் சொற்கள் (Focus Keywords)</label>
+            <input type="text" id="seoKeywords" class="form-control" placeholder="தவெக, விஜய், தேர்தல் 2026, தமிழ்நாடு" value="<%= isEdit && article.seoKeywords ? article.seoKeywords : '' %>">
+            <div class="form-help">கமாவால் பிரிக்கப்பட்ட சொற்கள்</div>
+          </div>
+
+          <div class="form-group">
+            <label for="canonicalUrl" class="form-label">Canonical URL (விரும்பினால்)</label>
+            <input type="url" id="canonicalUrl" class="form-control" placeholder="https://kkkmedia.com/news/..." value="<%= isEdit && article.canonicalUrl ? article.canonicalUrl : '' %>">
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar: Publishing Settings, Image & Tags -->
+    <div>
+      
+      <!-- Publish Action Box -->
+      <div class="admin-card">
+        <div class="card-header-padded">
+          <h2 style="font-size:1.05rem; font-weight:700;">வெளியீட்டு அமைப்புகள் (Publishing)</h2>
+        </div>
+        <div class="card-body-padded">
+          
+          <div class="form-group">
+            <label for="articleStatus" class="form-label">வெளியீட்டு நிலை (Status)</label>
+            <select id="articleStatus" class="form-control">
+              <option value="PUBLISHED" <%= isEdit && article.status === 'PUBLISHED' ? 'selected' : '' %>>
+                உடனே வெளியிடு (Publish Immediately)
+              </option>
+              <option value="DRAFT" <%= isEdit && article.status === 'DRAFT' ? 'selected' : (!isEdit ? 'selected' : '') %>>
+                வரைவாக சேமி (Save as Draft)
+              </option>
+              <option value="SCHEDULED" <%= isEdit && article.status === 'SCHEDULED' ? 'selected' : '' %>>
+                நேரம் திட்டமிடு (Schedule Publication)
+              </option>
+            </select>
+          </div>
+
+          <!-- Schedule Date Box -->
+          <div class="form-group" id="scheduleBox" style="display:none;">
+            <label for="scheduledDate" class="form-label">வெளியிட வேண்டிய தேதி & நேரம்</label>
+            <input type="datetime-local" 
+                   id="scheduledDate" 
+                   class="form-control" 
+                   value="<%= isEdit && article.scheduledDate ? new Date(article.scheduledDate).toISOString().slice(0, 16) : '' %>">
+          </div>
+
+          <!-- Category Selection -->
+          <div class="form-group">
+            <label for="articleCategory" class="form-label">செய்திப் பிரிவு (Category) <span style="color:#ef4444;">*</span></label>
+            <select id="articleCategory" class="form-control" required>
+              <option value="">-- பிரிவைத் தேர்ந்தெடுக்கவும் --</option>
+              <% categories.forEach(function(cat) { %>
+                <option value="<%= cat.id %>" <%= isEdit && article.categoryId === cat.id ? 'selected' : '' %>>
+                  <%= cat.nameTamil %> (<%= cat.nameEnglish %>)
+                </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <!-- Feature Flags -->
+          <div style="margin-top:1.25rem; border-top:1px solid var(--admin-border); padding-top:1rem; display:flex; flex-direction:column; gap:0.75rem;">
+            <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
+              <input type="checkbox" id="isFeatured" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= isEdit && article.isFeatured ? 'checked' : '' %>>
+              <span><strong>முதன்மை செய்தி (Featured Story)</strong></span>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
+              <input type="checkbox" id="isBreaking" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= isEdit && article.isBreaking ? 'checked' : '' %>>
+              <span><strong>முக்கிய செய்தி டிக்கர் (Breaking News)</strong></span>
+            </label>
+          </div>
+
+          <div style="margin-top:1.5rem;">
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem;">
+              <%= isEdit ? 'செய்தியைப் புதுப்பி (Update Article)' : 'செய்தியைச் சேமி (Save Article)' %>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Featured Image Card -->
+      <div class="admin-card">
+        <div class="card-header-padded">
+          <h2 style="font-size:1.05rem; font-weight:700;">முகப்பு படம் (Featured Image)</h2>
+        </div>
+        <div class="card-body-padded">
+          
+          <input type="file" id="imageFileInput" accept="image/*" style="display:none;">
+          <input type="hidden" id="featuredImage" value="<%= isEdit && article.featuredImage ? article.featuredImage : '' %>">
+
+          <div class="image-upload-dropzone" id="imageDropzone">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 0.5rem; color:#9ca3af;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <div style="font-size:0.875rem; font-weight:600; color:var(--admin-dark-bg);">படத்தை பதிவேற்ற கிளிக் செய்க அல்லது இழுத்து விடவும்</div>
+            <div style="font-size:0.75rem; color:var(--admin-text-muted); margin-top:0.25rem;">JPG, PNG, WEBP அல்லது GIF (அதிகபட்சம் 5MB)</div>
+          </div>
+
+          <div class="image-preview-box" id="imagePreviewBox" style="<%= isEdit && article.featuredImage ? 'display:block;' : '' %>">
+            <img id="imagePreviewImg" src="<%= isEdit && article.featuredImage ? article.featuredImage : '' %>" alt="Preview">
+          </div>
+
+          <div class="form-group" style="margin-top:1rem;">
+            <label for="imageAlt" class="form-label">பட விளக்கம் (Alt Text for SEO)</label>
+            <input type="text" id="imageAlt" class="form-control" placeholder="படத்தை விவரிக்கும் சொல்..." value="<%= isEdit && article.imageAlt ? article.imageAlt : '' %>">
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tags Card -->
+      <div class="admin-card">
+        <div class="card-header-padded">
+          <h2 style="font-size:1.05rem; font-weight:700;">குறிச்சொற்கள் (Tags)</h2>
+        </div>
+        <div class="card-body-padded">
+          <div id="tagsContainer" style="display:flex; flex-wrap:wrap; gap:0.4rem; padding:0.5rem; border:1px solid var(--admin-border); border-radius:var(--radius-sm); min-height:48px; align-items:center;">
+            <input type="text" id="tagTextInput" placeholder="Tag எழுதி Enter அழுத்தவும்..." style="border:none; outline:none; font-size:0.85rem; flex:1; min-width:120px;">
+          </div>
+          <input type="hidden" id="tagsHidden" value="<%= isEdit && article.tags ? article.tags.map(t => t.tag.name).join(',') : '' %>">
+          <div class="form-help">Enter அல்லது கமா அழுத்தி Tag உருவாக்கவும்.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</form>
+
+<script>
+  function insertTag(openTag, closeTag) {
+    const textarea = document.getElementById('fullContent');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.substring(start, end);
+    const replacement = openTag + (selected || 'வார்த்தை') + closeTag;
+    textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + openTag.length, start + replacement.length - closeTag.length);
+  }
+</script>
+
+<%- include('layout-footer') %>

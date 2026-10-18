@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding-top: 1.5rem; margin-bottom: 3rem;">
+  <nav class="article-breadcrumbs">
+    <a href="/">முகப்பு</a>
+    <span class="separator">/</span>
+    <span style="color:var(--charcoal-900); font-weight:600;">தொடர்புக்கு</span>
+  </nav>
+
+  <div class="article-container" style="max-width: 900px; margin: 0 auto;">
+    <h1 class="article-headline" style="border-bottom: 3px solid var(--primary-red); padding-bottom: 0.75rem;">
+      தொடர்புக்கு (Contact KKK Media)
+    </h1>
+
+    <% if (messageSent) { %>
+      <div style="background-color:#d1fae5; border-left:4px solid #10b981; padding:1rem; border-radius:var(--border-radius-sm); margin-bottom:1.5rem; color:#065f46; font-weight:600;">
+        ✓ உங்கள் செய்தி வெற்றிகரமாக பெறப்பட்டது. ஆசிரியர் குழு விரைவில் உங்களைத் தொடர்பு கொள்ளும். நன்றி!
+      </div>
+    <% } %>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem; margin-top:1.5rem;">
+      <!-- Contact Info -->
+      <div>
+        <h2 style="font-size:1.3rem; margin-bottom:1rem; color:var(--charcoal-900);">தலைமை அலுவலகம்</h2>
+        <div style="display:flex; flex-direction:column; gap:1rem; color:var(--charcoal-700); font-size:0.95rem;">
+          <p>
+            <strong>முகவரி:</strong><br>
+            <%= typeof settings !== 'undefined' && settings.contact_address ? settings.contact_address : 'KKK Media Tower, Anna Salai, Chennai, Tamil Nadu 600002' %>
+          </p>
+          <p>
+            <strong>செய்தி ஆசிரியர் மின்னஞ்சல்:</strong><br>
+            <a href="mailto:<%= typeof settings !== 'undefined' && settings.contact_email ? settings.contact_email : 'contact@kkkmedia.com' %>" style="color:var(--primary-red); font-weight:600;">
+              <%= typeof settings !== 'undefined' && settings.contact_email ? settings.contact_email : 'contact@kkkmedia.com' %>
+            </a>
+          </p>
+          <p>
+            <strong>தொலைபேசி / தொலைநகல்:</strong><br>
+            <%= typeof settings !== 'undefined' && settings.contact_phone ? settings.contact_phone : '+91 44 2855 0101' %>
+          </p>
+          <p>
+            <strong>செய்திப் பகிர்வுகள் & நிருபர்கள் தொடர்பு:</strong><br>
+            newsdesk@kkkmedia.com
+          </p>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div>
+        <h2 style="font-size:1.3rem; margin-bottom:1rem; color:var(--charcoal-900);">கருத்து / செய்தி அனுப்ப</h2>
+        <form action="/contact" method="POST">
+          <div style="margin-bottom:1rem;">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem;">உங்கள் பெயர்</label>
+            <input type="text" name="name" class="search-input" style="width:100%;" required>
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem;">மின்னஞ்சல் முகவரி</label>
+            <input type="email" name="email" class="search-input" style="width:100%;" required>
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem;">செய்தி / கருத்து விவரம்</label>
+            <textarea name="message" class="search-input" style="width:100%; min-height:120px; resize:vertical;" required></textarea>
+          </div>
+          <button type="submit" class="search-submit-btn" style="width:100%; padding:0.75rem;">செய்தியை அனுப்பு (Send Message)</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,162 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">கட்டுப்பாட்டு அறை (Dashboard Overview)</h1>
+    <p class="page-subtitle">வணக்கம் <%= user.name %>! KKK Media செய்தி தளம் சீராக இயங்கி வருகிறது.</p>
+  </div>
+  <div style="display:flex; gap:0.75rem;">
+    <a href="/admin/articles/new" class="btn btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      <span>புதிய செய்தி எழுதுக</span>
+    </a>
+  </div>
+</div>
+
+<!-- Key Stat Cards Grid -->
+<div class="stats-grid">
+  <!-- Total Articles -->
+  <div class="stat-card">
+    <div class="stat-header">
+      <span class="stat-label">மொத்த செய்திகள்</span>
+      <div class="stat-icon blue">📰</div>
+    </div>
+    <div class="stat-value"><%= stats.totalArticles %></div>
+  </div>
+
+  <!-- Published Articles -->
+  <div class="stat-card">
+    <div class="stat-header">
+      <span class="stat-label">வெளியானவை (Published)</span>
+      <div class="stat-icon green">✓</div>
+    </div>
+    <div class="stat-value" style="color:var(--color-success);"><%= stats.publishedArticles %></div>
+  </div>
+
+  <!-- Draft Articles -->
+  <div class="stat-card">
+    <div class="stat-header">
+      <span class="stat-label">வரைவு (Drafts)</span>
+      <div class="stat-icon yellow">✎</div>
+    </div>
+    <div class="stat-value" style="color:var(--color-warning);"><%= stats.draftArticles %></div>
+  </div>
+
+  <!-- Scheduled Articles -->
+  <div class="stat-card">
+    <div class="stat-header">
+      <span class="stat-label">திட்டமிடப்பட்டவை (Scheduled)</span>
+      <div class="stat-icon blue">⏱</div>
+    </div>
+    <div class="stat-value"><%= stats.scheduledArticles %></div>
+  </div>
+
+  <!-- Categories -->
+  <div class="stat-card">
+    <div class="stat-header">
+      <span class="stat-label">பிரிவுகள் (Categories)</span>
+      <div class="stat-icon red">📂</div>
+    </div>
+    <div class="stat-value"><%= stats.totalCategories %></div>
+  </div>
+
+  <!-- Total Views -->
+  <div class="stat-card">
+    <div class="stat-header">
+      <span class="stat-label">மொத்த பார்வைகள் (Views)</span>
+      <div class="stat-icon green">👁</div>
+    </div>
+    <div class="stat-value"><%= stats.totalViews.toLocaleString() %></div>
+  </div>
+</div>
+
+<!-- Layout: Recent Articles & Activity Log -->
+<div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.75rem;">
+  
+  <!-- Left Column: Recent Articles -->
+  <div class="admin-card">
+    <div class="card-header-padded">
+      <h2 style="font-size:1.15rem; font-weight:700;">சமீபத்திய செய்திகள் (Recent Articles)</h2>
+      <a href="/admin/articles" style="font-size:0.85rem; color:var(--admin-primary); font-weight:600;">அனைத்தும் &rarr;</a>
+    </div>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>தலைப்பு</th>
+            <th>பிரிவு</th>
+            <th>நிலை</th>
+            <th>பார்வைகள்</th>
+            <th>செயல்கள்</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentArticles && recentArticles.length > 0) { %>
+            <% recentArticles.forEach(function(art) { %>
+              <tr>
+                <td>
+                  <div style="font-weight:600; color:var(--admin-dark-bg); max-width:280px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    <a href="/admin/articles/<%= art.id %>/edit"><%= art.title %></a>
+                  </div>
+                  <div style="font-size:0.75rem; color:var(--admin-text-muted);">ஆசிரியர்: <%= art.author.name %></div>
+                </td>
+                <td><%= art.category.nameTamil %></td>
+                <td>
+                  <% if (art.status === 'PUBLISHED') { %>
+                    <span class="badge badge-published">வெளியானது</span>
+                  <% } else if (art.status === 'DRAFT') { %>
+                    <span class="badge badge-draft">வரைவு</span>
+                  <% } else { %>
+                    <span class="badge badge-scheduled">திட்டமிட்டவை</span>
+                  <% } %>
+                </td>
+                <td><%= art.viewCount.toLocaleString() %></td>
+                <td>
+                  <a href="/admin/articles/<%= art.id %>/edit" class="btn btn-secondary btn-sm" title="திருத்து">திருத்து</a>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="5" style="text-align:center; padding:2rem; color:var(--admin-text-muted);">செய்திகள் எதுவும் இல்லை.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Right Column: Recent Audit Log Activity -->
+  <div class="admin-card">
+    <div class="card-header-padded">
+      <h2 style="font-size:1.15rem; font-weight:700;">செயல்பாட்டு பதிவு (Audit Logs)</h2>
+    </div>
+    <div style="padding:1rem 1.25rem;">
+      <% if (recentAuditLogs && recentAuditLogs.length > 0) { %>
+        <div style="display:flex; flex-direction:column; gap:0.85rem;">
+          <% recentAuditLogs.forEach(function(log) { %>
+            <div style="border-bottom:1px solid #f3f4f6; padding-bottom:0.75rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                <span class="badge" style="background-color:#e5e7eb; color:#374151; font-size:0.7rem;"><%= log.action %></span>
+                <span style="font-size:0.725rem; color:#9ca3af;">
+                  <%= new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+                </span>
+              </div>
+              <div style="font-size:0.825rem; color:#374151; font-weight:500;">
+                <%= log.details || (log.entity + ' ' + log.action) %>
+              </div>
+              <div style="font-size:0.725rem; color:#9ca3af; margin-top:0.2rem;">
+                செய்தவர்: <%= log.user ? log.user.name : 'System' %>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div style="text-align:center; padding:1.5rem; color:var(--admin-text-muted); font-size:0.85rem;">செயல்பாடுகள் இல்லை.</div>
+      <% } %>
+    </div>
+  </div>
+
+</div>
+
+<%- include('layout-footer') %>

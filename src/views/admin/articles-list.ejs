@@ -1,0 +1,162 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">செய்திகள் மேலாண்மை (Articles)</h1>
+    <p class="page-subtitle">மொத்தம் <%= pagination.total %> செய்திகள் பதிவு செய்யப்பட்டுள்ளன.</p>
+  </div>
+  <a href="/admin/articles/new" class="btn btn-primary">
+    <span>+ புதிய செய்தி எழுதுக</span>
+  </a>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="admin-card" style="padding:1.25rem; margin-bottom:1.5rem;">
+  <form action="/admin/articles" method="GET" style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+    <div style="flex:1; min-width:240px;">
+      <input type="text" name="search" value="<%= filters.search || '' %>" class="form-control" placeholder="தலைப்பு அல்லது செய்தி தேடுக...">
+    </div>
+    
+    <div style="min-width:180px;">
+      <select name="categoryId" class="form-control">
+        <option value="">அனைத்து பிரிவுகள் (All Categories)</option>
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat.id %>" <%= filters.categoryId == cat.id ? 'selected' : '' %>>
+            <%= cat.nameTamil %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div style="min-width:160px;">
+      <select name="status" class="form-control">
+        <option value="">அனைத்து நிலைகள் (All Status)</option>
+        <option value="PUBLISHED" <%= filters.status === 'PUBLISHED' ? 'selected' : '' %>>வெளியானது (Published)</option>
+        <option value="DRAFT" <%= filters.status === 'DRAFT' ? 'selected' : '' %>>வரைவு (Draft)</option>
+        <option value="SCHEDULED" <%= filters.status === 'SCHEDULED' ? 'selected' : '' %>>திட்டமிடப்பட்டது (Scheduled)</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-secondary">வடிகட்டு (Filter)</button>
+    <% if (filters.search || filters.categoryId || filters.status) { %>
+      <a href="/admin/articles" class="btn btn-secondary" style="color:#ef4444;">வடிகட்டலை நீக்கு</a>
+    <% } %>
+  </form>
+</div>
+
+<!-- Articles Table Card -->
+<div class="admin-card">
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th style="width:70px;">படம்</th>
+          <th>தலைப்பு</th>
+          <th>பிரிவு</th>
+          <th>ஆசிரியர்</th>
+          <th>நிலை</th>
+          <th>சிறப்புகள்</th>
+          <th>பார்வைகள்</th>
+          <th>தேதி</th>
+          <th style="text-align:right;">செயல்கள்</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (articles && articles.length > 0) { %>
+          <% articles.forEach(function(art) { %>
+            <tr id="article-row-<%= art.id %>">
+              <td>
+                <img src="<%= art.featuredImage || '/images/placeholder.jpg' %>" 
+                     alt="" 
+                     style="width:54px; height:38px; object-fit:cover; border-radius:4px; background:#e5e7eb;">
+              </td>
+              <td>
+                <div style="font-weight:600; color:var(--admin-dark-bg); max-width:320px;">
+                  <a href="/admin/articles/<%= art.id %>/edit" title="செய்தியை திருத்து"><%= art.title %></a>
+                </div>
+                <div style="font-size:0.75rem; color:var(--admin-text-muted); font-family:monospace;">
+                  /news/<%= art.slug %>
+                </div>
+              </td>
+              <td>
+                <span class="badge" style="background-color:#e0e7ff; color:#3730a3;">
+                  <%= art.category.nameTamil %>
+                </span>
+              </td>
+              <td><%= art.author.name %></td>
+              <td>
+                <% if (art.status === 'PUBLISHED') { %>
+                  <span class="badge badge-published">வெளியானது</span>
+                <% } else if (art.status === 'DRAFT') { %>
+                  <span class="badge badge-draft">வரைவு</span>
+                <% } else { %>
+                  <span class="badge badge-scheduled">திட்டமிட்டவை</span>
+                <% } %>
+              </td>
+              <td>
+                <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                  <button type="button" 
+                          class="btn btn-sm btn-secondary btn-toggle-featured <%= art.isFeatured ? 'active' : '' %>"
+                          data-id="<%= art.id %>"
+                          style="font-size:0.7rem; padding:0.15rem 0.4rem;">
+                    <%= art.isFeatured ? '★ Featured' : '☆ Feature' %>
+                  </button>
+                  <button type="button" 
+                          class="btn btn-sm btn-secondary btn-toggle-breaking <%= art.isBreaking ? 'active' : '' %>"
+                          data-id="<%= art.id %>"
+                          style="font-size:0.7rem; padding:0.15rem 0.4rem;">
+                    <%= art.isBreaking ? '🔥 Breaking' : 'Breaking' %>
+                  </button>
+                </div>
+              </td>
+              <td><%= art.viewCount.toLocaleString() %></td>
+              <td style="font-size:0.8rem; color:var(--admin-text-muted); white-space:nowrap;">
+                <%= new Date(art.createdAt).toLocaleDateString() %>
+              </td>
+              <td style="text-align:right; white-space:nowrap;">
+                <a href="/news/<%= art.slug %>" target="_blank" class="btn btn-secondary btn-sm" title="முன்னோட்டம்">பார்</a>
+                <a href="/admin/articles/<%= art.id %>/edit" class="btn btn-secondary btn-sm" title="திருத்து">திருத்து</a>
+                <button type="button" 
+                        class="btn btn-danger btn-sm btn-delete-article" 
+                        data-id="<%= art.id %>" 
+                        data-title="<%= art.title %>" 
+                        title="நீக்கு">
+                  நீக்கு
+                </button>
+              </td>
+            </tr>
+          <% }); %>
+        <% } else { %>
+          <tr>
+            <td colspan="9" style="text-align:center; padding:3rem; color:var(--admin-text-muted);">
+              செய்திகள் எதுவும் கண்டறியப்படவில்லை.
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <% if (pagination.totalPages > 1) { %>
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:1.25rem 1.5rem; border-top:1px solid var(--admin-border);">
+      <div style="font-size:0.85rem; color:var(--admin-text-muted);">
+        பக்கம் <%= pagination.page %> / <%= pagination.totalPages %> (மொத்தம் <%= pagination.total %>)
+      </div>
+      <div style="display:flex; gap:0.5rem;">
+        <% if (pagination.page > 1) { %>
+          <a href="/admin/articles?page=<%= pagination.page - 1 %>&status=<%= filters.status || '' %>&categoryId=<%= filters.categoryId || '' %>&search=<%= filters.search || '' %>" class="btn btn-secondary btn-sm">
+            &laquo; முந்தையது
+          </a>
+        <% } %>
+        <% if (pagination.page < pagination.totalPages) { %>
+          <a href="/admin/articles?page=<%= pagination.page + 1 %>&status=<%= filters.status || '' %>&categoryId=<%= filters.categoryId || '' %>&search=<%= filters.search || '' %>" class="btn btn-secondary btn-sm">
+            அடுத்தது &raquo;
+          </a>
+        <% } %>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%- include('layout-footer') %>
