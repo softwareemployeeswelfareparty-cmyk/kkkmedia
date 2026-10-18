@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>நிர்வாகி உள்நுழைவு (Admin Login) | KKK Media CMS</title>
+  <!-- Dark / Light Theme Anti-FOUC Initialization -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('kkk_theme');
+        var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme ? savedTheme : (systemDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="/css/admin.css">
   <link rel="icon" type="image/png" href="/images/favicon.png">
   <style>
@@ -14,6 +25,13 @@
       justify-content: center;
       min-height: 100vh;
       padding: 1.5rem;
+      position: relative;
+    }
+    .login-theme-pos {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 10;
     }
     .login-card {
       background-color: #ffffff;
@@ -22,6 +40,7 @@
       border-radius: var(--radius-md);
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       overflow: hidden;
+      transition: background-color 0.3s ease;
     }
     .login-header {
       background-color: #1a1d24;
@@ -33,9 +52,36 @@
     .login-body {
       padding: 2.25rem 2rem;
     }
+    [data-theme="dark"] .login-card {
+      background-color: #161920;
+      border: 1px solid #272d3b;
+      box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.7);
+    }
+    [data-theme="dark"] .login-card .form-label {
+      color: #e5e7eb;
+    }
+    [data-theme="dark"] .login-card .form-control {
+      background-color: #1f242f;
+      border-color: #2e3646;
+      color: #f3f4f6;
+    }
+    [data-theme="dark"] .login-card .form-text {
+      color: #9ca3af;
+    }
   </style>
 </head>
 <body>
+
+<div class="login-theme-pos">
+  <button type="button" class="theme-toggle-btn admin-theme-toggle" id="loginThemeToggleBtn" aria-label="Toggle Dark / Light Theme" title="கருப்பு / வெளிர் நிற மாற்றம்">
+    <span class="theme-icon-sun" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </span>
+    <span class="theme-icon-moon" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </span>
+  </button>
+</div>
 
 <div class="login-card">
   <div class="login-header">
@@ -131,6 +177,17 @@
       alertBox.innerHTML = 'சேவையக இணைப்பு பிழை ஏற்பட்டது.';
     }
   });
+
+  // Theme Toggle in Login
+  const loginThemeToggle = document.getElementById('loginThemeToggleBtn');
+  if (loginThemeToggle) {
+    loginThemeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const nextTheme = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      try { localStorage.setItem('kkk_theme', nextTheme); } catch(e) {}
+    });
+  }
 </script>
 
 </body>

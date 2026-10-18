@@ -128,4 +128,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const year = now.getFullYear();
     headerDateEl.textContent = `${dayName}, ${dateNum} ${monthName} ${year}`;
   }
+
+  // 6. Dark / Light Theme Toggle
+  const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
+
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('kkk_theme', theme);
+    } catch (e) {}
+
+    themeToggleBtns.forEach((btn) => {
+      const isDark = theme === 'dark';
+      btn.setAttribute('aria-label', isDark ? 'வெளிர் நிறத்திற்கு மாறுக (Switch to Light Mode)' : 'இருண்ட நிறத்திற்கு மாறுக (Switch to Dark Mode)');
+      btn.setAttribute('title', isDark ? 'வெளிர் நிறத்திற்கு மாறுக (Light Mode)' : 'இருண்ட நிறத்திற்கு மாறுக (Dark Mode)');
+    });
+  };
+
+  themeToggleBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+  });
+
+  // Listen to OS theme changes if user hasn't explicitly set a preference
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('kkk_theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
 });

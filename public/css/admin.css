@@ -628,3 +628,179 @@ textarea.form-control {
     padding: 1rem;
   }
 }
+
+
+/* ==========================================================================
+   ADMIN THEME TOGGLE & DARK MODE STYLES
+   ========================================================================== */
+
+.theme-toggle-btn.admin-theme-toggle {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--admin-border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--admin-text-main);
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.theme-toggle-btn.admin-theme-toggle:hover {
+  background-color: var(--admin-card-bg);
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+  transform: rotate(15deg);
+}
+
+.theme-icon-sun,
+.theme-icon-moon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:root:not([data-theme="dark"]) .theme-icon-sun {
+  display: none !important;
+}
+:root:not([data-theme="dark"]) .theme-icon-moon {
+  display: inline-flex !important;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+  display: inline-flex !important;
+  color: #fbbf24;
+}
+[data-theme="dark"] .theme-icon-moon {
+  display: none !important;
+}
+
+/* Admin Dark Mode Overrides */
+[data-theme="dark"] {
+  --admin-body-bg: #0d0f14;
+  --admin-card-bg: #161920;
+  --admin-sidebar-bg: #0f1117;
+  --admin-border: #242936;
+  --admin-text-main: #f3f4f6;
+  --admin-text-muted: #9ca3af;
+  --admin-dark-bg: #ffffff;
+}
+
+[data-theme="dark"] .admin-topbar {
+  background-color: var(--admin-card-bg);
+  border-bottom-color: var(--admin-border);
+}
+
+[data-theme="dark"] .card {
+  background-color: var(--admin-card-bg);
+  border-color: var(--admin-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .form-control {
+  background-color: #1a1e27;
+  border-color: var(--admin-border);
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .form-control:focus {
+  border-color: var(--admin-primary);
+  background-color: #1f242f;
+}
+
+[data-theme="dark"] .table {
+  color: var(--admin-text-main);
+}
+
+[data-theme="dark"] .table th {
+  background-color: #1a1e27;
+  color: var(--admin-text-muted);
+  border-bottom-color: var(--admin-border);
+}
+
+[data-theme="dark"] .table td {
+  border-bottom-color: var(--admin-border);
+}
+
+[data-theme="dark"] .table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .stat-card {
+  background-color: var(--admin-card-bg);
+  border-color: var(--admin-border);
+}
+
+[data-theme="dark"] .stat-value {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .stat-label {
+  color: var(--admin-text-muted);
+}
+
+[data-theme="dark"] .btn-secondary {
+  background-color: #1f242f;
+  border-color: var(--admin-border);
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background-color: #272d3b;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-view-site {
+  background-color: #1f242f;
+  border-color: var(--admin-border);
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .btn-view-site:hover {
+  border-color: var(--admin-primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .modal-dialog {
+  background-color: var(--admin-card-bg);
+  border-color: var(--admin-border);
+  color: var(--admin-text-main);
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+  border-color: var(--admin-border);
+}
+
+[data-theme="dark"] .rich-editor-toolbar {
+  background-color: #1a1e27;
+  border-color: var(--admin-border);
+}
+
+[data-theme="dark"] .rich-editor-toolbar button {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .rich-editor-toolbar button:hover {
+  background-color: #272d3b;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .rich-editor-content {
+  background-color: #161920;
+  border-color: var(--admin-border);
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .sidebar-link {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .sidebar-link:hover,
+[data-theme="dark"] .sidebar-link.active {
+  background-color: rgba(200, 16, 46, 0.15);
+  color: #ff4d6a;
+}

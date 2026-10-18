@@ -39,6 +39,18 @@
     </script>
   <% } %>
 
+  <!-- Dark / Light Theme Anti-FOUC Initialization -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('kkk_theme');
+        var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme ? savedTheme : (systemDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/png" href="/images/favicon.png">
@@ -82,6 +94,15 @@
         <button class="search-trigger-btn search-modal-trigger" aria-label="செய்திகள் தேடுக">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <span>செய்திகள் தேடுக...</span>
+        </button>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Dark / Light Theme" title="கருப்பு / வெளிர் நிற மாற்றம்">
+          <span class="theme-icon-sun" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </span>
+          <span class="theme-icon-moon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </span>
         </button>
 
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="பட்டியல் திறக்க">
@@ -154,6 +175,17 @@
           </a>
         <% }); %>
       <% } %>
+      <div class="mobile-theme-row">
+        <span>இருண்ட பயன்முறை (Dark Theme)</span>
+        <button class="theme-toggle-btn mobile-theme-btn" aria-label="Toggle Dark / Light Theme" title="கருப்பு / வெளிர் நிற மாற்றம்">
+          <span class="theme-icon-sun" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </span>
+          <span class="theme-icon-moon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </span>
+        </button>
+      </div>
       <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:1rem 0;">
       <a href="/about">எங்களைப் பற்றி</a>
       <a href="/contact">தொடர்புக்கு</a>

@@ -89,6 +89,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 1.1 Admin Theme Toggle
+  const adminThemeToggleBtn = document.getElementById('adminThemeToggleBtn');
+  if (adminThemeToggleBtn) {
+    adminThemeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('kkk_theme', newTheme);
+      } catch (e) {}
+    });
+  }
+
   // 2. Article Form Logic (Slug Generator, SEO counters, Tags, Image Upload)
   const articleForm = document.getElementById('articleForm');
   if (articleForm) {
