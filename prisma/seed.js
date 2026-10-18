@@ -1,7 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
-
-const prisma = new PrismaClient();
+const prisma = require('../src/config/db');
 
 async function main() {
   console.log('[Seed] Starting database seeding for KKK Media...');

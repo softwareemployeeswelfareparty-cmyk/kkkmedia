@@ -2,16 +2,22 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 require('dotenv').config();
+const { fixSupabaseUrl } = require('../src/utils/supabaseUrl');
 
-const dbUrl = process.env.DATABASE_URL || 'file:./dev.db';
+let dbUrl = process.env.DATABASE_URL || 'file:./dev.db';
+let directUrl = process.env.DIRECT_URL || dbUrl;
+
+// Ensure URLs are IPv4 compatible if pointing to Supabase
+dbUrl = fixSupabaseUrl(dbUrl, 6543);
+directUrl = fixSupabaseUrl(directUrl, 5432);
+
+process.env.DATABASE_URL = dbUrl;
+process.env.DIRECT_URL = directUrl;
+
 const isPostgres = dbUrl.startsWith('postgres://') || dbUrl.startsWith('postgresql://');
 
-// If Postgres but DIRECT_URL not set, default DIRECT_URL to DATABASE_URL
-if (isPostgres && !process.env.DIRECT_URL) {
-  process.env.DIRECT_URL = dbUrl;
-}
-
 console.log(`[Database Sync] Detected database URL: ${dbUrl.replace(/:[^:]*@/, ':****@')}`);
+console.log(`[Database Sync] Direct migration URL: ${directUrl.replace(/:[^:]*@/, ':****@')}`);
 console.log(`[Database Sync] Provider: ${isPostgres ? 'PostgreSQL' : 'SQLite'}`);
 
 const prismaDir = path.join(__dirname, '..', 'prisma');
@@ -27,10 +33,10 @@ if (fs.existsSync(sourceSchema)) {
 
 try {
   console.log('[Database Sync] Running prisma generate...');
-  execSync('npx prisma generate', { stdio: 'inherit' });
+  execSync('npx prisma generate', { stdio: 'inherit', env: process.env });
 
   console.log('[Database Sync] Pushing database schema...');
-  execSync('npx prisma db push --skip-generate', { stdio: 'inherit' });
+  execSync('npx prisma db push --skip-generate', { stdio: 'inherit', env: process.env });
 
   console.log('[Database Sync] Database schema synchronized successfully!');
 } catch (error) {
