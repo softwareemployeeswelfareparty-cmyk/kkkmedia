@@ -15,12 +15,12 @@
                alt="<%= featured[0].imageAlt || featured[0].title %>" 
                loading="eager" />
           <div class="featured-overlay">
-            <span class="category-tag"><%= featured[0].category.nameTamil %></span>
-            <h1 class="featured-main-title"><%= featured[0].title %></h1>
+            <span class="category-tag" data-cat-slug="<%= featured[0].category.slug %>"><%= featured[0].category.nameTamil %></span>
+            <h1 class="featured-main-title" data-art-slug="<%= featured[0].slug %>"><%= featured[0].title %></h1>
             <div class="meta-row">
-              <span><%= formatTamilDate(featured[0].publishedAt) %></span>
+              <span class="card-date" data-article-date="<%= featured[0].publishedAt ? featured[0].publishedAt.toISOString() : '' %>"><%= formatTamilDate(featured[0].publishedAt) %></span>
               <span>•</span>
-              <span><%= calculateReadingTime(featured[0].fullContent) %></span>
+              <span class="card-reading-time" data-read-min="1"><%= calculateReadingTime(featured[0].fullContent) %></span>
             </div>
           </div>
         </a>
@@ -35,10 +35,10 @@
                    alt="<%= featured[1].imageAlt || featured[1].title %>" 
                    loading="lazy" />
               <div class="side-hero-overlay">
-                <span class="category-tag"><%= featured[1].category.nameTamil %></span>
-                <h2 class="side-hero-title"><%= featured[1].title %></h2>
+                <span class="category-tag" data-cat-slug="<%= featured[1].category.slug %>"><%= featured[1].category.nameTamil %></span>
+                <h2 class="side-hero-title" data-art-slug="<%= featured[1].slug %>"><%= featured[1].title %></h2>
                 <div class="meta-row" style="font-size:0.75rem;">
-                  <span><%= formatTamilDate(featured[1].publishedAt) %></span>
+                  <span class="card-date" data-article-date="<%= featured[1].publishedAt ? featured[1].publishedAt.toISOString() : '' %>"><%= formatTamilDate(featured[1].publishedAt) %></span>
                 </div>
               </div>
             </a>
@@ -52,10 +52,10 @@
                    alt="<%= featured[2].imageAlt || featured[2].title %>" 
                    loading="lazy" />
               <div class="side-hero-overlay">
-                <span class="category-tag"><%= featured[2].category.nameTamil %></span>
-                <h2 class="side-hero-title"><%= featured[2].title %></h2>
+                <span class="category-tag" data-cat-slug="<%= featured[2].category.slug %>"><%= featured[2].category.nameTamil %></span>
+                <h2 class="side-hero-title" data-art-slug="<%= featured[2].slug %>"><%= featured[2].title %></h2>
                 <div class="meta-row" style="font-size:0.75rem;">
-                  <span><%= formatTamilDate(featured[2].publishedAt) %></span>
+                  <span class="card-date" data-article-date="<%= featured[2].publishedAt ? featured[2].publishedAt.toISOString() : '' %>"><%= formatTamilDate(featured[2].publishedAt) %></span>
                 </div>
               </div>
             </a>
@@ -73,9 +73,9 @@
       <!-- Latest News Section -->
       <section class="section-block" style="margin-bottom:2.5rem;">
         <div class="section-header">
-          <h2 class="section-title">சமீபத்திய செய்திகள் (Latest News)</h2>
+          <h2 class="section-title" data-i18n="latest_news">சமீபத்திய செய்திகள் (Latest News)</h2>
           <a href="/category/tamil-nadu-politics" class="section-more-link">
-            <span>மேலும் பார்க்க</span>
+            <span data-i18n="view_more">மேலும் பார்க்க</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </a>
         </div>
@@ -90,16 +90,16 @@
                          alt="<%= article.imageAlt || article.title %>" 
                          loading="lazy" />
                   </a>
-                  <span class="card-category-pill"><%= article.category.nameTamil %></span>
+                  <span class="card-category-pill" data-cat-slug="<%= article.category.slug %>"><%= article.category.nameTamil %></span>
                 </div>
                 <div class="card-body">
                   <h3 class="card-title">
-                    <a href="/news/<%= article.slug %>"><%= article.title %></a>
+                    <a href="/news/<%= article.slug %>" data-art-slug="<%= article.slug %>"><%= article.title %></a>
                   </h3>
-                  <p class="card-excerpt"><%= article.shortDescription %></p>
+                  <p class="card-excerpt" data-excerpt-slug="<%= article.slug %>"><%= article.shortDescription %></p>
                   <div class="card-footer">
-                    <span><%= formatTamilDate(article.publishedAt) %></span>
-                    <span><%= calculateReadingTime(article.fullContent) %></span>
+                    <span class="card-date" data-article-date="<%= article.publishedAt ? article.publishedAt.toISOString() : '' %>"><%= formatTamilDate(article.publishedAt) %></span>
+                    <span class="card-reading-time" data-read-min="1"><%= calculateReadingTime(article.fullContent) %></span>
                   </div>
                 </div>
               </article>
@@ -115,8 +115,8 @@
       <% if (typeof tvkNews !== 'undefined' && tvkNews.length > 0) { %>
         <section class="section-block" style="margin-bottom:2.5rem;">
           <div class="section-header">
-            <h2 class="section-title">தவெக சிறப்புச் செய்திகள் (TVK News)</h2>
-            <a href="/category/tvk-news" class="section-more-link">அனைத்தும் பார்க்க &rarr;</a>
+            <h2 class="section-title" data-i18n="tvk_news_title">தவெக சிறப்புச் செய்திகள் (TVK News)</h2>
+            <a href="/category/tvk-news" class="section-more-link" data-i18n="view_all">அனைத்தும் பார்க்க &rarr;</a>
           </div>
 
           <div class="horizontal-news-list">
@@ -130,12 +130,12 @@
                   </a>
                 </div>
                 <div class="h-content">
-                  <span class="category-tag" style="align-self:flex-start; margin-bottom:0.25rem;"><%= art.category.nameTamil %></span>
+                  <span class="category-tag" data-cat-slug="<%= art.category.slug %>" style="align-self:flex-start; margin-bottom:0.25rem;"><%= art.category.nameTamil %></span>
                   <h3 class="h-title">
-                    <a href="/news/<%= art.slug %>"><%= art.title %></a>
+                    <a href="/news/<%= art.slug %>" data-art-slug="<%= art.slug %>"><%= art.title %></a>
                   </h3>
                   <div class="meta-row dark">
-                    <span><%= formatTamilDate(art.publishedAt) %></span>
+                    <span class="card-date" data-article-date="<%= art.publishedAt ? art.publishedAt.toISOString() : '' %>"><%= formatTamilDate(art.publishedAt) %></span>
                   </div>
                 </div>
               </article>
@@ -150,7 +150,7 @@
         <% if (typeof cinemaNews !== 'undefined' && cinemaNews.length > 0) { %>
           <div>
             <div class="section-header">
-              <h3 class="section-title">சினிமா (Cinema)</h3>
+              <h3 class="section-title" data-i18n="cinema_title">சினிமா (Cinema)</h3>
               <a href="/category/cinema-celebrity" class="section-more-link">&rarr;</a>
             </div>
             <div class="horizontal-news-list">
@@ -163,9 +163,9 @@
                   </div>
                   <div class="h-content">
                     <h4 class="h-title" style="font-size:0.95rem;">
-                      <a href="/news/<%= art.slug %>"><%= art.title %></a>
+                      <a href="/news/<%= art.slug %>" data-art-slug="<%= art.slug %>"><%= art.title %></a>
                     </h4>
-                    <span style="font-size:0.75rem; color:var(--grey-500);"><%= formatTamilDate(art.publishedAt) %></span>
+                    <span class="card-date" style="font-size:0.75rem; color:var(--grey-500);" data-article-date="<%= art.publishedAt ? art.publishedAt.toISOString() : '' %>"><%= formatTamilDate(art.publishedAt) %></span>
                   </div>
                 </article>
               <% }); %>
@@ -177,7 +177,7 @@
         <% if (typeof sportsNews !== 'undefined' && sportsNews.length > 0) { %>
           <div>
             <div class="section-header">
-              <h3 class="section-title">கிரிக்கெட் & விளையாட்டு</h3>
+              <h3 class="section-title" data-i18n="sports_title">கிரிக்கெட் & விளையாட்டு</h3>
               <a href="/category/cricket-sports" class="section-more-link">&rarr;</a>
             </div>
             <div class="horizontal-news-list">
@@ -190,9 +190,9 @@
                   </div>
                   <div class="h-content">
                     <h4 class="h-title" style="font-size:0.95rem;">
-                      <a href="/news/<%= art.slug %>"><%= art.title %></a>
+                      <a href="/news/<%= art.slug %>" data-art-slug="<%= art.slug %>"><%= art.title %></a>
                     </h4>
-                    <span style="font-size:0.75rem; color:var(--grey-500);"><%= formatTamilDate(art.publishedAt) %></span>
+                    <span class="card-date" style="font-size:0.75rem; color:var(--grey-500);" data-article-date="<%= art.publishedAt ? art.publishedAt.toISOString() : '' %>"><%= formatTamilDate(art.publishedAt) %></span>
                   </div>
                 </article>
               <% }); %>
@@ -209,7 +209,7 @@
       <!-- Trending Stories Widget -->
       <div class="sidebar-widget">
         <h3 class="widget-title">
-          <span>அதிகம் வாசிக்கப்பட்டவை</span>
+          <span data-i18n="trending_title">அதிகம் வாசிக்கப்பட்டவை</span>
           <span style="color:var(--primary-red); font-size:0.9rem;">🔥 Trending</span>
         </h3>
         <div class="trending-list">
@@ -218,8 +218,8 @@
               <div class="trending-item">
                 <span class="trending-rank">0<%= idx + 1 %></span>
                 <div class="trending-title">
-                  <a href="/news/<%= item.slug %>"><%= item.title %></a>
-                  <div style="font-size:0.75rem; color:var(--grey-500); margin-top:0.25rem;">
+                  <a href="/news/<%= item.slug %>" data-art-slug="<%= item.slug %>"><%= item.title %></a>
+                  <div style="font-size:0.75rem; color:var(--grey-500); margin-top:0.25rem;" data-cat-slug="<%= item.category.slug %>">
                     <%= item.category.nameTamil %>
                   </div>
                 </div>
@@ -231,7 +231,7 @@
 
       <!-- Social Follow Widget -->
       <div class="sidebar-widget">
-        <h3 class="widget-title">சமூக வலைதளங்களில் இணைந்திருங்கள்</h3>
+        <h3 class="widget-title" data-i18n="social_follow">சமூக வலைதளங்களில் இணைந்திருங்கள்</h3>
         <div class="social-buttons-grid">
           <a href="https://facebook.com" target="_blank" rel="noopener" class="social-btn fb">Facebook</a>
           <a href="https://x.com" target="_blank" rel="noopener" class="social-btn tw">X (Twitter)</a>
@@ -242,11 +242,11 @@
 
       <!-- Categories Widget -->
       <div class="sidebar-widget">
-        <h3 class="widget-title">அனைத்து செய்திப் பிரிவுகள்</h3>
+        <h3 class="widget-title" data-i18n="all_categories">அனைத்து செய்திப் பிரிவுகள்</h3>
         <div class="category-badges-widget">
           <% if (typeof categories !== 'undefined') { %>
             <% categories.forEach(function(cat) { %>
-              <a href="/category/<%= cat.slug %>" class="category-badge-link">
+              <a href="/category/<%= cat.slug %>" class="category-badge-link" data-cat-slug="<%= cat.slug %>">
                 <%= cat.nameTamil %>
               </a>
             <% }); %>

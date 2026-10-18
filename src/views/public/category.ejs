@@ -4,18 +4,18 @@
   
   <!-- Breadcrumbs -->
   <nav class="article-breadcrumbs">
-    <a href="/">முகப்பு</a>
+    <a href="/" data-i18n="home">முகப்பு</a>
     <span class="separator">/</span>
-    <span style="color:var(--charcoal-900); font-weight:600;"><%= category.nameTamil %></span>
+    <span style="color:var(--charcoal-900); font-weight:600;" data-cat-slug="<%= category.slug %>"><%= category.nameTamil %></span>
   </nav>
 
   <!-- Category Title Header -->
-  <div style="background-color:var(--white); border-radius:var(--border-radius-md); padding:1.75rem; border:1px solid var(--grey-200); margin-bottom:2rem; border-left:6px solid var(--primary-red);">
-    <h1 style="font-size:1.85rem; font-weight:800; color:var(--charcoal-900); margin-bottom:0.5rem;">
-      <%= category.nameTamil %> (<%= category.nameEnglish %>)
+  <div class="category-header-banner" style="background-color:var(--white); border-radius:var(--border-radius-md); padding:1.75rem; border:1px solid var(--grey-200); margin-bottom:2rem; border-left:6px solid var(--primary-red);">
+    <h1 class="category-banner-title" data-cat-title="<%= category.slug %>" style="font-size:1.85rem; font-weight:800; color:var(--charcoal-900); margin-bottom:0.5rem;">
+      <%= category.nameTamil %>
     </h1>
     <% if (category.description) { %>
-      <p style="color:var(--grey-600); font-size:1rem; margin:0;"><%= category.description %></p>
+      <p class="category-banner-desc" data-cat-desc="<%= category.slug %>" style="color:var(--grey-600); font-size:1rem; margin:0;"><%= category.description %></p>
     <% } %>
   </div>
 
@@ -36,16 +36,16 @@
                        alt="<%= article.imageAlt || article.title %>" 
                        loading="lazy" />
                 </a>
-                <span class="card-category-pill"><%= category.nameTamil %></span>
+                <span class="card-category-pill" data-cat-slug="<%= category.slug %>"><%= category.nameTamil %></span>
               </div>
               <div class="card-body">
                 <h2 class="card-title" style="font-size:1.15rem;">
-                  <a href="/news/<%= article.slug %>"><%= article.title %></a>
+                  <a href="/news/<%= article.slug %>" data-art-slug="<%= article.slug %>"><%= article.title %></a>
                 </h2>
-                <p class="card-excerpt"><%= article.shortDescription %></p>
+                <p class="card-excerpt" data-excerpt-slug="<%= article.slug %>"><%= article.shortDescription %></p>
                 <div class="card-footer">
-                  <span><%= formatTamilDate(article.publishedAt) %></span>
-                  <span><%= calculateReadingTime(article.fullContent) %></span>
+                  <span class="card-date" data-article-date="<%= article.publishedAt ? article.publishedAt.toISOString() : '' %>"><%= formatTamilDate(article.publishedAt) %></span>
+                  <span class="card-reading-time" data-read-min="1"><%= calculateReadingTime(article.fullContent) %></span>
                 </div>
               </div>
             </article>
@@ -56,7 +56,7 @@
         <% if (pagination.totalPages > 1) { %>
           <div class="pagination-wrap">
             <% if (pagination.page > 1) { %>
-              <a href="/category/<%= category.slug %>?page=<%= pagination.page - 1 %>" class="page-btn">&laquo; முந்தையது</a>
+              <a href="/category/<%= category.slug %>?page=<%= pagination.page - 1 %>" class="page-btn" data-i18n="prev_page">&laquo; முந்தையது</a>
             <% } %>
 
             <% for (let p = 1; p <= pagination.totalPages; p++) { %>
@@ -66,16 +66,16 @@
             <% } %>
 
             <% if (pagination.page < pagination.totalPages) { %>
-              <a href="/category/<%= category.slug %>?page=<%= pagination.page + 1 %>" class="page-btn">அடுத்தது &raquo;</a>
+              <a href="/category/<%= category.slug %>?page=<%= pagination.page + 1 %>" class="page-btn" data-i18n="next_page">அடுத்தது &raquo;</a>
             <% } %>
           </div>
         <% } %>
 
       <% } else { %>
         <div style="background-color:var(--white); padding:3rem; border-radius:var(--border-radius-md); text-align:center; border:1px solid var(--grey-200);">
-          <h3 style="color:var(--grey-600); margin-bottom:0.5rem;">இந்த பிரிவில் செய்திகள் எதுவும் இல்லை</h3>
-          <p style="color:var(--grey-400);">விரைவில் புதிய செய்திகள் பதிவேற்றப்படும்.</p>
-          <a href="/" class="page-btn" style="margin-top:1rem; display:inline-flex;">முகப்புக்குச் செல்</a>
+          <h3 style="color:var(--grey-600); margin-bottom:0.5rem;" data-i18n="no_articles_title">இந்த பிரிவில் செய்திகள் எதுவும் இல்லை</h3>
+          <p style="color:var(--grey-400);" data-i18n="no_articles_desc">விரைவில் புதிய செய்திகள் பதிவேற்றப்படும்.</p>
+          <a href="/" class="page-btn" style="margin-top:1rem; display:inline-flex;" data-i18n="go_home">முகப்புக்குச் செல்</a>
         </div>
       <% } %>
 
@@ -84,14 +84,14 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-widget">
-        <h3 class="widget-title">அதிகம் வாசிக்கப்பட்டவை</h3>
+        <h3 class="widget-title" data-i18n="trending_title">அதிகம் வாசிக்கப்பட்டவை</h3>
         <div class="trending-list">
           <% if (typeof trending !== 'undefined' && trending.length > 0) { %>
             <% trending.forEach(function(item, idx) { %>
               <div class="trending-item">
                 <span class="trending-rank">0<%= idx + 1 %></span>
                 <div class="trending-title">
-                  <a href="/news/<%= item.slug %>"><%= item.title %></a>
+                  <a href="/news/<%= item.slug %>" data-art-slug="<%= item.slug %>"><%= item.title %></a>
                 </div>
               </div>
             <% }); %>
@@ -101,11 +101,11 @@
 
       <!-- Categories Widget -->
       <div class="sidebar-widget">
-        <h3 class="widget-title">பிற செய்திப் பிரிவுகள்</h3>
+        <h3 class="widget-title" data-i18n="other_categories">பிற செய்திப் பிரிவுகள்</h3>
         <div class="category-badges-widget">
           <% if (typeof categories !== 'undefined') { %>
             <% categories.forEach(function(cat) { %>
-              <a href="/category/<%= cat.slug %>" class="category-badge-link <%= cat.slug === category.slug ? 'active' : '' %>">
+              <a href="/category/<%= cat.slug %>" class="category-badge-link <%= cat.slug === category.slug ? 'active' : '' %>" data-cat-slug="<%= cat.slug %>">
                 <%= cat.nameTamil %>
               </a>
             <% }); %>

@@ -2,7 +2,7 @@
    KKK MEDIA — Dynamic Tamil News & Blog CMS Design System
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* Brand Palette */
@@ -545,6 +545,11 @@ ul {
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin-bottom: 2.5rem;
+}
+
+.news-cards-grid > article:only-child {
+  grid-column: 1 / -1;
+  max-width: 620px;
 }
 
 .news-card {
@@ -1758,4 +1763,260 @@ ul {
   background-color: var(--theme-surface-elevated);
   border-color: var(--theme-border);
   color: var(--theme-text-muted);
+}
+
+
+/* ==========================================================================
+   LANGUAGE SELECTOR & MULTILINGUAL SYSTEM (TAMIL / ENGLISH / MALAYALAM)
+   ========================================================================== */
+
+/* Top Bar Language Dropdown */
+.lang-dropdown-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-switch-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.775rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--transition-fast);
+}
+
+.lang-switch-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background-color: var(--white);
+  border: 1px solid var(--grey-300);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  min-width: 170px;
+  z-index: 1050;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lang-dropdown-menu.show {
+  display: flex;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--charcoal-900);
+  transition: background-color var(--transition-fast);
+  width: 100%;
+}
+
+.lang-option:hover {
+  background-color: var(--grey-100);
+  color: var(--primary-red);
+}
+
+.lang-option.active {
+  background-color: rgba(200, 16, 46, 0.08);
+  color: var(--primary-red);
+  font-weight: 700;
+}
+
+.lang-code-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background-color: var(--grey-200);
+  color: var(--charcoal-700);
+  margin-right: 0.4rem;
+}
+
+.lang-option.active .lang-code-pill {
+  background-color: var(--primary-red);
+  color: #ffffff;
+}
+
+.lang-check {
+  font-weight: 800;
+  opacity: 0;
+  color: var(--primary-red);
+}
+
+.lang-option.active .lang-check {
+  opacity: 1;
+}
+
+/* Compact Header Language Button */
+.header-lang-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.header-lang-btn {
+  background: var(--grey-100);
+  border: 1px solid var(--grey-300);
+  padding: 0.45rem 0.75rem;
+  border-radius: 30px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--charcoal-900);
+  transition: all var(--transition-fast);
+}
+
+.header-lang-btn:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  background-color: var(--white);
+}
+
+.header-lang-dropdown-menu {
+  top: calc(100% + 8px);
+  right: 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+/* Mobile Drawer Language Section */
+.mobile-lang-section {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-lang-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-lang-pills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.mobile-lang-pill {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.45rem 0.2rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.mobile-lang-pill:hover,
+.mobile-lang-pill.active {
+  background-color: var(--primary-red);
+  border-color: var(--primary-red);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Dark Mode Overrides for Language Selector */
+[data-theme="dark"] .lang-dropdown-menu {
+  background-color: var(--theme-surface);
+  border-color: var(--theme-border-strong);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .lang-option {
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .lang-option:hover {
+  background-color: var(--theme-surface-elevated);
+  color: var(--primary-light-red);
+}
+
+[data-theme="dark"] .lang-option.active {
+  background-color: rgba(200, 16, 46, 0.2);
+  color: var(--primary-light-red);
+}
+
+[data-theme="dark"] .lang-code-pill {
+  background-color: var(--theme-surface-elevated);
+  color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .lang-option.active .lang-code-pill {
+  background-color: var(--primary-red);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .header-lang-btn {
+  background-color: var(--theme-surface-elevated);
+  border-color: var(--theme-border-strong);
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .header-lang-btn:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-light-red);
+  background-color: var(--theme-surface-subtle);
+}
+
+/* Hide Google Translate Banner and Clutter for Seamless UI */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
 }
