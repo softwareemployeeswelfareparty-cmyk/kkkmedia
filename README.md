@@ -173,13 +173,25 @@ Copy the example configuration:
 ```bash
 cp .env.example .env
 ```
-Inside `.env`, configure your database URL:
-```env
-# For Production / Local PostgreSQL Server:
-DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/kkkmedia?schema=public"
 
-# For Instant Zero-Config Local Development:
-# DATABASE_URL="file:./dev.db"
+#### Option A: Supabase (Recommended for Permanent Free Cloud Database & Storage)
+1. Create a free project on [Supabase](https://supabase.com).
+2. Go to **Project Settings** > **Database**:
+   - Copy **URI (Transaction Pooler - port 6543)** into `DATABASE_URL`
+   - Copy **URI (Direct Connection - port 5432)** into `DIRECT_URL`
+3. (Optional) In **Storage**, create a public bucket named `kkkmedia` and copy your project URL and Anon key into `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
+
+```env
+DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres"
+SUPABASE_URL="https://[PROJECT-REF].supabase.co"
+SUPABASE_ANON_KEY="your-supabase-anon-key"
+SUPABASE_STORAGE_BUCKET="kkkmedia"
+```
+
+#### Option B: Local Development / Fallback
+```env
+DATABASE_URL="file:./dev.db"
 ```
 
 ### 3. Start PostgreSQL (with Docker Compose)
