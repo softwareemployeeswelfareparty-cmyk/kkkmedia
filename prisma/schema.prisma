@@ -1,12 +1,11 @@
-// PostgreSQL schema for KKK Media production (Supabase)
+// SQLite schema for KKK Media local dev fallback
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
