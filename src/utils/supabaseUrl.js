@@ -8,19 +8,22 @@
 
 function fixSupabaseUrl(urlStr, targetPort = null) {
   if (!urlStr || typeof urlStr !== 'string') return urlStr;
-  if (!urlStr.includes('.supabase.co')) return urlStr;
+  if (!urlStr.includes('supabase.co') && !urlStr.includes('pooler.supabase.com')) return urlStr;
 
   try {
     const parsed = new URL(urlStr);
     
-    // Only rewrite if pointing to direct db.[ref].supabase.co host
+    // Project qfxzvhdqcglyftilhetm is in AWS ap-southeast-1 (Singapore)
+    const defaultRegion = 'aws-0-ap-southeast-1';
+    const region = process.env.SUPABASE_REGION || defaultRegion;
+    const poolerHost = region.includes('.pooler.supabase.com') 
+      ? region 
+      : `${region}.pooler.supabase.com`;
+
+    // 1. If pointing to direct db.[ref].supabase.co host (IPv6 only)
     if (parsed.hostname.startsWith('db.')) {
       const parts = parsed.hostname.split('.');
       const projectRef = parts[1];
-      const region = process.env.SUPABASE_REGION || 'aws-0-ap-south-1';
-      const poolerHost = region.includes('.pooler.supabase.com') 
-        ? region 
-        : `${region}.pooler.supabase.com`;
 
       parsed.hostname = poolerHost;
 
@@ -28,20 +31,21 @@ function fixSupabaseUrl(urlStr, targetPort = null) {
       if (parsed.username && !parsed.username.includes('.')) {
         parsed.username = `${parsed.username}.${projectRef}`;
       }
-
-      if (targetPort) {
-        parsed.port = String(targetPort);
-        if (targetPort === 5432) {
-          // Session mode: do not include pgbouncer flag
-          parsed.searchParams.delete('pgbouncer');
-        } else if (targetPort === 6543) {
-          // Transaction mode: pgBouncer requires this flag
-          parsed.searchParams.set('pgbouncer', 'true');
-        }
-      }
-
-      return parsed.toString();
     }
+
+    // 2. Adjust port & pgbouncer flag depending on use-case (5432 for migrations, 6543 for app)
+    if (parsed.hostname.includes('.pooler.supabase.com') && targetPort) {
+      parsed.port = String(targetPort);
+      if (targetPort === 5432) {
+        // Session mode for db push / migrations (no pgbouncer param)
+        parsed.searchParams.delete('pgbouncer');
+      } else if (targetPort === 6543) {
+        // Transaction mode for pooler
+        parsed.searchParams.set('pgbouncer', 'true');
+      }
+    }
+
+    return parsed.toString();
   } catch (err) {
     // If URL parsing fails, return original string
   }

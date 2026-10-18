@@ -8,17 +8,16 @@ let dbUrl = process.env.DATABASE_URL || 'file:./dev.db';
 let directUrl = process.env.DIRECT_URL || dbUrl;
 
 // Ensure URLs are IPv4 compatible if pointing to Supabase
-dbUrl = fixSupabaseUrl(dbUrl, 6543);
-directUrl = fixSupabaseUrl(directUrl, 5432);
-
-process.env.DATABASE_URL = dbUrl;
-process.env.DIRECT_URL = directUrl;
-
 const isPostgres = dbUrl.startsWith('postgres://') || dbUrl.startsWith('postgresql://');
 
-console.log(`[Database Sync] Detected database URL: ${dbUrl.replace(/:[^:]*@/, ':****@')}`);
-console.log(`[Database Sync] Direct migration URL: ${directUrl.replace(/:[^:]*@/, ':****@')}`);
-console.log(`[Database Sync] Provider: ${isPostgres ? 'PostgreSQL' : 'SQLite'}`);
+if (isPostgres) {
+  // During schema sync (DDL), use session port 5432 for both DATABASE_URL and DIRECT_URL
+  // to prevent pgBouncer transaction pooler (port 6543) from rejecting schema changes
+  const sessionUrl = fixSupabaseUrl(directUrl || dbUrl, 5432);
+  process.env.DATABASE_URL = sessionUrl;
+  process.env.DIRECT_URL = sessionUrl;
+  console.log(`[Database Sync] IPv4 Session URL for schema push: ${sessionUrl.replace(/:[^:]*@/, ':****@')}`);
+}
 
 const prismaDir = path.join(__dirname, '..', 'prisma');
 const schemaPath = path.join(prismaDir, 'schema.prisma');
