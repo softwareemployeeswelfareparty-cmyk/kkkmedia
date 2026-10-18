@@ -13,27 +13,34 @@ function fixSupabaseUrl(urlStr, targetPort = null) {
   try {
     const parsed = new URL(urlStr);
     
-    // Project qfxzvhdqcglyftilhetm is in AWS ap-southeast-1 (Singapore)
+    // Project qfxzvhdqcglyftilhetm is confirmed in AWS ap-southeast-1 (Singapore)
     const defaultRegion = 'aws-0-ap-southeast-1';
     const region = process.env.SUPABASE_REGION || defaultRegion;
     const poolerHost = region.includes('.pooler.supabase.com') 
       ? region 
       : `${region}.pooler.supabase.com`;
 
-    // 1. If pointing to direct db.[ref].supabase.co host (IPv6 only)
+    // Extract project ref from db.[ref].supabase.co or SUPABASE_URL
+    let projectRef = 'qfxzvhdqcglyftilhetm';
     if (parsed.hostname.startsWith('db.')) {
-      const parts = parsed.hostname.split('.');
-      const projectRef = parts[1];
-
+      projectRef = parsed.hostname.split('.')[1];
       parsed.hostname = poolerHost;
+    } else if (process.env.SUPABASE_URL) {
+      try {
+        const su = new URL(process.env.SUPABASE_URL);
+        projectRef = su.hostname.split('.')[0];
+      } catch (e) {}
+    }
 
-      // In Supabase pooler, username format must be: [user].[project-ref]
+    // On Supabase shared poolers, the username MUST be: [user].[project-ref]
+    // If username is just 'postgres', authentication will fail with 'credentials for postgres not valid'
+    if (parsed.hostname.includes('.pooler.supabase.com')) {
       if (parsed.username && !parsed.username.includes('.')) {
         parsed.username = `${parsed.username}.${projectRef}`;
       }
     }
 
-    // 2. Adjust port & pgbouncer flag depending on use-case (5432 for migrations, 6543 for app)
+    // Adjust port & pgbouncer flag depending on use-case (5432 for migrations, 6543 for app)
     if (parsed.hostname.includes('.pooler.supabase.com') && targetPort) {
       parsed.port = String(targetPort);
       if (targetPort === 5432) {
