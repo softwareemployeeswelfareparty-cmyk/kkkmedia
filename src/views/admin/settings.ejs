@@ -32,13 +32,44 @@
           <textarea name="site_description" class="form-control" style="min-height:80px;"><%= settings.site_description || '' %></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">தள Favicon / உலாவி ஐகான் (Favicon URL)</label>
-          <div style="display:flex; gap:0.75rem; align-items:center;">
-            <input type="text" name="site_favicon" id="site_favicon" class="form-control" placeholder="/favicon.ico or /images/favicon.ico" value="<%= settings.site_favicon || '/favicon.ico' %>">
-            <img id="faviconPreview" src="<%= settings.site_favicon || '/favicon.ico' %>" alt="Favicon" style="width:32px; height:32px; object-fit:contain; border:1px solid #e2e8f0; border-radius:4px; padding:2px; background:#fff;" onerror="this.src='/images/favicon.ico'">
+        <!-- 1. Dedicated Option for Site Logo -->
+        <div class="form-group" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
+          <label class="form-label" style="font-weight:700; color:#0f172a; display:flex; align-items:center; gap:0.5rem;">
+            <span>🖼️ தள முதன்மை இலச்சினை (Site Logo)</span>
+          </label>
+          <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:0.5rem;">
+            <input type="text" name="site_logo" id="site_logo" class="form-control" placeholder="/images/logo.png" value="<%= settings.site_logo || '/images/logo.png' %>">
+            <button type="button" class="btn btn-secondary" id="btnUploadLogo" style="white-space:nowrap; padding:0.55rem 0.9rem; font-size:0.85rem; font-weight:600;">
+              📤 லோகோ பதிவேற்று
+            </button>
+            <input type="file" id="logoFileInput" accept="image/*" style="display:none;">
           </div>
-          <div class="form-help">உலாவியின் தத்தலில் (Browser Tab) தோன்றும் சிறிய ஐகான்.</div>
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-top:0.5rem;">
+            <div style="width:52px; height:52px; border-radius:50%; border:2px solid #ef4444; overflow:hidden; background:#111827; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 0 10px rgba(239,68,68,0.25);">
+              <img id="logoPreview" src="<%= settings.site_logo || '/images/logo.png' %>" alt="Logo Preview" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='/images/kkkmedia-logo.svg'">
+            </div>
+            <div class="form-help" style="margin:0;">இணையதளத்தின் தலைப்பு (Header), அடிக்குறிப்பு (Footer) மற்றும் நிர்வாக தளத்தில் தோன்றும் அதிகாரப்பூர்வ லோகோ.</div>
+          </div>
+        </div>
+
+        <!-- 2. Dedicated Option for Browser Favicon -->
+        <div class="form-group" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
+          <label class="form-label" style="font-weight:700; color:#0f172a; display:flex; align-items:center; gap:0.5rem;">
+            <span>🌐 உலாவி ஐகான் (Browser Favicon)</span>
+          </label>
+          <div style="display:flex; gap:0.75rem; align-items:center; margin-bottom:0.5rem;">
+            <input type="text" name="site_favicon" id="site_favicon" class="form-control" placeholder="/images/favicon.png or /favicon.ico" value="<%= settings.site_favicon || '/images/favicon.png' %>">
+            <button type="button" class="btn btn-secondary" id="btnUploadFavicon" style="white-space:nowrap; padding:0.55rem 0.9rem; font-size:0.85rem; font-weight:600;">
+              📤 ஐகான் பதிவேற்று
+            </button>
+            <input type="file" id="faviconFileInput" accept="image/*,.ico" style="display:none;">
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-top:0.5rem;">
+            <div style="width:36px; height:36px; border:1px solid #cbd5e1; border-radius:6px; overflow:hidden; background:#ffffff; display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:2px;">
+              <img id="faviconPreview" src="<%= settings.site_favicon || '/images/favicon.png' %>" alt="Favicon Preview" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='/images/favicon.svg'">
+            </div>
+            <div class="form-help" style="margin:0;">உலாவியின் தத்தல் (Browser Tab) மற்றும் புக்மார்க்குகளில் தோன்றும் 32x32 ஐகான்.</div>
+          </div>
         </div>
 
         <div class="form-group">
@@ -176,14 +207,88 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // 1. Live Preview handlers
+    const logoInput = document.getElementById('site_logo');
+    const logoPrev = document.getElementById('logoPreview');
+    if (logoInput && logoPrev) {
+      logoInput.addEventListener('input', () => {
+        logoPrev.src = logoInput.value.trim() || '/images/logo.png';
+      });
+    }
+
     const favInput = document.getElementById('site_favicon');
     const favPrev = document.getElementById('faviconPreview');
     if (favInput && favPrev) {
       favInput.addEventListener('input', () => {
-        favPrev.src = favInput.value.trim() || '/favicon.ico';
+        favPrev.src = favInput.value.trim() || '/images/favicon.png';
       });
     }
 
+    // 2. Direct Logo Upload Handler
+    const btnUploadLogo = document.getElementById('btnUploadLogo');
+    const logoFileInput = document.getElementById('logoFileInput');
+    if (btnUploadLogo && logoFileInput) {
+      btnUploadLogo.addEventListener('click', () => logoFileInput.click());
+      logoFileInput.addEventListener('change', async () => {
+        const file = logoFileInput.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('altText', 'KKK Media Logo');
+        btnUploadLogo.disabled = true;
+        btnUploadLogo.textContent = 'பதிவேற்றப்படுகிறது...';
+        try {
+          const res = await fetch('/api/media/upload', { method: 'POST', body: formData });
+          const data = await res.json();
+          if (data.success && data.data && data.data.url) {
+            if (logoInput) logoInput.value = data.data.url;
+            if (logoPrev) logoPrev.src = data.data.url;
+            alert('லோகோ வெற்றிகரமாக பதிவேற்றப்பட்டது! மாற்றங்களை உறுதிசெய்ய "தள அமைப்புகளைச் சேமி" பொத்தானை அழுத்தவும்.');
+          } else {
+            alert('லோகோ பதிவேற்றம் தோல்வியடைந்தது: ' + (data.message || 'Error'));
+          }
+        } catch (err) {
+          alert('Network error: ' + err.message);
+        } finally {
+          btnUploadLogo.disabled = false;
+          btnUploadLogo.textContent = '📤 லோகோ பதிவேற்று';
+        }
+      });
+    }
+
+    // 3. Direct Favicon Upload Handler
+    const btnUploadFavicon = document.getElementById('btnUploadFavicon');
+    const faviconFileInput = document.getElementById('faviconFileInput');
+    if (btnUploadFavicon && faviconFileInput) {
+      btnUploadFavicon.addEventListener('click', () => faviconFileInput.click());
+      faviconFileInput.addEventListener('change', async () => {
+        const file = faviconFileInput.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('altText', 'KKK Media Favicon');
+        btnUploadFavicon.disabled = true;
+        btnUploadFavicon.textContent = 'பதிவேற்றப்படுகிறது...';
+        try {
+          const res = await fetch('/api/media/upload', { method: 'POST', body: formData });
+          const data = await res.json();
+          if (data.success && data.data && data.data.url) {
+            if (favInput) favInput.value = data.data.url;
+            if (favPrev) favPrev.src = data.data.url;
+            alert('ஃபேவிகான் ஐகான் வெற்றிகரமாக பதிவேற்றப்பட்டது! மாற்றங்களை உறுதிசெய்ய "தள அமைப்புகளைச் சேமி" பொத்தானை அழுத்தவும்.');
+          } else {
+            alert('ஃபேவிகான் பதிவேற்றம் தோல்வியடைந்தது: ' + (data.message || 'Error'));
+          }
+        } catch (err) {
+          alert('Network error: ' + err.message);
+        } finally {
+          btnUploadFavicon.disabled = false;
+          btnUploadFavicon.textContent = '📤 ஐகான் பதிவேற்று';
+        }
+      });
+    }
+
+    // 4. Cache Revalidation Handler
     const btnReval = document.getElementById('btnRevalidateCache');
     if (btnReval) {
       btnReval.addEventListener('click', async () => {

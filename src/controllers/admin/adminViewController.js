@@ -3,14 +3,16 @@ const articleService = require('../../services/articleService');
 const categoryService = require('../../services/categoryService');
 const settingsService = require('../../services/settingsService');
 
-const loginView = (req, res) => {
+const loginView = async (req, res) => {
   if (req.user) {
     return res.redirect('/admin/dashboard');
   }
+  const settings = await settingsService.getSettingsMap();
   res.render('admin/login', {
     title: 'Admin Login | KKK Media CMS',
     error: req.query.error || null,
     redirect: req.query.redirect || '/admin/dashboard',
+    settings,
   });
 };
 

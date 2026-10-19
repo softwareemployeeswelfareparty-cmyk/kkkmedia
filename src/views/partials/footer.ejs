@@ -4,8 +4,12 @@
       <div class="footer-top-grid">
         <!-- Brand Summary -->
         <div class="footer-brand">
-          <div class="logo-container" style="margin-bottom:0.85rem;">
-            <div class="logo-badge" style="font-size:1.3rem;">KKK</div>
+          <div class="logo-container" style="margin-bottom:0.85rem; display:flex; align-items:center; gap:0.65rem;">
+            <% if (typeof settings !== 'undefined' && settings.site_logo) { %>
+              <img src="<%= settings.site_logo %>" alt="KKK Media Logo" style="width:42px; height:42px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+            <% } else { %>
+              <div class="logo-badge" style="font-size:1.3rem;">KKK</div>
+            <% } %>
             <div class="logo-title" style="color:var(--white); font-size:1.4rem;">KKK <span>MEDIA</span></div>
           </div>
           <p class="footer-desc" data-i18n="footer_site_desc">

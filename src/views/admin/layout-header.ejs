@@ -28,9 +28,9 @@
   <!-- Admin Sidebar -->
   <aside class="admin-sidebar" id="adminSidebar">
     <div class="sidebar-header">
-      <div class="sidebar-logo">
-        <span class="sidebar-logo-badge">KKK</span>
-        <span>MEDIA CMS</span>
+      <div class="sidebar-logo" style="display: flex; align-items: center; gap: 10px;">
+        <img src="<%= (typeof settings !== 'undefined' && settings.site_logo) ? settings.site_logo : '/images/logo.png' %>" alt="KKK Media" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(220, 38, 38, 0.4); box-shadow: 0 0 10px rgba(220,38,38,0.3);" onerror="this.onerror=null; this.src='/images/logo.png';">
+        <span style="font-weight: 700; letter-spacing: 0.5px;">MEDIA CMS</span>
       </div>
     </div>
 
