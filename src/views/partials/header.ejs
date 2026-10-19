@@ -56,7 +56,7 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="icon" type="image/png" href="<%= typeof settings !== 'undefined' && settings.site_favicon ? settings.site_favicon : '/images/favicon.png' %>">
 </head>
 <body>
 

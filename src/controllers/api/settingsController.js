@@ -24,7 +24,21 @@ const updateSettings = async (req, res, next) => {
   }
 };
 
+const revalidateCache = async (req, res, next) => {
+  try {
+    settingsService.clearSettingsCache();
+    await logAction(req.user.id, 'UPDATE', 'SiteSetting', null, 'Purged and revalidated application cache', req);
+    res.json({
+      success: true,
+      message: 'Application cache purged & public pages successfully revalidated.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getSettings,
   updateSettings,
+  revalidateCache,
 };

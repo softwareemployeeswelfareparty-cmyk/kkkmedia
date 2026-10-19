@@ -1,24 +1,55 @@
 <%- include('../partials/header') %>
 
-<main class="container" style="padding-top: 3rem; padding-bottom: 5rem; text-align: center;">
-  <div style="background-color: var(--white); max-width: 650px; margin: 0 auto; padding: 3.5rem 2rem; border-radius: var(--border-radius-md); border: 1px solid var(--grey-200); box-shadow: var(--box-shadow-sm);">
-    <div style="font-size: 5rem; font-weight: 900; color: var(--primary-red); line-height: 1; margin-bottom: 1rem;">
+<main class="container" style="padding-top: 3.5rem; padding-bottom: 5rem; text-align: center;">
+  <div style="background-color: var(--white); max-width: 680px; margin: 0 auto; padding: 3.5rem 2.5rem; border-radius: var(--border-radius-md); border: 1px solid var(--grey-200); box-shadow: var(--box-shadow-sm);">
+    <div style="font-size: 5.5rem; font-weight: 900; color: var(--primary-red); line-height: 1; margin-bottom: 1rem; letter-spacing:-2px;">
       <%= typeof statusCode !== 'undefined' ? statusCode : 404 %>
     </div>
-    <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--charcoal-900); margin-bottom: 0.75rem;">
-      <%= typeof title !== 'undefined' ? title : 'பக்கம் கிடைக்கவில்லை' %>
+    
+    <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--charcoal-900); margin-bottom: 0.75rem;" data-i18n="page_not_found_title">
+      <%= typeof title !== 'undefined' ? title : 'பக்கம் கிடைக்கவில்லை (Page Not Found)' %>
     </h1>
-    <p style="color: var(--grey-600); margin-bottom: 2rem; font-size: 1rem;">
-      <%= typeof message !== 'undefined' ? message : 'நீங்கள் தேடும் பக்கம் நீக்கப்பட்டிருக்கலாம் அல்லது முகவரி மாற்றப்பட்டிருக்கலாம்.' %>
+    
+    <p style="color: var(--grey-600); margin-bottom: 2rem; font-size: 1rem; line-height: 1.6;" data-i18n="page_not_found_desc">
+      <%= typeof message !== 'undefined' ? message : 'நீங்கள் தேடும் செய்தி அல்லது பக்கம் நீக்கப்பட்டிருக்கலாம் அல்லது முகவரி மாற்றப்பட்டிருக்கலாம். கீழே தேடவும் அல்லது முகப்புக்குச் செல்லவும்.' %>
     </p>
-    <div style="display:flex; justify-content:center; gap:1rem;">
-      <a href="/" class="search-submit-btn" style="text-decoration:none; display:inline-flex; align-items:center; padding:0.65rem 1.5rem;">
-        முகப்புக்குச் செல்
-      </a>
-      <a href="/search" class="page-btn" style="text-decoration:none; display:inline-flex; align-items:center;">
-        செய்திகள் தேடுக
-      </a>
+
+    <!-- Direct Search Form for Lost Readers -->
+    <form action="/search" method="GET" style="display:flex; max-width:500px; margin:0 auto 2rem auto; gap:0.5rem;">
+      <input 
+        type="search" 
+        name="q" 
+        class="search-bar-input" 
+        style="width:100%; border:1.5px solid var(--grey-300); border-radius:var(--border-radius-sm); padding:0.75rem 1rem; font-size:0.95rem; outline:none;" 
+        placeholder="செய்தியின் தலைப்பு அல்லது வார்த்தைகளைத் தேடுங்கள்..." 
+        data-i18n-ph="search_404_placeholder" 
+        required
+      >
+      <button type="submit" class="search-submit-btn" style="padding:0.75rem 1.5rem; font-weight:700; white-space:nowrap; border:none; cursor:pointer;" data-i18n="search_btn">
+        தேடு
+      </button>
+    </form>
+
+    <div style="border-top: 1px solid var(--grey-200); padding-top: 1.5rem; margin-top: 1rem;">
+      <div style="font-size: 0.85rem; color: var(--grey-500); margin-bottom: 1rem;" data-i18n="quick_links">
+        முக்கிய பிரிவுகள்
+      </div>
+      <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:0.75rem;">
+        <a href="/" class="page-btn" style="text-decoration:none; display:inline-flex; align-items:center; font-size:0.9rem; padding:0.5rem 1rem;" data-i18n="go_home">
+          முகப்புக்குச் செல்
+        </a>
+        <a href="/category/tamil-nadu-politics" class="page-btn" style="text-decoration:none; display:inline-flex; align-items:center; font-size:0.9rem; padding:0.5rem 1rem;">
+          தமிழ்நாடு அரசியல்
+        </a>
+        <a href="/category/cinema-celebrity" class="page-btn" style="text-decoration:none; display:inline-flex; align-items:center; font-size:0.9rem; padding:0.5rem 1rem;">
+          சினிமா
+        </a>
+        <a href="/category/cricket-sports" class="page-btn" style="text-decoration:none; display:inline-flex; align-items:center; font-size:0.9rem; padding:0.5rem 1rem;">
+          விளையாட்டு
+        </a>
+      </div>
     </div>
+
   </div>
 </main>
 

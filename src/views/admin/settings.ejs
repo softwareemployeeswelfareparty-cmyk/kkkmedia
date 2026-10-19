@@ -33,6 +33,15 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label">தள Favicon / உலாவி ஐகான் (Favicon URL)</label>
+          <div style="display:flex; gap:0.75rem; align-items:center;">
+            <input type="text" name="site_favicon" id="site_favicon" class="form-control" placeholder="/favicon.ico or /images/favicon.ico" value="<%= settings.site_favicon || '/favicon.ico' %>">
+            <img id="faviconPreview" src="<%= settings.site_favicon || '/favicon.ico' %>" alt="Favicon" style="width:32px; height:32px; object-fit:contain; border:1px solid #e2e8f0; border-radius:4px; padding:2px; background:#fff;" onerror="this.src='/images/favicon.ico'">
+          </div>
+          <div class="form-help">உலாவியின் தத்தலில் (Browser Tab) தோன்றும் சிறிய ஐகான்.</div>
+        </div>
+
+        <div class="form-group">
           <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
             <input type="checkbox" name="breaking_news_enabled" id="breaking_news_enabled" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= settings.breaking_news_enabled === 'true' ? 'checked' : '' %>>
             <span><strong data-admin-i18n="settings_enable_ticker">முக்கிய செய்திகள் டிக்கரை இயக்கு (Enable Breaking Ticker)</strong></span>
@@ -125,6 +134,26 @@
       </div>
     </div>
 
+    <!-- Cache Management & Instant Revalidation -->
+    <div class="admin-card" style="grid-column: span 2;">
+      <div class="card-header-padded" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h2 style="font-size:1.1rem; font-weight:700;">கேச் & உடனடி புதுப்பிப்பு (Cache & Revalidation)</h2>
+          <p style="font-size:0.85rem; color:#64748b; margin:0.25rem 0 0 0;">பொதுப் பக்கங்கள் மற்றும் அமைப்புகளின் கேச்சை அழித்து உடனடியாக இணையதளத்தில் புதிய மாற்றங்களைப் பிரதிபலிக்கச் செய்க.</p>
+        </div>
+        <button type="button" id="btnRevalidateCache" class="btn" style="background:#0284c7; color:#fff; display:inline-flex; align-items:center; gap:0.5rem; font-weight:600; padding:0.6rem 1.25rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          <span>கேச் புதுப்பி (Purge & Revalidate Cache)</span>
+        </button>
+      </div>
+      <div class="card-body-padded" style="background:#f8fafc; border-top:1px solid #e2e8f0;">
+        <div style="font-size:0.875rem; color:#475569; display:flex; align-items:center; gap:0.75rem;">
+          <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; flex-shrink:0;"></span>
+          <span><strong>தானியங்கி புதுப்பிப்பு இயங்குகிறது (Auto-Revalidation Active):</strong> புதிய செய்திகள் வெளியிடும் போதோ அல்லது அமைப்புகள் சேமிக்கப்படும் போதோ கேச் தானாகவே அழிக்கப்பட்டு புதுப்பிக்கப்படும். ஏதேனும் முரண்பாடுகள் இருப்பின் மேலே உள்ள பொத்தானை அழுத்தி உடனடியாக கேச்சை அழிக்கலாம்.</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div style="margin-top:1.5rem; text-align:right;">
@@ -133,5 +162,43 @@
     </button>
   </div>
 </form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const favInput = document.getElementById('site_favicon');
+    const favPrev = document.getElementById('faviconPreview');
+    if (favInput && favPrev) {
+      favInput.addEventListener('input', () => {
+        favPrev.src = favInput.value.trim() || '/favicon.ico';
+      });
+    }
+
+    const btnReval = document.getElementById('btnRevalidateCache');
+    if (btnReval) {
+      btnReval.addEventListener('click', async () => {
+        const origContent = btnReval.innerHTML;
+        btnReval.disabled = true;
+        btnReval.innerHTML = '<span>புதுப்பிக்கப்படுகிறது...</span>';
+        try {
+          const res = await fetch('/api/settings/revalidate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            alert(data.message || 'கேச் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!');
+          } else {
+            alert('கேச் புதுப்பிப்பதில் தோல்வி: ' + (data.message || 'Unknown error'));
+          }
+        } catch (err) {
+          alert('தொடர்பு பிழை: ' + err.message);
+        } finally {
+          btnReval.disabled = false;
+          btnReval.innerHTML = origContent;
+        }
+      });
+    }
+  });
+</script>
 
 <%- include('layout-footer') %>

@@ -24,11 +24,17 @@ const getSettingsMap = async (forceRefresh = false) => {
   map.contact_email = map.contact_email || 'contact@kkkmedia.com';
   map.contact_phone = map.contact_phone || '+91 44 2855 0101';
   map.contact_address = map.contact_address || 'Chennai, Tamil Nadu';
+  map.site_favicon = map.site_favicon || '/images/favicon.png';
   map.adsense_enabled = map.adsense_enabled === 'true';
 
   settingsCache = map;
   lastFetch = now;
   return map;
+};
+
+const clearSettingsCache = () => {
+  settingsCache = null;
+  lastFetch = 0;
 };
 
 const getAllSettings = async () => {
@@ -70,4 +76,5 @@ module.exports = {
   getAllSettings,
   updateSetting,
   bulkUpdateSettings,
+  clearSettingsCache,
 };

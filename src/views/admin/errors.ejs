@@ -1,0 +1,149 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+  <div>
+    <h1 class="page-title">பிழைகள் & உடைந்த பக்கங்கள் கண்காணிப்பு (Error Monitoring)</h1>
+    <p class="page-subtitle">தளத்தில் ஏற்படும் 404 உடைந்த பக்கங்கள், பதிவேற்றப் பிழைகள் மற்றும் சர்வர் நிகழ்வுகளை கண்காணிக்கவும்.</p>
+  </div>
+  <% if (typeof errors !== 'undefined' && errors && errors.length > 0) { %>
+    <button type="button" class="btn btn-secondary" id="btnClearErrors" style="color:#ef4444; border-color:#fca5a5;">
+      அனைத்து பதிவுகளையும் அழி (Clear Error Logs)
+    </button>
+  <% } %>
+</div>
+
+<!-- Metrics Overview -->
+<div class="dashboard-stats-grid" style="margin-bottom: 2rem;">
+  <% 
+    const list = (typeof errors !== 'undefined' && errors) ? errors : [];
+    const count404 = list.filter(e => e.type === '404_NOT_FOUND' || e.statusCode === 404).length;
+    const countUpload = list.filter(e => e.type === 'UPLOAD_ERROR').length;
+    const countServer = list.filter(e => e.type === 'SERVER_ERROR' || e.statusCode >= 500).length;
+  %>
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-title">மொத்த பிழைகள் (Total Errors)</span>
+      <div class="stat-icon-wrapper" style="background:rgba(239,68,68,0.1); color:#ef4444;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      </div>
+    </div>
+    <div class="stat-value"><%= list.length %></div>
+    <div class="stat-trend">சமீபத்திய நிகழ்வுகள்</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-title">404 உடைந்த பக்கங்கள் (404 Broken URLs)</span>
+      <div class="stat-icon-wrapper" style="background:rgba(245,158,11,0.1); color:#f59e0b;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+      </div>
+    </div>
+    <div class="stat-value"><%= count404 %></div>
+    <div class="stat-trend">இல்லாத அல்லது நீக்கப்பட்ட பக்கங்கள்</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-title">பதிவேற்றப் பிழைகள் (Upload Errors)</span>
+      <div class="stat-icon-wrapper" style="background:rgba(59,130,246,0.1); color:#3b82f6;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+      </div>
+    </div>
+    <div class="stat-value"><%= countUpload %></div>
+    <div class="stat-trend">அளவு அல்லது வடிவம் மீறல்</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-title">சர்வர் பிழைகள் (500 Server Errors)</span>
+      <div class="stat-icon-wrapper" style="background:rgba(168,85,247,0.1); color:#a855f7;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+      </div>
+    </div>
+    <div class="stat-value"><%= countServer %></div>
+    <div class="stat-trend">தொழில்நுட்ப சிக்கல்கள்</div>
+  </div>
+</div>
+
+<!-- Logs Table -->
+<div class="admin-card">
+  <div class="card-header-padded">
+    <h2 style="font-size:1.05rem; font-weight:700;">நிகழ்வுப் பதிவுகள் (Real-time Event Logs)</h2>
+  </div>
+  <div class="card-body-padded" style="padding:0;">
+    <div style="overflow-x:auto;">
+      <table class="admin-table" style="margin:0;">
+        <thead>
+          <tr>
+            <th>நேரம் (Timestamp)</th>
+            <th>பிழை வகை (Type)</th>
+            <th>பாதை / URL (Path)</th>
+            <th>விவரம் (Message)</th>
+            <th>IP / பயனர் முகவர் (Client Info)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (list.length > 0) { %>
+            <% list.forEach(function(err) { %>
+              <tr>
+                <td style="white-space:nowrap; font-size:0.8rem; color:var(--admin-text-muted);">
+                  <%= new Date(err.timestamp).toLocaleString('ta-IN', { hour12: true }) %>
+                </td>
+                <td>
+                  <% if (err.type === '404_NOT_FOUND') { %>
+                    <span class="badge" style="background:#fef3c7; color:#92400e; font-weight:700; padding:0.25rem 0.5rem; border-radius:4px;">404 NOT FOUND</span>
+                  <% } else if (err.type === 'UPLOAD_ERROR') { %>
+                    <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; padding:0.25rem 0.5rem; border-radius:4px;">UPLOAD ERROR</span>
+                  <% } else { %>
+                    <span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700; padding:0.25rem 0.5rem; border-radius:4px;">SERVER ERROR</span>
+                  <% } %>
+                </td>
+                <td>
+                  <code style="background:rgba(0,0,0,0.05); padding:0.2rem 0.4rem; border-radius:4px; font-weight:600;"><%= err.path %></code>
+                </td>
+                <td style="font-size:0.85rem; max-width:280px; word-break:break-word;">
+                  <%= err.message %>
+                </td>
+                <td style="font-size:0.75rem; color:var(--admin-text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="<%= err.userAgent %>">
+                  <strong><%= err.ip || 'Localhost' %></strong><br>
+                  <%= err.userAgent ? err.userAgent.substring(0, 45) + '...' : '' %>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="5" style="text-align:center; padding:3rem; color:var(--admin-text-muted);">
+                <div style="font-size:2rem; margin-bottom:0.5rem;">✓</div>
+                பிழைகள் எதுவும் பதிவாகவில்லை. தளம் சீராக இயங்குகிறது! (No errors recorded. All systems operational!)
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnClear = document.getElementById('btnClearErrors');
+    if (btnClear) {
+      btnClear.addEventListener('click', async () => {
+        if (!confirm('அனைத்து பிழைப் பதிவுகளையும் அழிக்க விரும்புகிறீர்களா? (Clear all logs?)')) return;
+        try {
+          const res = await fetch('/api/errors/clear', { method: 'POST' });
+          const data = await res.json();
+          if (data && data.success) {
+            window.location.reload();
+          } else {
+            alert(data.message || 'Error clearing logs');
+          }
+        } catch (err) {
+          alert('Network error: ' + err.message);
+        }
+      });
+    }
+  });
+</script>
+
+<%- include('layout-footer') %>

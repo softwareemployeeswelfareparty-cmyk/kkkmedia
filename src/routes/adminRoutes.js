@@ -33,6 +33,12 @@ router.get('/settings', authenticate, authorizeRoles('ADMIN'), adminViewControll
 // Important Pages view (About Us, Privacy, Terms, Disclaimer, Contact)
 router.get('/pages', authenticate, adminViewController.pagesView);
 
+// Redirects Management view (ADMIN role only)
+router.get('/redirects', authenticate, authorizeRoles('ADMIN'), adminViewController.redirectsView);
+
+// Error Monitoring view (ADMIN role only)
+router.get('/errors', authenticate, authorizeRoles('ADMIN'), adminViewController.errorsView);
+
 // Profile view
 router.get('/profile', authenticate, adminViewController.profileView);
 

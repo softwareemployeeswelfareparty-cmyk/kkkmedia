@@ -45,11 +45,24 @@ router.get('/media', authenticate, mediaController.getMediaList);
 router.post('/media/upload', authenticate, upload.single('image'), mediaController.uploadImage);
 router.delete('/media/:id', authenticate, authorizeRoles('ADMIN'), mediaController.deleteMedia);
 
-// 6. Settings Endpoints
+const redirectController = require('../controllers/api/redirectController');
+const errorLogController = require('../controllers/api/errorLogController');
+
+// 6. Settings & Revalidation Endpoints
 router.get('/settings', settingsController.getSettings);
 router.put('/settings', authenticate, authorizeRoles('ADMIN'), settingsController.updateSettings);
+router.post('/settings/revalidate', authenticate, authorizeRoles('ADMIN'), settingsController.revalidateCache);
 
-// 7. Dynamic Translation Endpoint (Website & Admin CMS)
+// 7. Redirect Management Endpoints (ADMIN)
+router.get('/redirects', authenticate, authorizeRoles('ADMIN'), redirectController.getRedirects);
+router.post('/redirects', authenticate, authorizeRoles('ADMIN'), redirectController.createRedirect);
+router.delete('/redirects/:id', authenticate, authorizeRoles('ADMIN'), redirectController.deleteRedirect);
+
+// 8. Error Monitoring Endpoints (ADMIN)
+router.get('/errors', authenticate, authorizeRoles('ADMIN'), errorLogController.getErrorLogs);
+router.post('/errors/clear', authenticate, authorizeRoles('ADMIN'), errorLogController.clearErrorLogs);
+
+// 9. Dynamic Translation Endpoint (Website & Admin CMS)
 router.post('/translate', translateController.translate);
 
 module.exports = router;

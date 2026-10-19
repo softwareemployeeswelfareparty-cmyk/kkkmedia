@@ -60,6 +60,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Redirect Management Middleware (301/302 URL redirects)
+const redirectMiddleware = require('./middlewares/redirectMiddleware');
+app.use(redirectMiddleware);
+
 // Mount Routes
 app.use('/api', apiRoutes);
 app.use('/admin', adminRoutes);

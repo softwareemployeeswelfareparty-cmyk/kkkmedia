@@ -338,6 +338,11 @@ document.addEventListener('DOMContentLoaded', () => {
       next_page: "அடுத்தது »",
       no_articles_title: "இந்த பிரிவில் செய்திகள் எதுவும் இல்லை",
       no_articles_desc: "விரைவில் புதிய செய்திகள் பதிவேற்றப்படும்.",
+      page_not_found_title: "பக்கம் கிடைக்கவில்லை (Page Not Found)",
+      page_not_found_desc: "நீங்கள் தேடும் செய்தி அல்லது பக்கம் நீக்கப்பட்டிருக்கலாம் அல்லது முகவரி மாற்றப்பட்டிருக்கலாம். கீழே தேடவும் அல்லது முகப்புக்குச் செல்லவும்.",
+      back_home: "முகப்புக்குச் செல்",
+      search_articles: "செய்திகள் தேடுக",
+      search_404_placeholder: "செய்தியின் தலைப்பு அல்லது வார்த்தைகளைத் தேடுங்கள்...",
       go_home: "முகப்புக்குச் செல்",
       published_label: "வெளியீடு:",
       views_label: "பார்வைகள்",
@@ -410,6 +415,11 @@ document.addEventListener('DOMContentLoaded', () => {
       next_page: "Next »",
       no_articles_title: "No articles found in this category",
       no_articles_desc: "New stories will be published shortly.",
+      page_not_found_title: "Page Not Found",
+      page_not_found_desc: "The page or news story you are looking for may have been removed, renamed, or is temporarily unavailable. Search below or return to home.",
+      back_home: "Back to Home",
+      search_articles: "Search News",
+      search_404_placeholder: "Search headline or keywords...",
       go_home: "Go to Home",
       published_label: "Published:",
       views_label: "views",
@@ -482,6 +492,11 @@ document.addEventListener('DOMContentLoaded', () => {
       next_page: "അടുത്തത് »",
       no_articles_title: "ഈ വിഭാഗത്തിൽ വാർത്തകൾ ലഭ്യമല്ല",
       no_articles_desc: "ഉടൻ തന്നെ പുതിയ വാർത്തകൾ ലഭ്യമാകും.",
+      page_not_found_title: "പേജ് കണ്ടെത്താനായില്ല",
+      page_not_found_desc: "നിങ്ങൾ തിരയുന്ന വാർത്തയോ പേജോ നീക്കം ചെയ്തിരിക്കാം അല്ലെങ്കിൽ വിലാസം മാറിയിരിക്കാം. താഴെ തിരയുകയോ ഹോമിലേക്ക് മടങ്ങുകയോ ചെയ്യുക.",
+      back_home: "ഹോമിലേക്ക് പോകുക",
+      search_articles: "വാർത്തകൾ തിരയുക",
+      search_404_placeholder: "വാർത്തയുടെ തലക്കെട്ട് അല്ലെങ്കിൽ വാക്കുകൾ തിരയുക...",
       go_home: "ഹോമിലേക്ക് പോകുക",
       published_label: "പ്രസിദ്ധീകരിച്ചത്:",
       views_label: "കാഴ്ചകൾ",
@@ -672,6 +687,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           el.textContent = dict[key];
         }
+      }
+    });
+
+    // 1b. Placeholder elements with data-i18n-ph
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      if (dict[key]) {
+        el.placeholder = dict[key];
       }
     });
 

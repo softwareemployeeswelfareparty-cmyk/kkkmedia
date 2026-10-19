@@ -257,6 +257,36 @@ const pagesView = async (req, res, next) => {
   }
 };
 
+const redirectsView = async (req, res, next) => {
+  try {
+    const redirectService = require('../../services/redirectService');
+    const redirects = await redirectService.getAllRedirects();
+    res.render('admin/redirects', {
+      title: 'மறுதிசைவு மேலாண்மை (Redirect Management) | KKK Media Admin',
+      activeTab: 'redirects',
+      redirects,
+      user: req.user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const errorsView = async (req, res, next) => {
+  try {
+    const errorLogService = require('../../services/errorLogService');
+    const errors = await errorLogService.getErrorLogs();
+    res.render('admin/errors', {
+      title: 'பிழைகள் & உடைந்த பக்கங்கள் கண்காணிப்பு (Error Monitoring) | KKK Media Admin',
+      activeTab: 'errors',
+      errors,
+      user: req.user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   loginView,
   dashboardView,
@@ -268,4 +298,6 @@ module.exports = {
   settingsView,
   pagesView,
   profileView,
+  redirectsView,
+  errorsView,
 };
