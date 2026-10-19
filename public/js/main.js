@@ -362,6 +362,10 @@ document.addEventListener('DOMContentLoaded', () => {
       privacy_page_title: "தனியுரிமைக் கொள்கை (Privacy Policy)",
       terms_page_title: "பயன்பாட்டு விதிமுறைகள் (Terms & Conditions)",
       disclaimer_page_title: "பொறுப்புத் துறப்பு & ஆசிரியர் நெறிமுறைகள் (Disclaimer & Editorial Standards)",
+      footer_site_desc: "KKK Media தமிழ்நாடு அரசியல், தவெக, சினிமா, விளையாட்டு, தொழில்நுட்பம் மற்றும் உலக நடப்புகளை உடனுக்குடன் நடுநிலையுடன் வழங்கும் முன்னணி செய்தி தளம்.",
+      footer_email_label: "மின்னஞ்சல்:",
+      footer_phone_label: "தொலைபேசி:",
+      footer_rights: "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை (All Rights Reserved).",
       categories: {
         'tamil-nadu-politics': "தமிழ்நாடு அரசியல்",
         'tvk-news': "தவெக செய்திகள்",
@@ -430,6 +434,10 @@ document.addEventListener('DOMContentLoaded', () => {
       privacy_page_title: "Privacy Policy",
       terms_page_title: "Terms & Conditions",
       disclaimer_page_title: "Disclaimer & Editorial Standards",
+      footer_site_desc: "KKK Media is Tamil Nadu's trusted digital media portal delivering unbiased and breaking updates on politics, TVK, cinema, sports, technology and world affairs.",
+      footer_email_label: "Email:",
+      footer_phone_label: "Phone:",
+      footer_rights: "All Rights Reserved.",
       categories: {
         'tamil-nadu-politics': "Tamil Nadu Politics",
         'tvk-news': "TVK News",
@@ -498,6 +506,10 @@ document.addEventListener('DOMContentLoaded', () => {
       privacy_page_title: "സ്വകാര്യതാ നയം (Privacy Policy)",
       terms_page_title: "നിബന്ധനകളും വ്യവസ്ഥകളും (Terms & Conditions)",
       disclaimer_page_title: "നിരാകരണവും എഡിറ്റോറിയൽ മാനദണ്ഡങ്ങളും (Disclaimer)",
+      footer_site_desc: "തമിഴ്‌നാട് രാഷ്ട്രീയം, ടിവികെ, സിനിമ, കായികരംഗം, സാങ്കേതികവിദ്യ, ലോക വാർത്തകൾ എന്നിവ നിഷ്പക്ഷമായും തത്സമയവും നൽകുന്ന തമിഴിലെ മുൻനിര ഡിജിറ്റൽ വാർത്താ പോർട്ടലാണ് KKK മീഡിയ.",
+      footer_email_label: "ഇമെയിൽ:",
+      footer_phone_label: "ഫോൺ:",
+      footer_rights: "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം (All Rights Reserved).",
       categories: {
         'tamil-nadu-politics': "തമിഴ്നാട് രാഷ്ട്രീയം",
         'tvk-news': "ടിവികെ വാർത്തകൾ",
@@ -801,6 +813,11 @@ document.addEventListener('DOMContentLoaded', () => {
         el.setAttribute('data-orig-html', el.innerHTML);
       }
     });
+
+    const footerDescEl = document.querySelector('.footer-desc');
+    if (footerDescEl && !footerDescEl.hasAttribute('data-orig-text')) {
+      footerDescEl.setAttribute('data-orig-text', footerDescEl.textContent.trim());
+    }
   };
 
   // 12. Dynamic Translation Service for CMS-created Articles
@@ -833,6 +850,10 @@ document.addEventListener('DOMContentLoaded', () => {
           el.innerHTML = el.getAttribute('data-orig-html');
         }
       });
+      const footerDescEl = document.querySelector('.footer-desc');
+      if (footerDescEl && footerDescEl.hasAttribute('data-orig-text')) {
+        footerDescEl.textContent = footerDescEl.getAttribute('data-orig-text');
+      }
       return;
     }
 

@@ -8,28 +8,33 @@
             <div class="logo-badge" style="font-size:1.3rem;">KKK</div>
             <div class="logo-title" style="color:var(--white); font-size:1.4rem;">KKK <span>MEDIA</span></div>
           </div>
-          <p class="footer-desc">
-            <%= typeof settings !== 'undefined' && settings.site_description ? settings.site_description : 'KKK Media தமிழ் நாட்டின் முன்னணி செய்திகள், அரசியல், சினிமா மற்றும் விளையாட்டு நிகழ்வுகளை உடனுக்குடன் வழங்கும் நடுநிலையான டிஜிட்டல் ஊடகம்.' %>
+          <p class="footer-desc" data-i18n="footer_site_desc">
+            <%= typeof settings !== 'undefined' && settings.site_description ? settings.site_description : 'KKK Media தமிழ்நாடு அரசியல், தவெக, சினிமா, விளையாட்டு, தொழில்நுட்பம் மற்றும் உலக நடப்புகளை உடனுக்குடன் நடுநிலையுடன் வழங்கும் முன்னணி செய்தி தளம்.' %>
           </p>
-          <div style="display:flex; gap:0.6rem;">
-            <% if (typeof settings !== 'undefined' && settings.social_facebook) { %>
-              <a href="<%= settings.social_facebook %>" target="_blank" rel="noopener" class="share-btn fb" aria-label="Facebook">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.667 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z"/></svg>
-              </a>
-            <% } %>
-            <% if (typeof settings !== 'undefined' && settings.social_twitter) { %>
-              <a href="<%= settings.social_twitter %>" target="_blank" rel="noopener" class="share-btn tw" aria-label="X Twitter">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </a>
-            <% } %>
-            <% if (typeof settings !== 'undefined' && settings.social_youtube) { %>
-              <a href="<%= settings.social_youtube %>" target="_blank" rel="noopener" class="share-btn" style="background-color:#ff0000;" aria-label="YouTube">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-              </a>
-            <% } %>
-            <% if (typeof settings !== 'undefined' && settings.social_telegram) { %>
-              <a href="<%= settings.social_telegram %>" target="_blank" rel="noopener" class="share-btn tg" aria-label="Telegram">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <% const fbUrl = (typeof settings !== 'undefined' && settings.social_facebook) ? settings.social_facebook : 'https://facebook.com'; %>
+            <a href="<%= fbUrl %>" target="_blank" rel="noopener" class="share-btn fb" aria-label="Facebook">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.667 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z"/></svg>
+            </a>
+
+            <% const twUrl = (typeof settings !== 'undefined' && settings.social_twitter) ? settings.social_twitter : 'https://x.com'; %>
+            <a href="<%= twUrl %>" target="_blank" rel="noopener" class="share-btn tw" aria-label="X Twitter">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+
+            <% const ytUrl = (typeof settings !== 'undefined' && settings.social_youtube) ? settings.social_youtube : 'https://youtube.com'; %>
+            <a href="<%= ytUrl %>" target="_blank" rel="noopener" class="share-btn" style="background-color:#ff0000;" aria-label="YouTube">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+
+            <% const tgUrl = (typeof settings !== 'undefined' && settings.social_telegram) ? settings.social_telegram : 'https://t.me'; %>
+            <a href="<%= tgUrl %>" target="_blank" rel="noopener" class="share-btn tg" aria-label="Telegram">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            </a>
+
+            <% if (typeof settings !== 'undefined' && settings.social_whatsapp) { %>
+              <a href="<%= settings.social_whatsapp %>" target="_blank" rel="noopener" class="share-btn wa" aria-label="WhatsApp" style="background-color:#25d366;">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.1-.477-.15-.678.15-.201.3-.778.978-.954 1.179-.176.2-.351.225-.652.075-.301-.15-1.27-.468-2.42-1.493-.894-.798-1.498-1.784-1.674-2.085-.176-.301-.019-.464.132-.614.135-.135.301-.351.451-.527.15-.176.201-.3.301-.501.1-.2.05-.376-.025-.526-.075-.15-.678-1.633-.929-2.238-.244-.588-.493-.509-.678-.518-.176-.009-.377-.009-.578-.009-.201 0-.527.075-.803.376-.276.3-1.054 1.03-1.054 2.512 0 1.482 1.079 2.913 1.23 3.113.15.201 2.122 3.24 5.14 4.544.718.31 1.279.495 1.716.634.721.23 1.378.197 1.897.12.578-.087 1.78-.727 2.031-1.43.251-.703.251-1.305.176-1.43-.075-.126-.276-.201-.577-.351z"/></svg>
               </a>
             <% } %>
           </div>
@@ -66,9 +71,9 @@
           <h4 class="footer-heading" data-i18n="office_address">அலுவலக முகவரி</h4>
           <div class="footer-contact-info">
             <p><strong>KKK Media Digital Portal</strong></p>
-            <p><%= typeof settings !== 'undefined' && settings.contact_address ? settings.contact_address : 'KKK Media Tower, Anna Salai, Chennai, Tamil Nadu 600002' %></p>
-            <p><strong>மின்னஞ்சல்:</strong> <%= typeof settings !== 'undefined' && settings.contact_email ? settings.contact_email : 'contact@kkkmedia.com' %></p>
-            <p><strong>தொலைபேசி:</strong> <%= typeof settings !== 'undefined' && settings.contact_phone ? settings.contact_phone : '+91 44 2855 0101' %></p>
+            <p <%- (!settings || !settings.contact_address) ? 'data-i18n="contact_default_address"' : '' %>><%= typeof settings !== 'undefined' && settings.contact_address ? settings.contact_address : 'KKK Media Tower, Anna Salai, Chennai, Tamil Nadu 600002' %></p>
+            <p><strong data-i18n="footer_email_label">மின்னஞ்சல்:</strong> <%= typeof settings !== 'undefined' && settings.contact_email ? settings.contact_email : 'contact@kkkmedia.com' %></p>
+            <p><strong data-i18n="footer_phone_label">தொலைபேசி:</strong> <%= typeof settings !== 'undefined' && settings.contact_phone ? settings.contact_phone : '+91 44 2855 0101' %></p>
           </div>
         </div>
       </div>
@@ -76,7 +81,7 @@
       <!-- Copyright & Disclaimer -->
       <div class="footer-bottom">
         <div>
-          &copy; <%= currentYear %> <strong>KKK Media</strong>. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை (All Rights Reserved).
+          &copy; <%= currentYear %> <strong>KKK Media</strong>. <span data-i18n="footer_rights">அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை (All Rights Reserved).</span>
         </div>
         <div class="footer-bottom-links">
           <a href="/privacy-policy">Privacy Policy</a>

@@ -233,10 +233,10 @@
       <div class="sidebar-widget">
         <h3 class="widget-title" data-i18n="social_follow">சமூக வலைதளங்களில் இணைந்திருங்கள்</h3>
         <div class="social-buttons-grid">
-          <a href="https://facebook.com" target="_blank" rel="noopener" class="social-btn fb">Facebook</a>
-          <a href="https://x.com" target="_blank" rel="noopener" class="social-btn tw">X (Twitter)</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn yt">YouTube</a>
-          <a href="https://whatsapp.com" target="_blank" rel="noopener" class="social-btn wa">WhatsApp</a>
+          <a href="<%= typeof settings !== 'undefined' && settings.social_facebook ? settings.social_facebook : 'https://facebook.com' %>" target="_blank" rel="noopener" class="social-btn fb">Facebook</a>
+          <a href="<%= typeof settings !== 'undefined' && settings.social_twitter ? settings.social_twitter : 'https://x.com' %>" target="_blank" rel="noopener" class="social-btn tw">X (Twitter)</a>
+          <a href="<%= typeof settings !== 'undefined' && settings.social_youtube ? settings.social_youtube : 'https://youtube.com' %>" target="_blank" rel="noopener" class="social-btn yt">YouTube</a>
+          <a href="<%= typeof settings !== 'undefined' && settings.social_whatsapp ? settings.social_whatsapp : 'https://whatsapp.com' %>" target="_blank" rel="noopener" class="social-btn wa">WhatsApp</a>
         </div>
       </div>
 
