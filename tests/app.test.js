@@ -89,6 +89,20 @@ describe('KKK Media — Automated Test Suite', () => {
       expect(res.body.token).toBeDefined();
       expect(res.body.user.role).toBe('ADMIN');
     });
+
+    it('POST /api/translate - should translate text', async () => {
+      const res = await request(app)
+        .post('/api/translate')
+        .send({
+          text: 'வணக்கம்',
+          targetLang: 'en',
+          sourceLang: 'ta'
+        });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.translatedText).toBeDefined();
+    });
   });
 
 });
+

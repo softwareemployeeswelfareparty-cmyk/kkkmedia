@@ -26,11 +26,33 @@
       <div class="admin-card">
         <div class="card-body-padded">
           
+          <!-- Quick Language Converter Toolbar (English & Tamil) -->
+          <div class="admin-lang-converter-bar">
+            <div class="converter-info">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span><strong>செய்தி மொழி மாற்றம் (Article Language Converter):</strong></span>
+            </div>
+            <div class="converter-actions">
+              <button type="button" class="btn btn-secondary btn-sm" id="btnTranslateAllTaToEn" title="முழு செய்தியையும் ஆங்கிலத்தில் மாற்றவும் (Translate All to English)">
+                🌐 தமிழ் ➔ English
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnTranslateAllEnToTa" title="முழு செய்தியையும் தமிழில் மாற்றவும் (Translate All to Tamil)">
+                🌐 English ➔ தமிழ்
+              </button>
+            </div>
+          </div>
+          
           <!-- Article Title -->
           <div class="form-group">
-            <label for="articleTitle" class="form-label">
-              <span data-admin-i18n="art_label_headline">செய்தி தலைப்பு (Headline)</span> <span style="color:#ef4444;">*</span>
-            </label>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <label for="articleTitle" class="form-label" style="margin:0;">
+                <span data-admin-i18n="art_label_headline">செய்தி தலைப்பு (Headline)</span> <span style="color:#ef4444;">*</span>
+              </label>
+              <div style="display:flex; gap:0.35rem;">
+                <button type="button" class="btn-trans-mini" data-trans-target="articleTitle" data-trans-dir="ta2en" title="தலைப்பை ஆங்கிலத்தில் மாற்று">தமிழ் ➔ EN</button>
+                <button type="button" class="btn-trans-mini" data-trans-target="articleTitle" data-trans-dir="en2ta" title="தலைப்பை தமிழில் மாற்று">EN ➔ தமிழ்</button>
+              </div>
+            </div>
             <input type="text" 
                    id="articleTitle" 
                    class="form-control" 
@@ -60,9 +82,15 @@
 
           <!-- Short Description / Excerpt -->
           <div class="form-group">
-            <label for="shortDescription" class="form-label">
-              <span data-admin-i18n="art_label_excerpt">சுருக்க உரை (Short Description / Excerpt)</span> <span style="color:#ef4444;">*</span>
-            </label>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <label for="shortDescription" class="form-label" style="margin:0;">
+                <span data-admin-i18n="art_label_excerpt">சுருக்க உரை (Short Description / Excerpt)</span> <span style="color:#ef4444;">*</span>
+              </label>
+              <div style="display:flex; gap:0.35rem;">
+                <button type="button" class="btn-trans-mini" data-trans-target="shortDescription" data-trans-dir="ta2en" title="சுருக்கத்தை ஆங்கிலத்தில் மாற்று">தமிழ் ➔ EN</button>
+                <button type="button" class="btn-trans-mini" data-trans-target="shortDescription" data-trans-dir="en2ta" title="சுருக்கத்தை தமிழில் மாற்று">EN ➔ தமிழ்</button>
+              </div>
+            </div>
             <textarea id="shortDescription" 
                       class="form-control" 
                       style="min-height:75px;" 
@@ -74,12 +102,15 @@
 
           <!-- Full Content Editor -->
           <div class="form-group">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.4rem;">
               <label for="fullContent" class="form-label" style="margin:0;">
                 <span data-admin-i18n="art_label_content">முழு செய்தி விவரம் (Full Content - HTML & Text)</span> <span style="color:#ef4444;">*</span>
               </label>
-              <!-- Quick Formatting Helper Pills -->
-              <div style="display:flex; gap:0.35rem;">
+              <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
+                <button type="button" class="btn-trans-mini" data-trans-target="fullContent" data-trans-dir="ta2en" title="கட்டுரையை ஆங்கிலத்தில் மாற்று">தமிழ் ➔ EN</button>
+                <button type="button" class="btn-trans-mini" data-trans-target="fullContent" data-trans-dir="en2ta" title="கட்டுரையை தமிழில் மாற்று">EN ➔ தமிழ்</button>
+                <span style="border-left:1px solid var(--admin-border); height:16px; margin:0 0.2rem;"></span>
+                <!-- Quick Formatting Helper Pills -->
                 <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<h2>', '</h2>')">H2</button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<h3>', '</h3>')">H3</button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<strong>', '</strong>')"><b>B</b></button>

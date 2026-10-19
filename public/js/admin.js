@@ -548,18 +548,156 @@ document.addEventListener('DOMContentLoaded', () => {
     const tagTextInput = document.getElementById('tagTextInput');
     const tagsHiddenInput = document.getElementById('tagsHidden');
 
+    // Helper function to generate clean URL slug
+    const makeSlug = (text) => {
+      return (text || '')
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    };
+
     // Auto slug from English/Tamil title if slug is empty or user is typing new article
     if (titleInput && slugInput) {
       titleInput.addEventListener('blur', () => {
         if (!slugInput.value.trim()) {
           const val = titleInput.value.trim();
-          const cleanSlug = val
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/[\s_-]+/g, '-')
-            .replace(/^-+|-+$/g, '');
+          const cleanSlug = makeSlug(val);
           slugInput.value = cleanSlug || `news-${Date.now()}`;
         }
+      });
+    }
+
+    // 2.0 In-form Language Conversion (English <-> Tamil)
+    const translateApiCall = async (textOrTexts, targetLang, sourceLang = 'auto') => {
+      const isBatch = Array.isArray(textOrTexts);
+      const body = isBatch
+        ? { texts: textOrTexts, targetLang, sourceLang }
+        : { text: textOrTexts, targetLang, sourceLang };
+
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error('Translation service unavailable');
+      return await res.json();
+    };
+
+    // Mini Translation Buttons for individual fields
+    document.querySelectorAll('.btn-trans-mini').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-trans-target');
+        const dir = btn.getAttribute('data-trans-dir');
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+
+        const originalText = targetEl.value;
+        if (!originalText || !originalText.trim()) {
+          showToast('மொழிபெயர்க்க உரையை உள்ளிடவும் (Please enter text to translate)', 'warning');
+          targetEl.focus();
+          return;
+        }
+
+        const origBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="trans-loading-spinner"></span>';
+
+        try {
+          const targetLang = dir === 'ta2en' ? 'en' : 'ta';
+          const sourceLang = dir === 'ta2en' ? 'ta' : 'en';
+          const data = await translateApiCall(originalText, targetLang, sourceLang);
+
+          if (data && data.success && data.translatedText) {
+            targetEl.value = data.translatedText;
+            targetEl.dispatchEvent(new Event('input'));
+
+            // If translating Title to English, automatically populate clean slug
+            if (targetId === 'articleTitle' && dir === 'ta2en' && slugInput) {
+              const newSlug = makeSlug(data.translatedText);
+              if (newSlug) {
+                slugInput.value = newSlug;
+              }
+            }
+
+            showToast(
+              targetLang === 'en'
+                ? 'ஆங்கிலத்தில் மொழிபெயர்க்கப்பட்டது! (Translated to English)'
+                : 'தமிழில் மொழிபெயர்க்கப்பட்டது! (Translated to Tamil)',
+              'success'
+            );
+          }
+        } catch (err) {
+          showToast('மொழிபெயர்ப்பு தோல்வியடைந்தது: ' + err.message, 'danger');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = origBtnHtml;
+        }
+      });
+    });
+
+    // Translate All (Ta -> En and En -> Ta)
+    const btnAllTaToEn = document.getElementById('btnTranslateAllTaToEn');
+    const btnAllEnToTa = document.getElementById('btnTranslateAllEnToTa');
+
+    const handleTranslateAll = async (targetLang, sourceLang, activeBtn) => {
+      const title = titleInput ? titleInput.value.trim() : '';
+      const excerpt = document.getElementById('shortDescription')?.value.trim() || '';
+      const content = document.getElementById('fullContent')?.value.trim() || '';
+
+      if (!title && !excerpt && !content) {
+        showToast('மொழிபெயர்க்க தலைப்பு அல்லது விவரத்தை உள்ளிடவும்', 'warning');
+        return;
+      }
+
+      const origText = activeBtn.innerHTML;
+      activeBtn.disabled = true;
+      activeBtn.innerHTML = '<span class="trans-loading-spinner"></span> மொழிபெயர்க்கப்படுகிறது...';
+
+      try {
+        const textsToTranslate = [title, excerpt, content];
+        const data = await translateApiCall(textsToTranslate, targetLang, sourceLang);
+
+        if (data && data.success && Array.isArray(data.translations)) {
+          const [tTitle, tExcerpt, tContent] = data.translations;
+          if (titleInput && tTitle) titleInput.value = tTitle;
+          const shortDescEl = document.getElementById('shortDescription');
+          if (shortDescEl && tExcerpt) shortDescEl.value = tExcerpt;
+          const fullContentEl = document.getElementById('fullContent');
+          if (fullContentEl && tContent) fullContentEl.value = tContent;
+
+          if (targetLang === 'en' && slugInput && tTitle) {
+            const cleanSlug = makeSlug(tTitle);
+            if (cleanSlug) slugInput.value = cleanSlug;
+          }
+
+          showToast(
+            targetLang === 'en'
+              ? 'முழு செய்தியும் ஆங்கிலத்தில் மாற்றப்பட்டது! (Article translated to English)'
+              : 'முழு செய்தியும் தமிழில் மாற்றப்பட்டது! (Article translated to Tamil)',
+            'success'
+          );
+        }
+      } catch (err) {
+        showToast('மொழிபெயர்ப்பு தோல்வியடைந்தது: ' + err.message, 'danger');
+      } finally {
+        activeBtn.disabled = false;
+        activeBtn.innerHTML = origText;
+      }
+    };
+
+    if (btnAllTaToEn) {
+      btnAllTaToEn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleTranslateAll('en', 'ta', btnAllTaToEn);
+      });
+    }
+
+    if (btnAllEnToTa) {
+      btnAllEnToTa.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleTranslateAll('ta', 'en', btnAllEnToTa);
       });
     }
 

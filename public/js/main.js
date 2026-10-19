@@ -641,7 +641,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Article Titles with data-art-slug
     document.querySelectorAll('[data-art-slug]').forEach(el => {
       const slug = el.getAttribute('data-art-slug');
-      if (slug && articlesDictionary[slug] && articlesDictionary[slug][lang]) {
+      const origText = el.getAttribute('data-orig-text') || el.textContent.trim();
+      const hasStatic = articlesDictionary[slug] && articlesDictionary[slug][lang];
+      const staticTa = articlesDictionary[slug] && articlesDictionary[slug].ta && articlesDictionary[slug].ta.title.trim();
+
+      if (lang === 'ta') {
+        el.textContent = origText;
+      } else if (hasStatic && (!staticTa || staticTa === origText)) {
         el.textContent = articlesDictionary[slug][lang].title;
       }
     });
@@ -649,7 +655,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Article Excerpts with data-excerpt-slug
     document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
       const slug = el.getAttribute('data-excerpt-slug');
-      if (slug && articlesDictionary[slug] && articlesDictionary[slug][lang]) {
+      const origText = el.getAttribute('data-orig-text') || el.textContent.trim();
+      const hasStatic = articlesDictionary[slug] && articlesDictionary[slug][lang];
+      const staticTa = articlesDictionary[slug] && articlesDictionary[slug].ta && articlesDictionary[slug].ta.desc.trim();
+
+      if (lang === 'ta') {
+        el.textContent = origText;
+      } else if (hasStatic && (!staticTa || staticTa === origText)) {
         el.textContent = articlesDictionary[slug][lang].desc;
       }
     });
@@ -677,9 +689,212 @@ document.addEventListener('DOMContentLoaded', () => {
     // 9. Top bar date
     updateDateDisplay(lang);
 
-    // 10. Background Google Translate for dynamically generated CMS articles
+    // 10. Dynamic translation for custom / CMS-created articles
+    dynamicTranslateElements(lang);
+
+    // 11. Background Google Translate fallback
     if (triggerFullTranslate) {
       triggerGoogleTranslate(lang);
+    }
+  };
+
+  // Helper to ensure original server-rendered text is preserved before any client mutation
+  const preserveOriginalContent = () => {
+    document.querySelectorAll('[data-art-slug]').forEach(el => {
+      if (!el.hasAttribute('data-orig-text')) {
+        el.setAttribute('data-orig-text', el.textContent.trim());
+      }
+    });
+
+    document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
+      if (!el.hasAttribute('data-orig-text')) {
+        el.setAttribute('data-orig-text', el.textContent.trim());
+      }
+    });
+
+    const headlineEl = document.querySelector('.article-headline');
+    if (headlineEl && !headlineEl.hasAttribute('data-orig-text')) {
+      headlineEl.setAttribute('data-orig-text', headlineEl.textContent.trim());
+    }
+
+    const excerptEl = document.querySelector('.article-subheadline');
+    if (excerptEl && !excerptEl.hasAttribute('data-orig-text')) {
+      excerptEl.setAttribute('data-orig-text', excerptEl.textContent.trim());
+    }
+
+    const breadcrumbEl = document.querySelector('.breadcrumb-current');
+    if (breadcrumbEl && !breadcrumbEl.hasAttribute('data-orig-text')) {
+      breadcrumbEl.setAttribute('data-orig-text', breadcrumbEl.textContent.trim());
+    }
+
+    const contentEl = document.querySelector('.article-content');
+    if (contentEl && !contentEl.hasAttribute('data-orig-html')) {
+      contentEl.setAttribute('data-orig-html', contentEl.innerHTML);
+    }
+  };
+
+  // 12. Dynamic Translation Service for CMS-created Articles
+  let currentTranslationRequestId = 0;
+
+  const dynamicTranslateElements = async (lang) => {
+    const requestId = ++currentTranslationRequestId;
+
+    const headlineEl = document.querySelector('.article-headline');
+    const excerptEl = document.querySelector('.article-subheadline');
+    const contentEl = document.querySelector('.article-content');
+    const breadcrumbEl = document.querySelector('.breadcrumb-current');
+
+    if (lang === 'ta') {
+      if (headlineEl && headlineEl.hasAttribute('data-orig-text')) {
+        headlineEl.textContent = headlineEl.getAttribute('data-orig-text');
+      }
+      if (excerptEl && excerptEl.hasAttribute('data-orig-text')) {
+        excerptEl.textContent = excerptEl.getAttribute('data-orig-text');
+      }
+      if (breadcrumbEl && breadcrumbEl.hasAttribute('data-orig-text')) {
+        breadcrumbEl.textContent = breadcrumbEl.getAttribute('data-orig-text');
+      }
+      if (contentEl && contentEl.hasAttribute('data-orig-html')) {
+        contentEl.innerHTML = contentEl.getAttribute('data-orig-html');
+      }
+      return;
+    }
+
+    // Detail article translation (en / ml)
+    if (headlineEl) {
+      const artSlug = headlineEl.getAttribute('data-art-slug');
+      const staticTitle = articlesDictionary[artSlug]?.[lang]?.title;
+      const staticTaTitle = articlesDictionary[artSlug]?.ta?.title?.trim();
+      const origTitle = (headlineEl.getAttribute('data-orig-text') || headlineEl.textContent).trim();
+
+      const needsDynamic = !staticTitle || (staticTaTitle && origTitle !== staticTaTitle);
+
+      if (needsDynamic) {
+        const origExcerpt = excerptEl ? (excerptEl.getAttribute('data-orig-text') || excerptEl.textContent).trim() : '';
+        const origContent = contentEl ? (contentEl.getAttribute('data-orig-html') || contentEl.innerHTML) : '';
+
+        const cacheKeyPrefix = `kkk_art_${artSlug || 'art'}_${lang}_`;
+        let cachedTitle = null;
+        let cachedExcerpt = null;
+        let cachedContent = null;
+        try {
+          cachedTitle = sessionStorage.getItem(cacheKeyPrefix + 'title');
+          cachedExcerpt = sessionStorage.getItem(cacheKeyPrefix + 'excerpt');
+          cachedContent = sessionStorage.getItem(cacheKeyPrefix + 'content');
+        } catch (e) {}
+
+        if (cachedTitle && (cachedExcerpt || !origExcerpt) && (cachedContent || !origContent)) {
+          if (headlineEl && cachedTitle) headlineEl.textContent = cachedTitle;
+          if (breadcrumbEl && cachedTitle) breadcrumbEl.textContent = cachedTitle.substring(0, 40) + '...';
+          if (excerptEl && cachedExcerpt) excerptEl.textContent = cachedExcerpt;
+          if (contentEl && cachedContent) contentEl.innerHTML = cachedContent;
+        } else {
+          try {
+            const textsToTranslate = [];
+            if (origTitle) textsToTranslate.push(origTitle);
+            if (origExcerpt) textsToTranslate.push(origExcerpt);
+            if (origContent) textsToTranslate.push(origContent);
+
+            if (textsToTranslate.length > 0) {
+              const res = await fetch('/api/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  texts: textsToTranslate,
+                  targetLang: lang,
+                  sourceLang: 'ta'
+                })
+              });
+
+              if (res.ok && requestId === currentTranslationRequestId) {
+                const data = await res.json();
+                if (data && data.success && Array.isArray(data.translations)) {
+                  let idx = 0;
+                  if (origTitle && data.translations[idx]) {
+                    const transTitle = data.translations[idx++];
+                    headlineEl.textContent = transTitle;
+                    if (breadcrumbEl) breadcrumbEl.textContent = transTitle.substring(0, 40) + '...';
+                    try { sessionStorage.setItem(cacheKeyPrefix + 'title', transTitle); } catch (e) {}
+                  }
+                  if (origExcerpt && data.translations[idx]) {
+                    const transExcerpt = data.translations[idx++];
+                    if (excerptEl) excerptEl.textContent = transExcerpt;
+                    try { sessionStorage.setItem(cacheKeyPrefix + 'excerpt', transExcerpt); } catch (e) {}
+                  }
+                  if (origContent && data.translations[idx]) {
+                    const transContent = data.translations[idx++];
+                    if (contentEl) contentEl.innerHTML = transContent;
+                    try { sessionStorage.setItem(cacheKeyPrefix + 'content', transContent); } catch (e) {}
+                  }
+                }
+              }
+            }
+          } catch (err) {
+            console.warn('[KKKMedia] Article dynamic translation error:', err.message);
+          }
+        }
+      }
+    }
+
+    // Cards translation on listing pages
+    const customCards = [];
+    document.querySelectorAll('[data-art-slug]').forEach(el => {
+      if (el.classList.contains('article-headline') || el.classList.contains('breadcrumb-current')) return;
+
+      const slug = el.getAttribute('data-art-slug');
+      const staticTitle = articlesDictionary[slug]?.[lang]?.title;
+      const staticTaTitle = articlesDictionary[slug]?.ta?.title?.trim();
+      const origText = (el.getAttribute('data-orig-text') || el.textContent).trim();
+
+      const needsDynamic = !staticTitle || (staticTaTitle && origText !== staticTaTitle);
+      if (needsDynamic) {
+        customCards.push({ el, origText, slug });
+      }
+    });
+
+    if (customCards.length > 0) {
+      const textsToFetch = [];
+      const itemsToFetch = [];
+
+      customCards.forEach(item => {
+        const cardCacheKey = `kkk_card_${item.slug || 'slug'}_${lang}`;
+        let cached = null;
+        try { cached = sessionStorage.getItem(cardCacheKey); } catch (e) {}
+
+        if (cached) {
+          item.el.textContent = cached;
+        } else {
+          textsToFetch.push(item.origText);
+          itemsToFetch.push({ ...item, cardCacheKey });
+        }
+      });
+
+      if (textsToFetch.length > 0) {
+        try {
+          const res = await fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              texts: textsToFetch,
+              targetLang: lang,
+              sourceLang: 'ta'
+            })
+          });
+
+          if (res.ok && requestId === currentTranslationRequestId) {
+            const data = await res.json();
+            if (data && data.success && Array.isArray(data.translations)) {
+              data.translations.forEach((trans, idx) => {
+                const item = itemsToFetch[idx];
+                if (item && trans) {
+                  item.el.textContent = trans;
+                  try { sessionStorage.setItem(item.cardCacheKey, trans); } catch (e) {}
+                }
+              });
+            }
+          }
+        } catch (e) {}
+      }
     }
   };
 
@@ -727,7 +942,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Preserve original server-rendered Tamil text before applying initial language
+  preserveOriginalContent();
+
   // Initialize language on load
   const initialLang = localStorage.getItem('kkk_lang') || 'ta';
   applyLanguage(initialLang, initialLang !== 'ta');
 });
+

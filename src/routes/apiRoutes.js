@@ -6,6 +6,7 @@ const categoryController = require('../controllers/api/categoryController');
 const mediaController = require('../controllers/api/mediaController');
 const settingsController = require('../controllers/api/settingsController');
 const statsController = require('../controllers/api/statsController');
+const translateController = require('../controllers/api/translateController');
 const { authenticate, authorizeRoles } = require('../middlewares/auth');
 const upload = require('../middlewares/upload');
 const { authLimiter, apiLimiter } = require('../middlewares/security');
@@ -47,5 +48,8 @@ router.delete('/media/:id', authenticate, authorizeRoles('ADMIN'), mediaControll
 // 6. Settings Endpoints
 router.get('/settings', settingsController.getSettings);
 router.put('/settings', authenticate, authorizeRoles('ADMIN'), settingsController.updateSettings);
+
+// 7. Dynamic Translation Endpoint (Website & Admin CMS)
+router.post('/translate', translateController.translate);
 
 module.exports = router;
