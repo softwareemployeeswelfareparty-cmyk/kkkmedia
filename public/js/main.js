@@ -341,6 +341,27 @@ document.addEventListener('DOMContentLoaded', () => {
       go_home: "முகப்புக்குச் செல்",
       published_label: "வெளியீடு:",
       views_label: "பார்வைகள்",
+      contact_page_title: "தொடர்புக்கு (Contact KKK Media)",
+      contact_hq_title: "தலைமை அலுவலகம்",
+      contact_address_label: "முகவரி:",
+      contact_default_address: "KKK Media Tower, அண்ணா சாலை, சென்னை, தமிழ்நாடு 600002",
+      contact_editor_email_label: "செய்தி ஆசிரியர் மின்னஞ்சல்:",
+      contact_phone_label: "தொலைபேசி / தொலைநகல்:",
+      contact_newsdesk_label: "செய்திப் பகிர்வுகள் & நிருபர்கள் தொடர்பு:",
+      contact_form_title: "கருத்து / செய்தி அனுப்ப",
+      contact_name_label: "உங்கள் பெயர்",
+      contact_email_label: "மின்னஞ்சல் முகவரி",
+      contact_msg_label: "செய்தி / கருத்து விவரம்",
+      contact_send_btn: "செய்தியை அனுப்பு (Send Message)",
+      contact_success_msg: "✓ உங்கள் செய்தி வெற்றிகரமாக பெறப்பட்டது. ஆசிரியர் குழு விரைவில் உங்களைத் தொடர்பு கொள்ளும். நன்றி!",
+      about_page_title: "எங்களைப் பற்றி (About KKK Media)",
+      about_mission_title: "எங்கள் நோக்கம் (Our Mission)",
+      about_coverage_title: "நாங்கள் உள்ளடக்கும் துறைகள்",
+      about_ethics_title: "பத்திரிகை தர்மம் & உண்மை சரிபார்ப்பு (Fact-Checking)",
+      about_editors_title: "தலைமை ஆசிரியர் குழு",
+      privacy_page_title: "தனியுரிமைக் கொள்கை (Privacy Policy)",
+      terms_page_title: "பயன்பாட்டு விதிமுறைகள் (Terms & Conditions)",
+      disclaimer_page_title: "பொறுப்புத் துறப்பு & ஆசிரியர் நெறிமுறைகள் (Disclaimer & Editorial Standards)",
       categories: {
         'tamil-nadu-politics': "தமிழ்நாடு அரசியல்",
         'tvk-news': "தவெக செய்திகள்",
@@ -388,6 +409,27 @@ document.addEventListener('DOMContentLoaded', () => {
       go_home: "Go to Home",
       published_label: "Published:",
       views_label: "views",
+      contact_page_title: "Contact Us (KKK Media)",
+      contact_hq_title: "Headquarters",
+      contact_address_label: "Address:",
+      contact_default_address: "KKK Media Tower, Anna Salai, Chennai, Tamil Nadu 600002",
+      contact_editor_email_label: "Chief Editor Email:",
+      contact_phone_label: "Phone / Fax:",
+      contact_newsdesk_label: "News Submissions & Reporter Desk:",
+      contact_form_title: "Send Message / Feedback",
+      contact_name_label: "Your Name",
+      contact_email_label: "Email Address",
+      contact_msg_label: "Message / Feedback Details",
+      contact_send_btn: "Send Message",
+      contact_success_msg: "✓ Your message has been received successfully. Our editorial team will contact you soon. Thank you!",
+      about_page_title: "About Us (KKK Media)",
+      about_mission_title: "Our Mission",
+      about_coverage_title: "Topics We Cover",
+      about_ethics_title: "Journalistic Ethics & Fact-Checking",
+      about_editors_title: "Editorial Board",
+      privacy_page_title: "Privacy Policy",
+      terms_page_title: "Terms & Conditions",
+      disclaimer_page_title: "Disclaimer & Editorial Standards",
       categories: {
         'tamil-nadu-politics': "Tamil Nadu Politics",
         'tvk-news': "TVK News",
@@ -435,6 +477,27 @@ document.addEventListener('DOMContentLoaded', () => {
       go_home: "ഹോമിലേക്ക് പോകുക",
       published_label: "പ്രസിദ്ധീകരിച്ചത്:",
       views_label: "കാഴ്ചകൾ",
+      contact_page_title: "ബന്ധപ്പെടുക (KKK മീഡിയ)",
+      contact_hq_title: "മുഖ്യ ഓഫീസ്",
+      contact_address_label: "മേൽവിലാസം:",
+      contact_default_address: "കെ.കെ.കെ മീഡിയ ടവർ, അണ്ണാ ശാലൈ, ചെന്നൈ, തമിഴ്നാട് 600002",
+      contact_editor_email_label: "ചീഫ് എഡിറ്റർ ഇമെയിൽ:",
+      contact_phone_label: "ഫോൺ / ഫാക്സ്:",
+      contact_newsdesk_label: "വാർത്തകൾ അയക്കാനും റിപ്പോർട്ടർമാർക്കും:",
+      contact_form_title: "അഭിപ്രായം / സന്ദേശം അയക്കുക",
+      contact_name_label: "നിങ്ങളുടെ പേര്",
+      contact_email_label: "ഇമെയിൽ വിലാസം",
+      contact_msg_label: "സന്ദേശം / അഭിപ്രായ വിവരണം",
+      contact_send_btn: "സന്ദേശം അയക്കുക (Send Message)",
+      contact_success_msg: "✓ നിങ്ങളുടെ സന്ദേശം വിജയകരമായി ലഭിച്ചു. എഡിറ്റോറിയൽ ടീം ഉടൻ നിങ്ങളുമായി ബന്ധപ്പെടും. നന്ദി!",
+      about_page_title: "ഞങ്ങളെ കുറിച്ച് (KKK മീഡിയ)",
+      about_mission_title: "ഞങ്ങളുടെ ലക്ഷ്യം",
+      about_coverage_title: "ഞങ്ങൾ ഉൾക്കൊള്ളുന്ന മേഖലകൾ",
+      about_ethics_title: "മാധ്യമ ധർമ്മവും വസ്തുതാ പരിശോധനയും (Fact-Checking)",
+      about_editors_title: "എഡിറ്റോറിയൽ ബോർഡ്",
+      privacy_page_title: "സ്വകാര്യതാ നയം (Privacy Policy)",
+      terms_page_title: "നിബന്ധനകളും വ്യവസ്ഥകളും (Terms & Conditions)",
+      disclaimer_page_title: "നിരാകരണവും എഡിറ്റോറിയൽ മാനദണ്ഡങ്ങളും (Disclaimer)",
       categories: {
         'tamil-nadu-politics': "തമിഴ്നാട് രാഷ്ട്രീയം",
         'tvk-news': "ടിവികെ വാർത്തകൾ",
@@ -592,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (dict[key]) {
-        if (el.tagName === 'INPUT') {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
           el.placeholder = dict[key];
         } else {
           el.textContent = dict[key];
@@ -732,6 +795,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contentEl && !contentEl.hasAttribute('data-orig-html')) {
       contentEl.setAttribute('data-orig-html', contentEl.innerHTML);
     }
+
+    document.querySelectorAll('.page-static-content').forEach(el => {
+      if (!el.hasAttribute('data-orig-html')) {
+        el.setAttribute('data-orig-html', el.innerHTML);
+      }
+    });
   };
 
   // 12. Dynamic Translation Service for CMS-created Articles
@@ -759,6 +828,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (contentEl && contentEl.hasAttribute('data-orig-html')) {
         contentEl.innerHTML = contentEl.getAttribute('data-orig-html');
       }
+      document.querySelectorAll('.page-static-content').forEach(el => {
+        if (el.hasAttribute('data-orig-html')) {
+          el.innerHTML = el.getAttribute('data-orig-html');
+        }
+      });
       return;
     }
 
@@ -899,6 +973,43 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
       }
     }
+
+    // Dynamic translation for static pages content (about, contact intro, privacy, terms, disclaimer)
+    const staticContentEls = document.querySelectorAll('.page-static-content');
+    staticContentEls.forEach(async (el) => {
+      const pageSlug = el.getAttribute('data-page-slug') || 'page';
+      const origHtml = el.getAttribute('data-orig-html') || el.innerHTML;
+      if (!origHtml || !origHtml.trim()) return;
+
+      const cacheKey = `kkk_page_${pageSlug}_${lang}`;
+      let cached = null;
+      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+
+      if (cached) {
+        el.innerHTML = cached;
+      } else {
+        try {
+          const res = await fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              texts: [origHtml],
+              targetLang: lang,
+              sourceLang: 'ta'
+            })
+          });
+          if (res.ok && requestId === currentTranslationRequestId) {
+            const data = await res.json();
+            if (data && data.success && Array.isArray(data.translations) && data.translations[0]) {
+              el.innerHTML = data.translations[0];
+              try { sessionStorage.setItem(cacheKey, data.translations[0]); } catch (e) {}
+            }
+          }
+        } catch (err) {
+          console.warn('[KKKMedia] Static page translation error:', err.message);
+        }
+      }
+    });
   };
 
   const langSwitchBtn = document.getElementById('langSwitchBtn');

@@ -1,18 +1,19 @@
 <%- include('../partials/header') %>
 
 <main class="container" style="padding-top: 1.5rem; margin-bottom: 3rem;">
-  <nav class="article-breadcrumbs">
-    <a href="/">முகப்பு</a>
-    <span class="separator">/</span>
-    <span style="color:var(--charcoal-900); font-weight:600;">தனியுரிமைக் கொள்கை</span>
-  </nav>
+  <div style="max-width: 920px; margin: 0 auto;">
+    <nav class="article-breadcrumbs" style="margin-bottom: 1.25rem;">
+      <a href="/" data-i18n="home">முகப்பு</a>
+      <span class="separator">/</span>
+      <span class="breadcrumb-current" data-i18n="privacy">தனியுரிமைக் கொள்கை</span>
+    </nav>
 
-  <div class="article-container" style="max-width: 900px; margin: 0 auto;">
-    <h1 class="article-headline" style="border-bottom: 3px solid var(--primary-red); padding-bottom: 0.75rem;">
-      தனியுரிமைக் கொள்கை (Privacy Policy)
-    </h1>
+    <div class="article-container">
+      <h1 class="article-headline" style="border-bottom: 3px solid var(--primary-red); padding-bottom: 0.75rem;" data-i18n="privacy_page_title">
+        தனியுரிமைக் கொள்கை (Privacy Policy)
+      </h1>
 
-    <div class="article-content">
+      <div class="article-content page-static-content" data-page-slug="privacy">
       <% if (typeof settings !== 'undefined' && settings.page_privacy_content) { %>
         <%- settings.page_privacy_content %>
       <% } else { %>
@@ -51,6 +52,7 @@
       </p>
       <% } %>
     </div>
+  </div>
   </div>
 </main>
 
