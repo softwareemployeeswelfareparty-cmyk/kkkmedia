@@ -712,22 +712,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    const headlineEl = document.querySelector('.article-headline');
+    // Capture article headline/subheadline only on actual news article pages with data-art-slug
+    const headlineEl = document.querySelector('article.article-container .article-headline[data-art-slug]');
     if (headlineEl && !headlineEl.hasAttribute('data-orig-text')) {
       headlineEl.setAttribute('data-orig-text', headlineEl.textContent.trim());
     }
 
-    const excerptEl = document.querySelector('.article-subheadline');
+    const excerptEl = document.querySelector('article.article-container .article-subheadline[data-excerpt-slug]');
     if (excerptEl && !excerptEl.hasAttribute('data-orig-text')) {
       excerptEl.setAttribute('data-orig-text', excerptEl.textContent.trim());
     }
 
-    const breadcrumbEl = document.querySelector('.breadcrumb-current');
+    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current[data-art-slug]');
     if (breadcrumbEl && !breadcrumbEl.hasAttribute('data-orig-text')) {
       breadcrumbEl.setAttribute('data-orig-text', breadcrumbEl.textContent.trim());
     }
 
-    const contentEl = document.querySelector('.article-content');
+    const contentEl = headlineEl ? document.querySelector('article.article-container .article-content') : null;
     if (contentEl && !contentEl.hasAttribute('data-orig-html')) {
       contentEl.setAttribute('data-orig-html', contentEl.innerHTML);
     }
@@ -739,10 +740,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const dynamicTranslateElements = async (lang) => {
     const requestId = ++currentTranslationRequestId;
 
-    const headlineEl = document.querySelector('.article-headline');
-    const excerptEl = document.querySelector('.article-subheadline');
-    const contentEl = document.querySelector('.article-content');
-    const breadcrumbEl = document.querySelector('.breadcrumb-current');
+    // Only run on actual news article pages with data-art-slug
+    const headlineEl = document.querySelector('article.article-container .article-headline[data-art-slug]');
+    const excerptEl = document.querySelector('article.article-container .article-subheadline[data-excerpt-slug]');
+    const contentEl = headlineEl ? document.querySelector('article.article-container .article-content') : null;
+    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current[data-art-slug]');
 
     if (lang === 'ta') {
       if (headlineEl && headlineEl.hasAttribute('data-orig-text')) {
@@ -763,6 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Detail article translation (en / ml)
     if (headlineEl) {
       const artSlug = headlineEl.getAttribute('data-art-slug');
+      if (!artSlug) return;
       const staticTitle = articlesDictionary[artSlug]?.[lang]?.title;
       const staticTaTitle = articlesDictionary[artSlug]?.ta?.title?.trim();
       const origTitle = (headlineEl.getAttribute('data-orig-text') || headlineEl.textContent).trim();
