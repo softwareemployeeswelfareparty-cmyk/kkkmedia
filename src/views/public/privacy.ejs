@@ -13,6 +13,9 @@
     </h1>
 
     <div class="article-content">
+      <% if (typeof settings !== 'undefined' && settings.page_privacy_content) { %>
+        <%- settings.page_privacy_content %>
+      <% } else { %>
       <p class="lead">
         KKK Media (https://kkkmedia.com) தளத்திற்கு வருகை தரும் அனைத்து வாசகர்களின் தனியுரிமையை பாதுகாப்பது எங்களது முதன்மையான கடமையாகும்.
       </p>
@@ -46,6 +49,7 @@
       <p>
         எங்கள் தனியுரிமைக் கொள்கையை அவ்வப்போது புதுப்பிக்க உரிமை உண்டு. எந்தவொரு மாற்றமும் இந்தப் பக்கத்தில் உடனடியாக வெளியிடப்படும்.
       </p>
+      <% } %>
     </div>
   </div>
 </main>

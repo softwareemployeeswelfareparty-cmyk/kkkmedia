@@ -30,6 +30,9 @@ router.get('/media', authenticate, adminViewController.mediaView);
 // Site Settings view (ADMIN role only)
 router.get('/settings', authenticate, authorizeRoles('ADMIN'), adminViewController.settingsView);
 
+// Important Pages view (About Us, Privacy, Terms, Disclaimer, Contact)
+router.get('/pages', authenticate, adminViewController.pagesView);
+
 // Profile view
 router.get('/profile', authenticate, adminViewController.profileView);
 

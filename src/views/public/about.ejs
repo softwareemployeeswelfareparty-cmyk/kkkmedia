@@ -13,6 +13,9 @@
     </h1>
 
     <div class="article-content">
+      <% if (typeof settings !== 'undefined' && settings.page_about_content) { %>
+        <%- settings.page_about_content %>
+      <% } else { %>
       <p class="lead">
         <strong>KKK Media</strong> என்பது தமிழ்நாட்டின் நம்பகமான, நடுநிலையான மற்றும் துல்லியமான டிஜிட்டல் செய்தி மற்றும் ஆய்வுப் பதிவுகளை வழங்கும் முன்னணி செய்தித் தளமாகும்.
       </p>
@@ -40,6 +43,7 @@
       <p>
         பத்திரிகைத் துறையில் பல்லாண்டு கால அனுபவம் வாய்ந்த மூத்த ஊடகவியலாளர்கள் மற்றும் கள ஆய்வாளர்கள் கொண்ட குழுவால் KKK Media வழிநடத்தப்படுகிறது.
       </p>
+      <% } %>
     </div>
   </div>
 </main>

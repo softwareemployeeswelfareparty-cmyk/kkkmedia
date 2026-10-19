@@ -243,6 +243,20 @@ const profileView = async (req, res, next) => {
   }
 };
 
+const pagesView = async (req, res, next) => {
+  try {
+    const settings = await settingsService.getSettingsMap(true);
+    res.render('admin/pages', {
+      title: 'முக்கிய பக்கங்கள் (Important Pages) | KKK Media Admin',
+      activeTab: 'pages',
+      settings,
+      user: req.user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   loginView,
   dashboardView,
@@ -252,5 +266,6 @@ module.exports = {
   categoriesView,
   mediaView,
   settingsView,
+  pagesView,
   profileView,
 };

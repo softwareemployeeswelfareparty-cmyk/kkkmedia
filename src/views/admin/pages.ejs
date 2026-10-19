@@ -1,0 +1,332 @@
+<%- include('layout-header') %>
+
+<div class="page-header-row">
+  <div>
+    <h1 class="page-title">முக்கிய பக்கங்கள் மேலாண்மை (Important Pages Management)</h1>
+    <p class="page-subtitle">
+      எங்களைப் பற்றி, தனியுரிமைக் கொள்கை, பயன்பாட்டு விதிமுறைகள் மற்றும் பொறுப்புத் துறப்பு பக்கங்களின் உள்ளடக்கத்தை நேரடியாக திருத்தவும்.
+    </p>
+  </div>
+</div>
+
+<%
+  const defaultAbout = `<p class="lead">
+  <strong>KKK Media</strong> என்பது தமிழ்நாட்டின் நம்பகமான, நடுநிலையான மற்றும் துல்லியமான டிஜிட்டல் செய்தி மற்றும் ஆய்வுப் பதிவுகளை வழங்கும் முன்னணி செய்தித் தளமாகும்.
+</p>
+
+<h2>எங்கள் நோக்கம் (Our Mission)</h2>
+<p>
+  செய்திகளை விரைவாக வழங்குவது மட்டுமல்லாமல், உண்மைத் தன்மையை முழுமையாக உறுதிசெய்து, வதந்திகளற்ற, சமூகப் பொறுப்புணர்வுடன் கூடிய செய்திகளை உலகெங்கும் வாழும் தமிழ் பேசும் மக்களுக்கு கொண்டு சேர்ப்பதே எங்களின் தலையாய இலக்காகும்.
+</p>
+
+<h2>நாங்கள் உள்ளடக்கும் துறைகள்</h2>
+<ul>
+  <li><strong>தமிழ்நாடு அரசியல்:</strong> ஆளுங்கட்சி, எதிர்க்கட்சிகள் மற்றும் களநிலவரங்களின் துல்லியமான அரசியல் அலசல்கள்.</li>
+  <li><strong>தவெக & தலைவர்கள் செய்திகள்:</strong> புதிய அரசியல் எழுச்சிகள் மற்றும் சமூக மாற்றங்கள் பற்றிய பிரத்யேக அறிக்கைகள்.</li>
+  <li><strong>சினிமா & கலாச்சாரம்:</strong> கலை, திரைப்பட விமர்சனங்கள் மற்றும் பிரபலங்களின் ஆக்கப்பூர்வமான பேட்டிகள்.</li>
+  <li><strong>விளையாட்டு & கிரிக்கெட்:</strong> தேசிய, சர்வதேச போட்டிகள் மற்றும் தமிழ்நாட்டு வீரர்களின் சாதனைகள்.</li>
+  <li><strong>தொழில்நுட்பம் & ஏஐ:</strong> எதிர்கால உலகம், டிஜிட்டல் அறிவியல் மற்றும் எளிய தமிழ் விளக்கங்கள்.</li>
+</ul>
+
+<h2>பத்திரிகை தர்மம் & உண்மை சரிபார்ப்பு (Fact-Checking)</h2>
+<p>
+  KKK Media ஆசிரியர்கள் குழு சர்வதேச பத்திரிகை தர்மக் கோட்பாடுகளுக்கு கட்டுப்பட்டு செயல்படுகிறது. எந்தவொரு செய்தியும் பலமுறை சரிபார்க்கப்பட்ட பின்னரே தளத்தில் பிரசுரிக்கப்படுகிறது. தவறுகள் சுட்டிக்காட்டப்பட்டால் வெளிப்படைத்தன்மையுடன் உடனுக்குடன் திருத்தம் செய்யப்படும்.
+</p>
+
+<h2>தலைமை ஆசிரியர் குழு</h2>
+<p>
+  பத்திரிகைத் துறையில் பல்லாண்டு கால அனுபவம் வாய்ந்த மூத்த ஊடகவியலாளர்கள் மற்றும் கள ஆய்வாளர்கள் கொண்ட குழுவால் KKK Media வழிநடத்தப்படுகிறது.
+</p>`;
+
+  const defaultPrivacy = `<p class="lead">
+  KKK Media (https://kkkmedia.com) தளத்திற்கு வருகை தரும் அனைத்து வாசகர்களின் தனியுரிமையை பாதுகாப்பது எங்களது முதன்மையான கடமையாகும்.
+</p>
+
+<h2>1. நாங்கள் சேகரிக்கும் தகவல்கள்</h2>
+<p>
+  எங்கள் தளத்தை வாசிக்கும் போது பயனர்களின் தனிப்பட்ட தகவல்கள் (பெயர், முகவரி போன்றவை) தன்னிச்சையாக சேகரிக்கப்படுவதில்லை. பயனர் செய்திமடல் சந்தா அல்லது கருத்துப் படிவம் மூலம் சுயமாக வழங்கும் தகவல்கள் மட்டுமே அனுமதிக்கப்பட்ட தொடர்புக்காக பயன்படுத்தப்படும்.
+</p>
+
+<h2>2. பதிவு கோப்புகள் (Log Files)</h2>
+<p>
+  நிலையான இணைய சேவையக நெறிமுறைகளின்படி, இணைய நெறிமுறை (IP) முகவரிகள், உலாவி வகை, இணைய சேவை வழங்குநர் (ISP), தேதி மற்றும் நேர முத்திரைகள், பக்கங்கள் போன்ற பகுப்பாய்வு தகவல்கள் தொழில்நுட்ப பராமரிப்புக்காக பதிவு செய்யப்படலாம். இவை தனிப்பட்ட நபரை அடையாளம் காணப் பயன்படாது.
+</p>
+
+<h2>3. குக்கீகள் & இணைய வழிகாட்டிகள் (Cookies & Web Beacons)</h2>
+<p>
+  பயனர்களின் விருப்பத்தேர்வுகள் மற்றும் தளத்தில் அவர்கள் பார்வையிடும் பக்கங்களை நினைவில் கொண்டு சிறந்த வாசிப்பு அனுபவத்தை வழங்க குக்கீகள் பயன்படுத்தப்படுகின்றன. பயனர்கள் தங்கள் உலாவி அமைப்புகளில் குக்கீகளை முடக்க முழு உரிமை உண்டு.
+</p>
+
+<h2>4. Google AdSense & மூன்றாம் தரப்பு விளம்பரதாரர்கள்</h2>
+<p>
+  Google உள்ளிட்ட மூன்றாம் தரப்பு விற்பனையாளர்கள் எங்கள் தளத்தில் விளம்பரங்களை வழங்க குக்கீகளைப் பயன்படுத்துகின்றனர். Google இன் DART குக்கீ பயன்பாடு எங்கள் தளம் மற்றும் இணையத்தில் உள்ள பிற தளங்களுக்கான பயனர்களின் வருகையின் அடிப்படையில் விளம்பரங்களை வழங்க அனுமதிக்கிறது. பயனர்கள் Google விளம்பர அமைப்புகள் பக்கத்தைப் பார்வையிட்டு DART குக்கீயைத் தவிர்க்கலாம்.
+</p>
+
+<h2>5. மூன்றாம் தரப்பு தனியுரிமைக் கொள்கைகள்</h2>
+<p>
+  KKK Media-வின் தனியுரிமைக் கொள்கை பிற விளம்பரதாரர்கள் அல்லது வலைத்தளங்களுக்கு பொருந்தாது. அவர்களின் தனியுரிமைக் கொள்கைகளை மதிப்பாய்வு செய்ய பரிந்துரைக்கிறோம்.
+</p>
+
+<h2>6. கொள்கை மாற்றங்கள்</h2>
+<p>
+  எங்கள் தனியுரிமைக் கொள்கையை அவ்வப்போது புதுப்பிக்க உரிமை உண்டு. எந்தவொரு மாற்றமும் இந்தப் பக்கத்தில் உடனடியாக வெளியிடப்படும்.
+</p>`;
+
+  const defaultTerms = `<p class="lead">
+  KKK Media வலைத்தளத்தை அணுகுவதன் மூலம் நீங்கள் பின்வரும் விதிமுறைகள் மற்றும் நிபந்தனைகளுக்கு கட்டுப்பட ஒப்புக்கொள்கிறீர்கள்.
+</p>
+
+<h2>1. அறிவுசார் சொத்துரிமை (Intellectual Property)</h2>
+<p>
+  KKK Media தளத்தில் வெளியாகும் அனைத்து எழுத்து வடிவ கட்டுரைகள், வரைகலைகள், இலச்சினை (Logo), வீடியோக்கள் மற்றும் பிற வடிவடக்கங்கள் KKK Media-வின் பதிப்புரிமைக்கு உட்பட்டவை. உரிய எழுத்துப்பூர்வ அனுமதியின்றி இவற்றை மறுபிரசுரம் செய்வதோ அல்லது வணிக ரீதியாக பயன்படுத்துவதோ சட்டப்படி தண்டனைக்குரியது.
+</p>
+
+<h2>2. பயனர் நடத்தை</h2>
+<p>
+  வாசகர்கள் கருத்துப் பிரிவில் தங்களின் கருத்துக்களை நாகரிகமாகவும், சட்டம் மற்றும் ஒழுங்கை மதிக்கும் வகையிலும் பதிவு செய்ய வேண்டும். வெறுப்புப் பேச்சு, தனிநபர் தாக்குதல், அவதூறு அல்லது சட்டவிரோத உள்ளடக்கங்களை பதிவிட அனுமதி இல்லை.
+</p>
+
+<h2>3. பொறுப்பு வரம்பு</h2>
+<p>
+  தளத்தில் உள்ள தகவல்கள் பொது அறிவு மற்றும் தகவல் நோக்கங்களுக்காக மட்டுமே வழங்கப்படுகின்றன. தகவல்களைப் பயன்படுத்தி பயனர்கள் எடுக்கும் தனிப்பட்ட முடிவுகளுக்கு KKK Media நேரடியாக பொறுப்பேற்காது.
+</p>`;
+
+  const defaultDisclaimer = `<h2>1. அசல் செய்தி சேகரிப்பு & ஆசிரிய நெறிமுறைகள் (Original Reporting)</h2>
+<p>
+  KKK Media-வில் வெளியாகும் பெரும்பாலான செய்திகள் எங்கள் நிருபர்கள், ஆய்வாளர்கள் மற்றும் பத்திரிகையாளர்களால் நேரடியாக களத்திலிருந்து சேகரிக்கப்பட்ட அசல் உள்ளடக்கங்களாகும். அரசின் செய்தி வெளியீடுகள், அதிகாரப்பூர்வ அறிக்கைகள் மற்றும் பொது களத் தகவல்கள் மூல ஆதாரங்களுடன் மட்டுமே மேற்கோள் காட்டப்படுகின்றன.
+</p>
+
+<h2>2. பதிப்புரிமை & கடன் வழங்குதல் (Copyright Attribution)</h2>
+<p>
+  மூன்றாம் தரப்பு புகைப்படங்கள், செய்தி நிறுவனங்களின் தகவல்கள் அல்லது பொதுக் கள வரைகலைகள் பயன்படுத்தப்படும் இடங்களில் உரிய மூல ஆசிரியர்களுக்கு (Source Attribution / Photo Credits) கடன் வழங்கப்படுகிறது. ஏதேனும் பதிப்புரிமை மீறல் கவனத்திற்கு வந்தால் உடனடியாக ஆசிரியர் குழுவுக்கு மின்னஞ்சல் மூலம் தெரிவிக்கலாம். உரிய விசாரணைக்குப் பின் உடனே நடவடிக்கை எடுக்கப்படும்.
+</p>
+
+<h2>3. கூகுள் அட்சென்ஸ் கொள்கைகள் (Google Publisher Policies Compliance)</h2>
+<p>
+  எங்கள் தளம் கூகுள் வெளியீட்டாளர் கொள்கைகள் (Google Publisher Policies) மற்றும் உள்ளடக்க நெறிமுறைகளுக்கு முழுமையாக கட்டுப்பட்டு இயங்குகிறது. தவறான தகவல்கள், வன்முறை, ஆபாசம் அல்லது பிறரின் பதிப்புரிமையை மீறும் வகையிலான உள்ளடக்கங்களை வெளியிடுவதில்லை. விளம்பரங்கள் மற்றும் தலையங்க உள்ளடக்கங்கள் தெளிவாக வேறுபடுத்திக் காட்டப்படுகின்றன.
+</p>
+
+<h2>4. திருத்தக் கொள்கை (Corrections Policy)</h2>
+<p>
+  வெளியிடப்பட்ட செய்திகளில் ஏதேனும் தவறு அல்லது பிழை கண்டறியப்பட்டால், வெளிப்படையாக திருத்தக் குறிப்பு சேர்க்கப்பட்டு செய்தி புதுப்பிக்கப்படும்.
+</p>`;
+
+  const defaultContactIntro = `<p class="lead">
+  செய்திப் பகிர்வுகள், கருத்துகள், விளம்பரத் தேவைகள் அல்லது பொதுவான விசாரணைகளுக்கு KKK Media குழுவைத் தொடர்பு கொள்ளலாம்.
+</p>`;
+%>
+
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <div style="display:flex; border-bottom:1px solid var(--admin-border); overflow-x:auto; background:var(--admin-bg);">
+    <button type="button" class="page-tab-btn active" data-tab="about" style="padding:0.9rem 1.25rem; font-weight:600; font-size:0.95rem; border:none; background:none; cursor:pointer; color:var(--admin-primary); border-bottom:3px solid var(--admin-primary); white-space:nowrap;">
+      📄 எங்களைப் பற்றி (About Us)
+    </button>
+    <button type="button" class="page-tab-btn" data-tab="privacy" style="padding:0.9rem 1.25rem; font-weight:600; font-size:0.95rem; border:none; background:none; cursor:pointer; color:var(--admin-text-muted); border-bottom:3px solid transparent; white-space:nowrap;">
+      🛡️ தனியுரிமைக் கொள்கை (Privacy Policy)
+    </button>
+    <button type="button" class="page-tab-btn" data-tab="terms" style="padding:0.9rem 1.25rem; font-weight:600; font-size:0.95rem; border:none; background:none; cursor:pointer; color:var(--admin-text-muted); border-bottom:3px solid transparent; white-space:nowrap;">
+      📜 பயன்பாட்டு விதிமுறைகள் (Terms)
+    </button>
+    <button type="button" class="page-tab-btn" data-tab="disclaimer" style="padding:0.9rem 1.25rem; font-weight:600; font-size:0.95rem; border:none; background:none; cursor:pointer; color:var(--admin-text-muted); border-bottom:3px solid transparent; white-space:nowrap;">
+      ⚖️ பொறுப்புத் துறப்பு (Disclaimer)
+    </button>
+    <button type="button" class="page-tab-btn" data-tab="contact" style="padding:0.9rem 1.25rem; font-weight:600; font-size:0.95rem; border:none; background:none; cursor:pointer; color:var(--admin-text-muted); border-bottom:3px solid transparent; white-space:nowrap;">
+      📞 தொடர்பு பக்கம் (Contact Page Intro)
+    </button>
+  </div>
+
+  <form id="pageContentForm" style="padding:1.5rem;">
+    
+    <!-- Tab 1: About Us -->
+    <div class="page-tab-pane" id="pane-about">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size:1.15rem; font-weight:700; margin:0;">எங்களைப் பற்றி (About Us) பக்க உள்ளடக்கம்</h2>
+          <span style="font-size:0.85rem; color:var(--admin-text-muted);">முகவரி: <a href="/about" target="_blank" style="color:var(--admin-primary);">/about</a></span>
+        </div>
+        <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-trans-mini" data-trans-target="content-about" data-trans-dir="ta2en">தமிழ் ➔ EN</button>
+          <button type="button" class="btn-trans-mini" data-trans-target="content-about" data-trans-dir="en2ta">EN ➔ தமிழ்</button>
+          <span style="border-left:1px solid var(--admin-border); height:16px; margin:0 0.2rem;"></span>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-about', '<h2>', '</h2>')">H2</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-about', '<p>', '</p>')">P</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-about', '<strong>', '</strong>')"><b>B</b></button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-about', '<ul>\\n  <li>', '</li>\\n</ul>')">List</button>
+        </div>
+      </div>
+      <textarea id="content-about" name="page_about_content" class="form-control" style="min-height:350px; font-family:'Mukta Malar', monospace; font-size:1rem; line-height:1.7;"><%= settings.page_about_content || defaultAbout %></textarea>
+    </div>
+
+    <!-- Tab 2: Privacy Policy -->
+    <div class="page-tab-pane" id="pane-privacy" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size:1.15rem; font-weight:700; margin:0;">தனியுரிமைக் கொள்கை (Privacy Policy) பக்க உள்ளடக்கம்</h2>
+          <span style="font-size:0.85rem; color:var(--admin-text-muted);">முகவரி: <a href="/privacy-policy" target="_blank" style="color:var(--admin-primary);">/privacy-policy</a></span>
+        </div>
+        <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-trans-mini" data-trans-target="content-privacy" data-trans-dir="ta2en">தமிழ் ➔ EN</button>
+          <button type="button" class="btn-trans-mini" data-trans-target="content-privacy" data-trans-dir="en2ta">EN ➔ தமிழ்</button>
+          <span style="border-left:1px solid var(--admin-border); height:16px; margin:0 0.2rem;"></span>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-privacy', '<h2>', '</h2>')">H2</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-privacy', '<p>', '</p>')">P</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-privacy', '<strong>', '</strong>')"><b>B</b></button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-privacy', '<ul>\\n  <li>', '</li>\\n</ul>')">List</button>
+        </div>
+      </div>
+      <textarea id="content-privacy" name="page_privacy_content" class="form-control" style="min-height:350px; font-family:'Mukta Malar', monospace; font-size:1rem; line-height:1.7;"><%= settings.page_privacy_content || defaultPrivacy %></textarea>
+    </div>
+
+    <!-- Tab 3: Terms & Conditions -->
+    <div class="page-tab-pane" id="pane-terms" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size:1.15rem; font-weight:700; margin:0;">பயன்பாட்டு விதிமுறைகள் (Terms & Conditions) பக்க உள்ளடக்கம்</h2>
+          <span style="font-size:0.85rem; color:var(--admin-text-muted);">முகவரி: <a href="/terms" target="_blank" style="color:var(--admin-primary);">/terms</a></span>
+        </div>
+        <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-trans-mini" data-trans-target="content-terms" data-trans-dir="ta2en">தமிழ் ➔ EN</button>
+          <button type="button" class="btn-trans-mini" data-trans-target="content-terms" data-trans-dir="en2ta">EN ➔ தமிழ்</button>
+          <span style="border-left:1px solid var(--admin-border); height:16px; margin:0 0.2rem;"></span>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-terms', '<h2>', '</h2>')">H2</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-terms', '<p>', '</p>')">P</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-terms', '<strong>', '</strong>')"><b>B</b></button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-terms', '<ul>\\n  <li>', '</li>\\n</ul>')">List</button>
+        </div>
+      </div>
+      <textarea id="content-terms" name="page_terms_content" class="form-control" style="min-height:350px; font-family:'Mukta Malar', monospace; font-size:1rem; line-height:1.7;"><%= settings.page_terms_content || defaultTerms %></textarea>
+    </div>
+
+    <!-- Tab 4: Disclaimer -->
+    <div class="page-tab-pane" id="pane-disclaimer" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size:1.15rem; font-weight:700; margin:0;">பொறுப்புத் துறப்பு (Disclaimer & Editorial Policy) பக்க உள்ளடக்கம்</h2>
+          <span style="font-size:0.85rem; color:var(--admin-text-muted);">முகவரி: <a href="/disclaimer" target="_blank" style="color:var(--admin-primary);">/disclaimer</a></span>
+        </div>
+        <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-trans-mini" data-trans-target="content-disclaimer" data-trans-dir="ta2en">தமிழ் ➔ EN</button>
+          <button type="button" class="btn-trans-mini" data-trans-target="content-disclaimer" data-trans-dir="en2ta">EN ➔ தமிழ்</button>
+          <span style="border-left:1px solid var(--admin-border); height:16px; margin:0 0.2rem;"></span>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-disclaimer', '<h2>', '</h2>')">H2</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-disclaimer', '<p>', '</p>')">P</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-disclaimer', '<strong>', '</strong>')"><b>B</b></button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="insertPageTag('content-disclaimer', '<ul>\\n  <li>', '</li>\\n</ul>')">List</button>
+        </div>
+      </div>
+      <textarea id="content-disclaimer" name="page_disclaimer_content" class="form-control" style="min-height:350px; font-family:'Mukta Malar', monospace; font-size:1rem; line-height:1.7;"><%= settings.page_disclaimer_content || defaultDisclaimer %></textarea>
+    </div>
+
+    <!-- Tab 5: Contact Page Intro -->
+    <div class="page-tab-pane" id="pane-contact" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size:1.15rem; font-weight:700; margin:0;">தொடர்பு பக்கம் முகப்புரை (Contact Page Intro)</h2>
+          <span style="font-size:0.85rem; color:var(--admin-text-muted);">முகவரி: <a href="/contact" target="_blank" style="color:var(--admin-primary);">/contact</a> (அலுவலக முகவரி, மின்னஞ்சல், தொலைபேசி ஆகியவை <a href="/admin/settings" style="color:var(--admin-primary);">தள அமைப்புகளில்</a> நிர்வகிக்கப்படுகிறது)</span>
+        </div>
+        <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-trans-mini" data-trans-target="content-contact" data-trans-dir="ta2en">தமிழ் ➔ EN</button>
+          <button type="button" class="btn-trans-mini" data-trans-target="content-contact" data-trans-dir="en2ta">EN ➔ தமிழ்</button>
+        </div>
+      </div>
+      <textarea id="content-contact" name="page_contact_content" class="form-control" style="min-height:200px; font-family:'Mukta Malar', monospace; font-size:1rem; line-height:1.7;"><%= settings.page_contact_content || defaultContactIntro %></textarea>
+    </div>
+
+    <div style="margin-top:1.5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--admin-border); padding-top:1.25rem;">
+      <span style="font-size:0.85rem; color:var(--admin-text-muted);">
+        சேமித்தவுடன், பொது வலைத்தளப் பக்கங்களில் உடனடியாக மாற்றங்கள் தெரியும்.
+      </span>
+      <button type="submit" id="savePageBtn" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:1rem;">
+        பக்க மாற்றங்களைச் சேமி (Save Page Content)
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  function insertPageTag(targetId, openTag, closeTag) {
+    const textarea = document.getElementById(targetId);
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.substring(start, end);
+    const replacement = openTag + (selected || 'உள்ளடக்கம்') + closeTag;
+    textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + openTag.length, start + replacement.length - closeTag.length);
+  }
+
+  // Tab switching
+  const tabButtons = document.querySelectorAll('.page-tab-btn');
+  const tabPanes = document.querySelectorAll('.page-tab-pane');
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-tab');
+
+      tabButtons.forEach(b => {
+        b.classList.remove('active');
+        b.style.color = 'var(--admin-text-muted)';
+        b.style.borderBottomColor = 'transparent';
+      });
+
+      btn.classList.add('active');
+      btn.style.color = 'var(--admin-primary)';
+      btn.style.borderBottomColor = 'var(--admin-primary)';
+
+      tabPanes.forEach(p => p.style.display = 'none');
+      const activePane = document.getElementById(`pane-${targetTab}`);
+      if (activePane) activePane.style.display = 'block';
+    });
+  });
+
+  // Save form handler
+  const form = document.getElementById('pageContentForm');
+  const saveBtn = document.getElementById('savePageBtn');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const origText = saveBtn.innerHTML;
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="trans-loading-spinner"></span> சேமிக்கப்படுகிறது...';
+
+      try {
+        const formData = new FormData(form);
+        const data = {};
+        for (let [k, v] of formData.entries()) {
+          data[k] = v;
+        }
+
+        const res = await fetch('/api/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          if (typeof showToast === 'function') {
+            showToast('பக்க உள்ளடக்கம் வெற்றிகரமாக சேமிக்கப்பட்டது! (Page updated successfully)', 'success');
+          } else {
+            alert('பக்க உள்ளடக்கம் வெற்றிகரமாக சேமிக்கப்பட்டது!');
+          }
+        } else {
+          throw new Error(result.message || 'சேமிப்பதில் தோல்வி');
+        }
+      } catch (err) {
+        if (typeof showToast === 'function') {
+          showToast('பிழை: ' + err.message, 'danger');
+        } else {
+          alert('பிழை: ' + err.message);
+        }
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = origText;
+      }
+    });
+  }
+</script>
+
+<%- include('layout-footer') %>
