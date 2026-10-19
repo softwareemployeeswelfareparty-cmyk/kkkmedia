@@ -19,9 +19,16 @@
         </div>
       <% } %>
 
+      <% 
+        function renderFormattedContent(text) {
+          if (!text) return '';
+          if (/<(p|h[1-6]|div|ul|ol|table|blockquote)/i.test(text)) return text;
+          return text.split(/\n\s*\n/).map(p => '<p>' + p.trim().replace(/\n/g, '<br>') + '</p>').join('\n');
+        }
+      %>
       <% if (typeof settings !== 'undefined' && settings.page_contact_content) { %>
         <div class="article-content page-static-content" data-page-slug="contact" style="margin-bottom:1.5rem;">
-          <%- settings.page_contact_content %>
+          <%- renderFormattedContent(settings.page_contact_content) %>
         </div>
       <% } %>
 

@@ -830,20 +830,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. All content blocks in article-content (paragraphs, headings, lists, quotes)
     document.querySelectorAll('article.article-container .article-content').forEach(contentEl => {
-      contentEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption').forEach(block => {
-        if (!block.hasAttribute('data-orig-text')) {
-          block.setAttribute('data-orig-text', block.innerText.trim());
+      const blocks = contentEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
+      if (blocks.length > 0) {
+        blocks.forEach(block => {
+          if (!block.hasAttribute('data-orig-text')) {
+            block.setAttribute('data-orig-text', block.innerText.trim());
+          }
+        });
+      } else {
+        if (!contentEl.hasAttribute('data-orig-text')) {
+          contentEl.setAttribute('data-orig-text', contentEl.innerText.trim());
         }
-      });
+      }
     });
 
     // 5. Static page blocks (About, Contact, Privacy, Terms, Disclaimer)
     document.querySelectorAll('.page-static-content').forEach(staticEl => {
-      staticEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote').forEach(block => {
-        if (!block.hasAttribute('data-orig-text')) {
-          block.setAttribute('data-orig-text', block.innerText.trim());
+      const blocks = staticEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote');
+      if (blocks.length > 0) {
+        blocks.forEach(block => {
+          if (!block.hasAttribute('data-orig-text')) {
+            block.setAttribute('data-orig-text', block.innerText.trim());
+          }
+        });
+      } else {
+        if (!staticEl.hasAttribute('data-orig-text')) {
+          staticEl.setAttribute('data-orig-text', staticEl.innerText.trim());
         }
-      });
+      }
     });
 
     const footerDescEl = document.querySelector('.footer-desc');
@@ -864,47 +878,83 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'h' + Math.abs(hash);
   };
 
+  const containsTamil = (str) => /[\u0B80-\u0BFF]/.test(str);
+  const isPureEnglish = (str) => !containsTamil(str) && /[a-zA-Z]{3,}/.test(str);
+
   const dynamicTranslateElements = async (lang) => {
     const requestId = ++currentTranslationRequestId;
+    const pendingItems = [];
 
-    // --- A. IF TAMIL ('ta'), REVERT EVERYTHING TO ORIGINAL TAMIL TEXT ---
+    // Helper to queue an element for translation
+    const queueElement = (el, origText, targetLang) => {
+      if (!origText || origText.length < 2) return;
+      const cacheKey = `kkk_tr_${targetLang}_${hashText(origText)}`;
+      let cached = null;
+      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+      if (cached) {
+        el.textContent = cached;
+      } else {
+        pendingItems.push({
+          text: origText,
+          cacheKey,
+          targetLang,
+          apply: (trans) => { el.textContent = trans; }
+        });
+      }
+    };
+
+    // --- A. IF TAMIL ('ta') ---
     if (lang === 'ta') {
       const headlineEl = document.querySelector('article.article-container .article-headline');
       if (headlineEl && headlineEl.hasAttribute('data-orig-text')) {
-        headlineEl.textContent = headlineEl.getAttribute('data-orig-text');
+        const orig = headlineEl.getAttribute('data-orig-text');
+        if (isPureEnglish(orig)) queueElement(headlineEl, orig, 'ta');
+        else headlineEl.textContent = orig;
       }
       const excerptEl = document.querySelector('article.article-container .article-subheadline');
       if (excerptEl && excerptEl.hasAttribute('data-orig-text')) {
-        excerptEl.textContent = excerptEl.getAttribute('data-orig-text');
+        const orig = excerptEl.getAttribute('data-orig-text');
+        if (isPureEnglish(orig)) queueElement(excerptEl, orig, 'ta');
+        else excerptEl.textContent = orig;
       }
       const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current');
       if (breadcrumbEl && breadcrumbEl.hasAttribute('data-orig-text')) {
-        breadcrumbEl.textContent = breadcrumbEl.getAttribute('data-orig-text');
+        const orig = breadcrumbEl.getAttribute('data-orig-text');
+        if (isPureEnglish(orig)) queueElement(breadcrumbEl, orig, 'ta');
+        else breadcrumbEl.textContent = orig;
       }
 
-      // Restore article body content blocks
+      // Check article body content blocks
       document.querySelectorAll('article.article-container .article-content p, article.article-container .article-content h2, article.article-container .article-content h3, article.article-container .article-content h4, article.article-container .article-content li, article.article-container .article-content blockquote, article.article-container .article-content figcaption').forEach(block => {
         if (block.hasAttribute('data-orig-text')) {
-          block.textContent = block.getAttribute('data-orig-text');
+          const orig = block.getAttribute('data-orig-text');
+          if (isPureEnglish(orig)) queueElement(block, orig, 'ta');
+          else block.textContent = orig;
         }
       });
 
-      // Restore static pages
-      document.querySelectorAll('.page-static-content p, .page-static-content h2, .page-static-content h3, .page-static-content h4, .page-static-content li, .page-static-content blockquote').forEach(block => {
+      // Check static pages
+      document.querySelectorAll('.page-static-content p, .page-static-content h2, .page-static-content h3, .page-static-content h4, .page-static-content li, .page-static-content blockquote, .page-static-content[data-orig-text]').forEach(block => {
         if (block.hasAttribute('data-orig-text')) {
-          block.textContent = block.getAttribute('data-orig-text');
+          const orig = block.getAttribute('data-orig-text');
+          if (isPureEnglish(orig)) queueElement(block, orig, 'ta');
+          else block.textContent = orig;
         }
       });
 
       // Restore listing cards
       document.querySelectorAll('[data-art-slug]').forEach(el => {
         if (el.hasAttribute('data-orig-text')) {
-          el.textContent = el.getAttribute('data-orig-text');
+          const orig = el.getAttribute('data-orig-text');
+          if (isPureEnglish(orig)) queueElement(el, orig, 'ta');
+          else el.textContent = orig;
         }
       });
       document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
         if (el.hasAttribute('data-orig-text')) {
-          el.textContent = el.getAttribute('data-orig-text');
+          const orig = el.getAttribute('data-orig-text');
+          if (isPureEnglish(orig)) queueElement(el, orig, 'ta');
+          else el.textContent = orig;
         }
       });
 
@@ -912,177 +962,96 @@ document.addEventListener('DOMContentLoaded', () => {
       if (footerDescEl && footerDescEl.hasAttribute('data-orig-text')) {
         footerDescEl.textContent = footerDescEl.getAttribute('data-orig-text');
       }
-      return;
+
+      // Process any English-to-Tamil queued items
+      if (pendingItems.length === 0) return;
     }
 
-    // --- B. IF ENGLISH ('en') OR MALAYALAM ('ml') ---
-    const pendingItems = [];
+    // --- B. IF ENGLISH ('en') OR MALAYALAM ('ml') (OR PENDING 'ta') ---
+    if (lang !== 'ta') {
+      // 1. Article Headline & Excerpt
+      const headlineEl = document.querySelector('article.article-container .article-headline');
+      const excerptEl = document.querySelector('article.article-container .article-subheadline');
+      const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current');
+      const artSlug = headlineEl ? headlineEl.getAttribute('data-art-slug') : null;
 
-    // 1. Article Headline & Excerpt
-    const headlineEl = document.querySelector('article.article-container .article-headline');
-    const excerptEl = document.querySelector('article.article-container .article-subheadline');
-    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current');
-    const artSlug = headlineEl ? headlineEl.getAttribute('data-art-slug') : null;
+      if (headlineEl) {
+        const origHeadline = headlineEl.getAttribute('data-orig-text') || headlineEl.textContent.trim();
+        const staticTitle = artSlug && articlesDictionary[artSlug]?.[lang]?.title;
+        if (staticTitle) {
+          headlineEl.textContent = staticTitle;
+          if (breadcrumbEl) breadcrumbEl.textContent = staticTitle.substring(0, 40) + '...';
+        } else if (origHeadline) {
+          queueElement(headlineEl, origHeadline, lang);
+        }
+      }
 
-    if (headlineEl) {
-      const origHeadline = headlineEl.getAttribute('data-orig-text') || headlineEl.textContent.trim();
-      const staticTitle = artSlug && articlesDictionary[artSlug]?.[lang]?.title;
-      if (staticTitle) {
-        headlineEl.textContent = staticTitle;
-        if (breadcrumbEl) breadcrumbEl.textContent = staticTitle.substring(0, 40) + '...';
-      } else if (origHeadline) {
-        const cacheKey = `kkk_tr_${lang}_${hashText(origHeadline)}`;
-        let cached = null;
-        try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-        if (cached) {
-          headlineEl.textContent = cached;
-          if (breadcrumbEl) breadcrumbEl.textContent = cached.substring(0, 40) + '...';
+      if (excerptEl) {
+        const origExcerpt = excerptEl.getAttribute('data-orig-text') || excerptEl.textContent.trim();
+        const staticExcerpt = artSlug && articlesDictionary[artSlug]?.[lang]?.desc;
+        if (staticExcerpt) {
+          excerptEl.textContent = staticExcerpt;
+        } else if (origExcerpt) {
+          queueElement(excerptEl, origExcerpt, lang);
+        }
+      }
+
+      // 2. Full Article Body Content Elements
+      document.querySelectorAll('article.article-container .article-content p, article.article-container .article-content h2, article.article-container .article-content h3, article.article-container .article-content h4, article.article-container .article-content li, article.article-container .article-content blockquote, article.article-container .article-content figcaption').forEach(block => {
+        if (block.querySelector('img, iframe, video, audio')) return;
+        const text = (block.getAttribute('data-orig-text') || block.innerText).trim();
+        if (!text || text.length <= 1) return;
+        queueElement(block, text, lang);
+      });
+
+      // 3. Static Pages Content Elements (About Us, Contact, Terms, Privacy, Disclaimer)
+      document.querySelectorAll('.page-static-content p, .page-static-content h2, .page-static-content h3, .page-static-content h4, .page-static-content li, .page-static-content blockquote, .page-static-content[data-orig-text]').forEach(block => {
+        if (block.querySelector('img, iframe, video, audio')) return;
+        const text = (block.getAttribute('data-orig-text') || block.innerText).trim();
+        if (!text || text.length <= 1) return;
+        queueElement(block, text, lang);
+      });
+
+      // 4. Listing Article Cards
+      document.querySelectorAll('[data-art-slug]').forEach(el => {
+        if (el.classList.contains('article-headline') || el.classList.contains('breadcrumb-current')) return;
+        const slug = el.getAttribute('data-art-slug');
+        const staticTitle = slug && articlesDictionary[slug]?.[lang]?.title;
+        if (staticTitle) {
+          el.textContent = staticTitle;
         } else {
-          pendingItems.push({
-            text: origHeadline,
-            cacheKey,
-            apply: (translated) => {
-              headlineEl.textContent = translated;
-              if (breadcrumbEl) breadcrumbEl.textContent = translated.substring(0, 40) + '...';
-            }
-          });
+          const text = (el.getAttribute('data-orig-text') || el.textContent).trim();
+          if (text && text.length > 2) queueElement(el, text, lang);
         }
-      }
-    }
+      });
 
-    if (excerptEl) {
-      const origExcerpt = excerptEl.getAttribute('data-orig-text') || excerptEl.textContent.trim();
-      const staticExcerpt = artSlug && articlesDictionary[artSlug]?.[lang]?.desc;
-      if (staticExcerpt) {
-        excerptEl.textContent = staticExcerpt;
-      } else if (origExcerpt) {
-        const cacheKey = `kkk_tr_${lang}_${hashText(origExcerpt)}`;
-        let cached = null;
-        try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-        if (cached) {
-          excerptEl.textContent = cached;
+      document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
+        if (el.classList.contains('article-subheadline')) return;
+        const slug = el.getAttribute('data-excerpt-slug');
+        const staticExcerpt = slug && articlesDictionary[slug]?.[lang]?.desc;
+        if (staticExcerpt) {
+          el.textContent = staticExcerpt;
         } else {
-          pendingItems.push({
-            text: origExcerpt,
-            cacheKey,
-            apply: (translated) => {
-              excerptEl.textContent = translated;
-            }
-          });
+          const text = (el.getAttribute('data-orig-text') || el.textContent).trim();
+          if (text && text.length > 2) queueElement(el, text, lang);
         }
-      }
+      });
     }
 
-    // 2. Full Article Body Content Elements (paragraphs, headings, quotes, lists)
-    document.querySelectorAll('article.article-container .article-content p, article.article-container .article-content h2, article.article-container .article-content h3, article.article-container .article-content h4, article.article-container .article-content li, article.article-container .article-content blockquote, article.article-container .article-content figcaption').forEach(block => {
-      if (block.querySelector('img, iframe, video, audio')) return;
-      const text = (block.getAttribute('data-orig-text') || block.innerText).trim();
-      if (!text || text.length <= 1) return;
-
-      const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
-      let cached = null;
-      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-
-      if (cached) {
-        block.textContent = cached;
-      } else {
-        pendingItems.push({
-          text,
-          cacheKey,
-          apply: (translated) => {
-            block.textContent = translated;
-          }
-        });
-      }
-    });
-
-    // 3. Static Pages Content Elements (About Us, Contact, Terms, Privacy, Disclaimer)
-    document.querySelectorAll('.page-static-content p, .page-static-content h2, .page-static-content h3, .page-static-content h4, .page-static-content li, .page-static-content blockquote').forEach(block => {
-      if (block.querySelector('img, iframe, video, audio')) return;
-      const text = (block.getAttribute('data-orig-text') || block.innerText).trim();
-      if (!text || text.length <= 1) return;
-
-      const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
-      let cached = null;
-      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-
-      if (cached) {
-        block.textContent = cached;
-      } else {
-        pendingItems.push({
-          text,
-          cacheKey,
-          apply: (translated) => {
-            block.textContent = translated;
-          }
-        });
-      }
-    });
-
-    // 4. Listing Article Cards (Titles and Excerpts on Home, Category, and Search)
-    document.querySelectorAll('[data-art-slug]').forEach(el => {
-      if (el.classList.contains('article-headline') || el.classList.contains('breadcrumb-current')) return;
-      const slug = el.getAttribute('data-art-slug');
-      const staticTitle = slug && articlesDictionary[slug]?.[lang]?.title;
-      if (staticTitle) {
-        el.textContent = staticTitle;
-      } else {
-        const text = (el.getAttribute('data-orig-text') || el.textContent).trim();
-        if (text && text.length > 2) {
-          const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
-          let cached = null;
-          try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-          if (cached) {
-            el.textContent = cached;
-          } else {
-            pendingItems.push({
-              text,
-              cacheKey,
-              apply: (translated) => { el.textContent = translated; }
-            });
-          }
-        }
-      }
-    });
-
-    document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
-      if (el.classList.contains('article-subheadline')) return;
-      const slug = el.getAttribute('data-excerpt-slug');
-      const staticExcerpt = slug && articlesDictionary[slug]?.[lang]?.desc;
-      if (staticExcerpt) {
-        el.textContent = staticExcerpt;
-      } else {
-        const text = (el.getAttribute('data-orig-text') || el.textContent).trim();
-        if (text && text.length > 2) {
-          const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
-          let cached = null;
-          try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-          if (cached) {
-            el.textContent = cached;
-          } else {
-            pendingItems.push({
-              text,
-              cacheKey,
-              apply: (translated) => { el.textContent = translated; }
-            });
-          }
-        }
-      }
-    });
-
-    // 5. Batch Translate all pending items in chunks of 25 (fast, parallel, and resilient)
+    // 5. Batch Translate all pending items in chunks of 25 with auto source language
     if (pendingItems.length > 0) {
       const CHUNK_SIZE = 25;
       for (let i = 0; i < pendingItems.length; i += CHUNK_SIZE) {
         const chunk = pendingItems.slice(i, i + CHUNK_SIZE);
+        const targetLanguage = chunk[0].targetLang || lang;
         try {
           const res = await fetch('/api/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               texts: chunk.map(item => item.text),
-              targetLang: lang,
-              sourceLang: 'ta'
+              targetLang: targetLanguage,
+              sourceLang: 'auto'
             })
           });
 
