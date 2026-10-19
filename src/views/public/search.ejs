@@ -5,12 +5,12 @@
   <nav class="article-breadcrumbs">
     <a href="/">முகப்பு</a>
     <span class="separator">/</span>
-    <span style="color:var(--charcoal-900); font-weight:600;">தேடல் (Search)</span>
+    <span class="breadcrumb-current">தேடல் (Search)</span>
   </nav>
 
   <!-- Search Input Header -->
-  <div style="background-color:var(--white); border-radius:var(--border-radius-md); padding:2rem; border:1px solid var(--grey-200); margin-bottom:2rem;">
-    <h1 style="font-size:1.6rem; font-weight:800; color:var(--charcoal-900); margin-bottom:1rem;">
+  <div class="search-header-banner">
+    <h1 class="search-header-title">
       செய்திகள் தேடல் (News Search)
     </h1>
     <form action="/search" method="GET" style="display:flex; gap:0.75rem; max-width:700px;">
@@ -18,7 +18,7 @@
       <button type="submit" class="search-submit-btn">தேடு</button>
     </form>
     <% if (query) { %>
-      <div style="margin-top:0.75rem; font-size:0.9rem; color:var(--grey-600);">
+      <div class="search-query-info">
         "<strong><%= query %></strong>" என்ற சொல்லுக்கு <strong><%= pagination.total %></strong> செய்திகள் கண்டறியப்பட்டுள்ளன.
       </div>
     <% } %>
@@ -65,9 +65,9 @@
           </div>
         <% } %>
       <% } else if (query) { %>
-        <div style="background-color:var(--white); padding:3rem; border-radius:var(--border-radius-md); text-align:center; border:1px solid var(--grey-200);">
-          <h3 style="color:var(--grey-600); margin-bottom:0.5rem;">முடிவுகள் எதுவும் கிடைக்கவில்லை</h3>
-          <p style="color:var(--grey-400);">வேறு சொற்களைப் பயன்படுத்தி மீண்டும் தேட முயற்சிக்கவும்.</p>
+        <div class="empty-state-box">
+          <h3 class="empty-state-title">முடிவுகள் எதுவும் கிடைக்கவில்லை</h3>
+          <p class="empty-state-desc">வேறு சொற்களைப் பயன்படுத்தி மீண்டும் தேட முயற்சிக்கவும்.</p>
         </div>
       <% } %>
     </div>

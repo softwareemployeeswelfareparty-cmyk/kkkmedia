@@ -4,7 +4,7 @@
   <nav class="article-breadcrumbs">
     <a href="/">முகப்பு</a>
     <span class="separator">/</span>
-    <span style="color:var(--charcoal-900); font-weight:600;">தொடர்புக்கு</span>
+    <span class="breadcrumb-current">தொடர்புக்கு</span>
   </nav>
 
   <div class="article-container" style="max-width: 900px; margin: 0 auto;">
@@ -21,8 +21,8 @@
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem; margin-top:1.5rem;">
       <!-- Contact Info -->
       <div>
-        <h2 style="font-size:1.3rem; margin-bottom:1rem; color:var(--charcoal-900);">தலைமை அலுவலகம்</h2>
-        <div style="display:flex; flex-direction:column; gap:1rem; color:var(--charcoal-700); font-size:0.95rem;">
+        <h2 class="contact-section-heading">தலைமை அலுவலகம்</h2>
+        <div class="contact-info-list" style="display:flex; flex-direction:column; gap:1rem; font-size:0.95rem;">
           <p>
             <strong>முகவரி:</strong><br>
             <%= typeof settings !== 'undefined' && settings.contact_address ? settings.contact_address : 'KKK Media Tower, Anna Salai, Chennai, Tamil Nadu 600002' %>
@@ -46,7 +46,7 @@
 
       <!-- Contact Form -->
       <div>
-        <h2 style="font-size:1.3rem; margin-bottom:1rem; color:var(--charcoal-900);">கருத்து / செய்தி அனுப்ப</h2>
+        <h2 class="contact-section-heading">கருத்து / செய்தி அனுப்ப</h2>
         <form action="/contact" method="POST">
           <div style="margin-bottom:1rem;">
             <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.35rem;">உங்கள் பெயர்</label>

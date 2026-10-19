@@ -6,16 +6,16 @@
   <nav class="article-breadcrumbs">
     <a href="/" data-i18n="home">முகப்பு</a>
     <span class="separator">/</span>
-    <span style="color:var(--charcoal-900); font-weight:600;" data-cat-slug="<%= category.slug %>"><%= category.nameTamil %></span>
+    <span class="breadcrumb-current" data-cat-slug="<%= category.slug %>"><%= category.nameTamil %></span>
   </nav>
 
   <!-- Category Title Header -->
-  <div class="category-header-banner" style="background-color:var(--white); border-radius:var(--border-radius-md); padding:1.75rem; border:1px solid var(--grey-200); margin-bottom:2rem; border-left:6px solid var(--primary-red);">
-    <h1 class="category-banner-title" data-cat-title="<%= category.slug %>" style="font-size:1.85rem; font-weight:800; color:var(--charcoal-900); margin-bottom:0.5rem;">
+  <div class="category-header-banner">
+    <h1 class="category-banner-title" data-cat-title="<%= category.slug %>">
       <%= category.nameTamil %>
     </h1>
     <% if (category.description) { %>
-      <p class="category-banner-desc" data-cat-desc="<%= category.slug %>" style="color:var(--grey-600); font-size:1rem; margin:0;"><%= category.description %></p>
+      <p class="category-banner-desc" data-cat-desc="<%= category.slug %>"><%= category.description %></p>
     <% } %>
   </div>
 
@@ -72,9 +72,9 @@
         <% } %>
 
       <% } else { %>
-        <div style="background-color:var(--white); padding:3rem; border-radius:var(--border-radius-md); text-align:center; border:1px solid var(--grey-200);">
-          <h3 style="color:var(--grey-600); margin-bottom:0.5rem;" data-i18n="no_articles_title">இந்த பிரிவில் செய்திகள் எதுவும் இல்லை</h3>
-          <p style="color:var(--grey-400);" data-i18n="no_articles_desc">விரைவில் புதிய செய்திகள் பதிவேற்றப்படும்.</p>
+        <div class="empty-state-box">
+          <h3 class="empty-state-title" data-i18n="no_articles_title">இந்த பிரிவில் செய்திகள் எதுவும் இல்லை</h3>
+          <p class="empty-state-desc" data-i18n="no_articles_desc">விரைவில் புதிய செய்திகள் பதிவேற்றப்படும்.</p>
           <a href="/" class="page-btn" style="margin-top:1rem; display:inline-flex;" data-i18n="go_home">முகப்புக்குச் செல்</a>
         </div>
       <% } %>
