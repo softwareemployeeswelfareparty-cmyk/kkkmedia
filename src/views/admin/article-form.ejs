@@ -2,7 +2,7 @@
 
 <div class="page-header-row">
   <div>
-    <h1 class="page-title">
+    <h1 class="page-title" data-admin-i18n="<%= isEdit ? 'art_form_edit_title' : 'art_form_create_title' %>">
       <%= isEdit ? 'செய்தி திருத்துதல் (Edit Article)' : 'புதிய செய்தி உருவாக்குதல் (Create Article)' %>
     </h1>
     <p class="page-subtitle">
@@ -10,7 +10,7 @@
     </p>
   </div>
   <div>
-    <a href="/admin/articles" class="btn btn-secondary">
+    <a href="/admin/articles" class="btn btn-secondary" data-admin-i18n="art_form_back_list">
       &larr; செய்திகள் பட்டியலுக்குச் செல்
     </a>
   </div>
@@ -29,20 +29,21 @@
           <!-- Article Title -->
           <div class="form-group">
             <label for="articleTitle" class="form-label">
-              செய்தி தலைப்பு (Headline) <span style="color:#ef4444;">*</span>
+              <span data-admin-i18n="art_label_headline">செய்தி தலைப்பு (Headline)</span> <span style="color:#ef4444;">*</span>
             </label>
             <input type="text" 
                    id="articleTitle" 
                    class="form-control" 
                    style="font-size:1.15rem; font-weight:700; font-family:'Mukta Malar', sans-serif;"
                    placeholder="வாசகர்களை ஈர்க்கும் தலைப்பை உள்ளிடவும்..." 
+                   data-admin-i18n-ph="art_ph_headline"
                    value="<%= isEdit ? article.title : '' %>" 
                    required>
           </div>
 
           <!-- URL Slug -->
           <div class="form-group">
-            <label for="articleSlug" class="form-label">
+            <label for="articleSlug" class="form-label" data-admin-i18n="art_label_slug">
               வலைத்தள முகவரி (URL Slug)
             </label>
             <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -54,27 +55,28 @@
                      placeholder="tvk-vijay-meeting-update-2026" 
                      value="<%= isEdit ? article.slug : '' %>">
             </div>
-            <div class="form-help">தலைப்பை உள்ளிட்டு வெளியே கிளிக் செய்தால் தானாகவே நிரப்பப்படும்.</div>
+            <div class="form-help" data-admin-i18n="art_help_slug">தலைப்பை உள்ளிட்டு வெளியே கிளிக் செய்தால் தானாகவே நிரப்பப்படும்.</div>
           </div>
 
           <!-- Short Description / Excerpt -->
           <div class="form-group">
             <label for="shortDescription" class="form-label">
-              சுருக்க உரை (Short Description / Excerpt) <span style="color:#ef4444;">*</span>
+              <span data-admin-i18n="art_label_excerpt">சுருக்க உரை (Short Description / Excerpt)</span> <span style="color:#ef4444;">*</span>
             </label>
             <textarea id="shortDescription" 
                       class="form-control" 
                       style="min-height:75px;" 
                       placeholder="செய்தியின் முக்கிய 2-3 வரிகள் சுருக்கம்..." 
+                      data-admin-i18n-ph="art_ph_excerpt"
                       required><%= isEdit ? article.shortDescription : '' %></textarea>
-            <div class="form-help">முகப்பு அட்டை மற்றும் சமூக வலைதளப் பகிர்வுகளில் இது தோன்றும்.</div>
+            <div class="form-help" data-admin-i18n="art_help_excerpt">முகப்பு அட்டை மற்றும் சமூக வலைதளப் பகிர்வுகளில் இது தோன்றும்.</div>
           </div>
 
           <!-- Full Content Editor -->
           <div class="form-group">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
               <label for="fullContent" class="form-label" style="margin:0;">
-                முழு செய்தி விவரம் (Full Content - HTML & Text) <span style="color:#ef4444;">*</span>
+                <span data-admin-i18n="art_label_content">முழு செய்தி விவரம் (Full Content - HTML & Text)</span> <span style="color:#ef4444;">*</span>
               </label>
               <!-- Quick Formatting Helper Pills -->
               <div style="display:flex; gap:0.35rem;">
@@ -105,7 +107,7 @@
           
           <div class="form-group">
             <div style="display:flex; justify-content:space-between;">
-              <label for="seoTitle" class="form-label">SEO Meta Title</label>
+              <label for="seoTitle" class="form-label" data-admin-i18n="art_label_seo_title">SEO Meta Title</label>
               <span id="seoTitleCount" style="font-size:0.75rem; color:var(--admin-text-muted);">0/60 எழுத்துகள்</span>
             </div>
             <input type="text" id="seoTitle" class="form-control" placeholder="கூகுளில் தோன்றும் முதன்மை தலைப்பு..." value="<%= isEdit && article.seoTitle ? article.seoTitle : '' %>">
@@ -113,7 +115,7 @@
 
           <div class="form-group">
             <div style="display:flex; justify-content:space-between;">
-              <label for="seoDescription" class="form-label">SEO Meta Description</label>
+              <label for="seoDescription" class="form-label" data-admin-i18n="art_label_seo_desc">SEO Meta Description</label>
               <span id="seoDescCount" style="font-size:0.75rem; color:var(--admin-text-muted);">0/160 எழுத்துகள்</span>
             </div>
             <textarea id="seoDescription" class="form-control" style="min-height:70px;" placeholder="கூகுள் தேடல் முடிவுகளின் கீழே காட்டப்படும் சுருக்க விளக்கம்..."><%= isEdit && article.seoDescription ? article.seoDescription : '' %></textarea>
@@ -140,12 +142,12 @@
       <!-- Publish Action Box -->
       <div class="admin-card">
         <div class="card-header-padded">
-          <h2 style="font-size:1.05rem; font-weight:700;">வெளியீட்டு அமைப்புகள் (Publishing)</h2>
+          <h2 style="font-size:1.05rem; font-weight:700;" data-admin-i18n="art_label_publish_settings">வெளியீட்டு அமைப்புகள் (Publishing)</h2>
         </div>
         <div class="card-body-padded">
           
           <div class="form-group">
-            <label for="articleStatus" class="form-label">வெளியீட்டு நிலை (Status)</label>
+            <label for="articleStatus" class="form-label" data-admin-i18n="art_label_status">வெளியீட்டு நிலை (Status)</label>
             <select id="articleStatus" class="form-control">
               <option value="PUBLISHED" <%= isEdit && article.status === 'PUBLISHED' ? 'selected' : '' %>>
                 உடனே வெளியிடு (Publish Immediately)
@@ -161,7 +163,7 @@
 
           <!-- Schedule Date Box -->
           <div class="form-group" id="scheduleBox" style="display:none;">
-            <label for="scheduledDate" class="form-label">வெளியிட வேண்டிய தேதி & நேரம்</label>
+            <label for="scheduledDate" class="form-label" data-admin-i18n="art_label_schedule_time">வெளியிட வேண்டிய தேதி & நேரம்</label>
             <input type="datetime-local" 
                    id="scheduledDate" 
                    class="form-control" 
@@ -170,7 +172,9 @@
 
           <!-- Category Selection -->
           <div class="form-group">
-            <label for="articleCategory" class="form-label">செய்திப் பிரிவு (Category) <span style="color:#ef4444;">*</span></label>
+            <label for="articleCategory" class="form-label">
+              <span data-admin-i18n="art_label_category">செய்திப் பிரிவு (Category)</span> <span style="color:#ef4444;">*</span>
+            </label>
             <select id="articleCategory" class="form-control" required>
               <option value="">-- பிரிவைத் தேர்ந்தெடுக்கவும் --</option>
               <% categories.forEach(function(cat) { %>
@@ -185,17 +189,17 @@
           <div style="margin-top:1.25rem; border-top:1px solid var(--admin-border); padding-top:1rem; display:flex; flex-direction:column; gap:0.75rem;">
             <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
               <input type="checkbox" id="isFeatured" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= isEdit && article.isFeatured ? 'checked' : '' %>>
-              <span><strong>முதன்மை செய்தி (Featured Story)</strong></span>
+              <span><strong data-admin-i18n="art_toggle_featured">முதன்மை செய்தி (Featured Story)</strong></span>
             </label>
 
             <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
               <input type="checkbox" id="isBreaking" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= isEdit && article.isBreaking ? 'checked' : '' %>>
-              <span><strong>முக்கிய செய்தி டிக்கர் (Breaking News)</strong></span>
+              <span><strong data-admin-i18n="art_toggle_breaking">முக்கிய செய்தி டிக்கர் (Breaking News)</strong></span>
             </label>
           </div>
 
           <div style="margin-top:1.5rem;">
-            <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem;">
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem;" data-admin-i18n="art_btn_save">
               <%= isEdit ? 'செய்தியைப் புதுப்பி (Update Article)' : 'செய்தியைச் சேமி (Save Article)' %>
             </button>
           </div>
@@ -206,7 +210,7 @@
       <!-- Featured Image Card -->
       <div class="admin-card">
         <div class="card-header-padded">
-          <h2 style="font-size:1.05rem; font-weight:700;">முகப்பு படம் (Featured Image)</h2>
+          <h2 style="font-size:1.05rem; font-weight:700;" data-admin-i18n="art_label_featured_img">முகப்பு படம் (Featured Image)</h2>
         </div>
         <div class="card-body-padded">
           
@@ -215,7 +219,7 @@
 
           <div class="image-upload-dropzone" id="imageDropzone">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 0.5rem; color:#9ca3af;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-            <div style="font-size:0.875rem; font-weight:600; color:var(--admin-dark-bg);">படத்தை பதிவேற்ற கிளிக் செய்க அல்லது இழுத்து விடவும்</div>
+            <div style="font-size:0.875rem; font-weight:600; color:var(--admin-dark-bg);" data-admin-i18n="art_label_dropzone">படத்தை பதிவேற்ற கிளிக் செய்க அல்லது இழுத்து விடவும்</div>
             <div style="font-size:0.75rem; color:var(--admin-text-muted); margin-top:0.25rem;">JPG, PNG, WEBP அல்லது GIF (அதிகபட்சம் 5MB)</div>
           </div>
 
@@ -224,7 +228,7 @@
           </div>
 
           <div class="form-group" style="margin-top:1rem;">
-            <label for="imageAlt" class="form-label">பட விளக்கம் (Alt Text for SEO)</label>
+            <label for="imageAlt" class="form-label" data-admin-i18n="art_label_img_caption">பட விளக்கம் (Alt Text for SEO)</label>
             <input type="text" id="imageAlt" class="form-control" placeholder="படத்தை விவரிக்கும் சொல்..." value="<%= isEdit && article.imageAlt ? article.imageAlt : '' %>">
           </div>
 
@@ -234,11 +238,11 @@
       <!-- Tags Card -->
       <div class="admin-card">
         <div class="card-header-padded">
-          <h2 style="font-size:1.05rem; font-weight:700;">குறிச்சொற்கள் (Tags)</h2>
+          <h2 style="font-size:1.05rem; font-weight:700;" data-admin-i18n="art_label_tags">குறிச்சொற்கள் (Tags)</h2>
         </div>
         <div class="card-body-padded">
           <div id="tagsContainer" style="display:flex; flex-wrap:wrap; gap:0.4rem; padding:0.5rem; border:1px solid var(--admin-border); border-radius:var(--radius-sm); min-height:48px; align-items:center;">
-            <input type="text" id="tagTextInput" placeholder="Tag எழுதி Enter அழுத்தவும்..." style="border:none; outline:none; font-size:0.85rem; flex:1; min-width:120px;">
+            <input type="text" id="tagTextInput" placeholder="Tag எழுதி Enter அழுத்தவும்..." data-admin-i18n-ph="art_ph_tags" style="border:none; outline:none; font-size:0.85rem; flex:1; min-width:120px;">
           </div>
           <input type="hidden" id="tagsHidden" value="<%= isEdit && article.tags ? article.tags.map(t => t.tag.name).join(',') : '' %>">
           <div class="form-help">Enter அல்லது கமா அழுத்தி Tag உருவாக்கவும்.</div>

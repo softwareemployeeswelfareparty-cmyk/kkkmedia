@@ -2,8 +2,8 @@
 
 <div class="page-header-row">
   <div>
-    <h1 class="page-title">தள அமைப்புகள் (Site Settings)</h1>
-    <p class="page-subtitle">வலைத்தளத்தின் அடையாளங்கள், தொடர்புகள், சமூக ஊடகங்கள் மற்றும் விளம்பர அமைப்புகள்.</p>
+    <h1 class="page-title" data-admin-i18n="settings_title">தள அமைப்புகள் (Site Settings)</h1>
+    <p class="page-subtitle" data-admin-i18n="settings_subtitle">வலைத்தளத்தின் அடையாளங்கள், தொடர்புகள், சமூக ஊடகங்கள் மற்றும் விளம்பர அமைப்புகள்.</p>
   </div>
 </div>
 
@@ -13,29 +13,29 @@
     <!-- Branding & SEO -->
     <div class="admin-card">
       <div class="card-header-padded">
-        <h2 style="font-size:1.1rem; font-weight:700;">அடையாளம் & அடிப்படை (Branding)</h2>
+        <h2 style="font-size:1.1rem; font-weight:700;" data-admin-i18n="settings_branding">அடையாளம் & அடிப்படை (Branding)</h2>
       </div>
       <div class="card-body-padded">
         
         <div class="form-group">
-          <label class="form-label">தளத்தின் பெயர் (Site Name)</label>
+          <label class="form-label" data-admin-i18n="settings_site_name">தளத்தின் பெயர் (Site Name)</label>
           <input type="text" name="site_name" class="form-control" value="<%= settings.site_name || 'KKK Media' %>" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label">தளத்தின் தமிழ் முழக்கம் (Tagline)</label>
+          <label class="form-label" data-admin-i18n="settings_tagline">தளத்தின் தமிழ் முழக்கம் (Tagline)</label>
           <input type="text" name="site_tagline" class="form-control" value="<%= settings.site_tagline || '' %>">
         </div>
 
         <div class="form-group">
-          <label class="form-label">தள விவரிப்பு (Site Meta Description)</label>
+          <label class="form-label" data-admin-i18n="settings_meta_desc">தள விவரிப்பு (Site Meta Description)</label>
           <textarea name="site_description" class="form-control" style="min-height:80px;"><%= settings.site_description || '' %></textarea>
         </div>
 
         <div class="form-group">
           <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.875rem;">
             <input type="checkbox" name="breaking_news_enabled" id="breaking_news_enabled" style="width:18px; height:18px; accent-color:var(--admin-primary);" <%= settings.breaking_news_enabled === 'true' ? 'checked' : '' %>>
-            <span><strong>முக்கிய செய்திகள் டிக்கரை இயக்கு (Enable Breaking Ticker)</strong></span>
+            <span><strong data-admin-i18n="settings_enable_ticker">முக்கிய செய்திகள் டிக்கரை இயக்கு (Enable Breaking Ticker)</strong></span>
           </label>
         </div>
 
@@ -45,22 +45,22 @@
     <!-- Contact Information -->
     <div class="admin-card">
       <div class="card-header-padded">
-        <h2 style="font-size:1.1rem; font-weight:700;">தொடர்பு விவரங்கள் (Contact Details)</h2>
+        <h2 style="font-size:1.1rem; font-weight:700;" data-admin-i18n="settings_contact">தொடர்பு விவரங்கள் (Contact Details)</h2>
       </div>
       <div class="card-body-padded">
         
         <div class="form-group">
-          <label class="form-label">அலுவலக மின்னஞ்சல் (Contact Email)</label>
+          <label class="form-label" data-admin-i18n="settings_email">அலுவலக மின்னஞ்சல் (Contact Email)</label>
           <input type="email" name="contact_email" class="form-control" value="<%= settings.contact_email || '' %>">
         </div>
 
         <div class="form-group">
-          <label class="form-label">தொலைபேசி எண் (Contact Phone)</label>
+          <label class="form-label" data-admin-i18n="settings_phone">தொலைபேசி எண் (Contact Phone)</label>
           <input type="text" name="contact_phone" class="form-control" value="<%= settings.contact_phone || '' %>">
         </div>
 
         <div class="form-group">
-          <label class="form-label">அலுவலக முகவரி (Office Address)</label>
+          <label class="form-label" data-admin-i18n="settings_address">அலுவலக முகவரி (Office Address)</label>
           <textarea name="contact_address" class="form-control" style="min-height:80px;"><%= settings.contact_address || '' %></textarea>
         </div>
 
@@ -70,7 +70,7 @@
     <!-- Social Media Links -->
     <div class="admin-card">
       <div class="card-header-padded">
-        <h2 style="font-size:1.1rem; font-weight:700;">சமூக ஊடக இணைப்புகள் (Social Channels)</h2>
+        <h2 style="font-size:1.1rem; font-weight:700;" data-admin-i18n="settings_social">சமூக ஊடக இணைப்புகள் (Social Channels)</h2>
       </div>
       <div class="card-body-padded">
         
@@ -128,7 +128,7 @@
   </div>
 
   <div style="margin-top:1.5rem; text-align:right;">
-    <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:1rem;">
+    <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem; font-size:1rem;" data-admin-i18n="settings_btn_save">
       தள அமைப்புகளைச் சேமி (Save Settings)
     </button>
   </div>

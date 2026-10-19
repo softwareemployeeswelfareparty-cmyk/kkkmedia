@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>நிர்வாகி உள்நுழைவு (Admin Login) | KKK Media CMS</title>
-  <!-- Dark / Light Theme Anti-FOUC Initialization -->
+  <!-- Dark / Light Theme & Language Anti-FOUC Initialization -->
   <script>
     (function() {
       try {
@@ -12,6 +12,10 @@
         var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         var theme = savedTheme ? savedTheme : (systemDark ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
+
+        var savedLang = localStorage.getItem('kkk_admin_lang') || 'ta';
+        document.documentElement.setAttribute('lang', savedLang);
+        document.documentElement.setAttribute('data-admin-lang', savedLang);
       } catch (e) {}
     })();
   </script>
@@ -32,6 +36,9 @@
       top: 1.5rem;
       right: 1.5rem;
       z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
     .login-card {
       background-color: #ffffff;
@@ -73,7 +80,43 @@
 <body>
 
 <div class="login-theme-pos">
-  <button type="button" class="theme-toggle-btn admin-theme-toggle" id="loginThemeToggleBtn" aria-label="Toggle Dark / Light Theme" title="கருப்பு / வெளிர் நிற மாற்றம்">
+  <!-- Language Switcher in Login -->
+  <div class="admin-lang-wrap" id="adminLangWrap">
+    <button type="button" class="admin-lang-btn" id="adminLangBtn" aria-label="Language Selector" aria-expanded="false" title="மொழியைத் தேர்வு செய்க / Select Language">
+      <svg class="admin-lang-globe" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+      <span class="admin-lang-current" id="adminLangCurrentLabel">தமிழ்</span>
+      <svg class="admin-lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div class="admin-lang-dropdown" id="adminLangDropdown" role="menu">
+      <div class="admin-lang-header">
+        <span data-admin-i18n="lang_menu_title">நிர்வாக மொழி / Admin Language</span>
+      </div>
+      <button type="button" class="admin-lang-option" data-lang="ta" role="menuitem">
+        <span class="admin-lang-pill">TA</span>
+        <div class="admin-lang-texts">
+          <span class="admin-lang-name">தமிழ்</span>
+          <span class="admin-lang-sub">Tamil</span>
+        </div>
+        <span class="admin-lang-check">✓</span>
+      </button>
+      <button type="button" class="admin-lang-option" data-lang="en" role="menuitem">
+        <span class="admin-lang-pill">EN</span>
+        <div class="admin-lang-texts">
+          <span class="admin-lang-name">English</span>
+          <span class="admin-lang-sub">ஆங்கிலம்</span>
+        </div>
+        <span class="admin-lang-check">✓</span>
+      </button>
+    </div>
+  </div>
+
+  <button type="button" class="theme-toggle-btn admin-theme-toggle" id="loginThemeToggleBtn" aria-label="Toggle Dark / Light Theme" title="கருப்பு / வெளிர் நிற மாற்றம்" data-admin-i18n-title="theme_toggle">
     <span class="theme-icon-sun" aria-hidden="true">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
     </span>
@@ -89,7 +132,7 @@
       <span class="sidebar-logo-badge" style="font-size:1.2rem; padding:0.25rem 0.65rem;">KKK</span>
       <span style="font-weight:900; font-size:1.4rem; letter-spacing:-0.5px;">MEDIA CMS</span>
     </div>
-    <div style="font-size:0.85rem; color:#9ca3af;">
+    <div style="font-size:0.85rem; color:#9ca3af;" data-admin-i18n="login_portal_desc">
       செய்தி ஆசிரியர் நிர்வாக தளம் (Editorial Portal)
     </div>
   </div>
@@ -105,30 +148,31 @@
 
     <form id="adminLoginForm">
       <div class="form-group">
-        <label for="loginEmail" class="form-label">மின்னஞ்சல் (Email Address)</label>
+        <label for="loginEmail" class="form-label" data-admin-i18n="login_email_label">மின்னஞ்சல் (Email Address)</label>
         <input type="email" id="loginEmail" class="form-control" placeholder="admin@kkkmedia.com" required value="admin@kkkmedia.com">
       </div>
 
       <div class="form-group">
-        <label for="loginPassword" class="form-label">கடவுச்சொல் (Password)</label>
+        <label for="loginPassword" class="form-label" data-admin-i18n="login_password_label">கடவுச்சொல் (Password)</label>
         <input type="password" id="loginPassword" class="form-control" placeholder="••••••••••••" required value="Admin@KKKMedia2026!">
       </div>
 
-      <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+      <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;" data-admin-i18n="login_btn">
         உள்நுழைக (Sign In)
       </button>
     </form>
 
     <div style="margin-top:1.5rem; text-align:center; font-size:0.8rem; color:#6b7280;">
-      இயல்புநிலை நிர்வாகி: <code>admin@kkkmedia.com</code> / <code>Admin@KKKMedia2026!</code>
+      <span data-admin-i18n="login_default_creds">இயல்புநிலை நிர்வாகி:</span> <code>admin@kkkmedia.com</code> / <code>Admin@KKKMedia2026!</code>
     </div>
 
     <div style="margin-top:1.25rem; text-align:center;">
-      <a href="/" style="font-size:0.85rem; color:var(--admin-primary); font-weight:600;">&larr; பொது வலைத்தளத்திற்குச் செல்</a>
+      <a href="/" style="font-size:0.85rem; color:var(--admin-primary); font-weight:600;" data-admin-i18n="login_back_home">&larr; பொது வலைத்தளத்திற்குச் செல்</a>
     </div>
   </div>
 </div>
 
+<script src="/js/admin.js"></script>
 <script>
   document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -136,9 +180,10 @@
     const alertBox = document.getElementById('loginAlert');
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
+    const currentLang = localStorage.getItem('kkk_admin_lang') || 'ta';
 
     btn.disabled = true;
-    btn.innerHTML = 'சரிபார்க்கப்படுகிறது...';
+    btn.innerHTML = currentLang === 'en' ? 'Verifying...' : 'சரிபார்க்கப்படுகிறது...';
     alertBox.style.display = 'none';
 
     try {
@@ -154,27 +199,29 @@
         alertBox.style.backgroundColor = '#d1fae5';
         alertBox.style.borderLeft = '4px solid #10b981';
         alertBox.style.color = '#065f46';
-        alertBox.innerHTML = '✓ வெற்றி! நிர்வாக தளத்திற்கு அழைத்துச் செல்லப்படுகிறீர்கள்...';
+        alertBox.innerHTML = currentLang === 'en' 
+          ? '✓ Success! Redirecting to admin dashboard...' 
+          : '✓ வெற்றி! நிர்வாக தளத்திற்கு அழைத்துச் செல்லப்படுகிறீர்கள்...';
         setTimeout(() => {
           window.location.href = '/admin/dashboard';
         }, 600);
       } else {
         btn.disabled = false;
-        btn.innerHTML = 'உள்நுழைக (Sign In)';
+        btn.innerHTML = currentLang === 'en' ? 'Sign In' : 'உள்நுழைக (Sign In)';
         alertBox.style.display = 'block';
         alertBox.style.backgroundColor = '#fee2e2';
         alertBox.style.borderLeft = '4px solid #ef4444';
         alertBox.style.color = '#991b1b';
-        alertBox.innerHTML = data.message || 'உள்நுழைவு தோல்வி அடைந்தது.';
+        alertBox.innerHTML = data.message || (currentLang === 'en' ? 'Login failed.' : 'உள்நுழைவு தோல்வி அடைந்தது.');
       }
     } catch (err) {
       btn.disabled = false;
-      btn.innerHTML = 'உள்நுழைக (Sign In)';
+      btn.innerHTML = currentLang === 'en' ? 'Sign In' : 'உள்நுழைக (Sign In)';
       alertBox.style.display = 'block';
       alertBox.style.backgroundColor = '#fee2e2';
       alertBox.style.borderLeft = '4px solid #ef4444';
       alertBox.style.color = '#991b1b';
-      alertBox.innerHTML = 'சேவையக இணைப்பு பிழை ஏற்பட்டது.';
+      alertBox.innerHTML = currentLang === 'en' ? 'Server connection error occurred.' : 'சேவையக இணைப்பு பிழை ஏற்பட்டது.';
     }
   });
 

@@ -2,11 +2,13 @@
 
 <div class="page-header-row">
   <div>
-    <h1 class="page-title">செய்திகள் மேலாண்மை (Articles)</h1>
-    <p class="page-subtitle">மொத்தம் <%= pagination.total %> செய்திகள் பதிவு செய்யப்பட்டுள்ளன.</p>
+    <h1 class="page-title" data-admin-i18n="art_list_title">செய்திகள் மேலாண்மை (Articles)</h1>
+    <p class="page-subtitle">
+      <span data-admin-i18n="art_list_subtitle_prefix">மொத்தம்</span> <%= pagination.total %> <span data-admin-i18n="art_list_subtitle_suffix">செய்திகள் பதிவு செய்யப்பட்டுள்ளன.</span>
+    </p>
   </div>
   <a href="/admin/articles/new" class="btn btn-primary">
-    <span>+ புதிய செய்தி எழுதுக</span>
+    <span data-admin-i18n="dash_btn_new">+ புதிய செய்தி எழுதுக</span>
   </a>
 </div>
 
@@ -14,12 +16,12 @@
 <div class="admin-card" style="padding:1.25rem; margin-bottom:1.5rem;">
   <form action="/admin/articles" method="GET" style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
     <div style="flex:1; min-width:240px;">
-      <input type="text" name="search" value="<%= filters.search || '' %>" class="form-control" placeholder="தலைப்பு அல்லது செய்தி தேடுக...">
+      <input type="text" name="search" value="<%= filters.search || '' %>" class="form-control" placeholder="தலைப்பு அல்லது செய்தி தேடுக..." data-admin-i18n-ph="art_filter_search_ph">
     </div>
     
     <div style="min-width:180px;">
       <select name="categoryId" class="form-control">
-        <option value="">அனைத்து பிரிவுகள் (All Categories)</option>
+        <option value="" data-admin-i18n="art_filter_all_cats">அனைத்து பிரிவுகள் (All Categories)</option>
         <% categories.forEach(function(cat) { %>
           <option value="<%= cat.id %>" <%= filters.categoryId == cat.id ? 'selected' : '' %>>
             <%= cat.nameTamil %>
@@ -30,16 +32,16 @@
 
     <div style="min-width:160px;">
       <select name="status" class="form-control">
-        <option value="">அனைத்து நிலைகள் (All Status)</option>
-        <option value="PUBLISHED" <%= filters.status === 'PUBLISHED' ? 'selected' : '' %>>வெளியானது (Published)</option>
-        <option value="DRAFT" <%= filters.status === 'DRAFT' ? 'selected' : '' %>>வரைவு (Draft)</option>
-        <option value="SCHEDULED" <%= filters.status === 'SCHEDULED' ? 'selected' : '' %>>திட்டமிடப்பட்டது (Scheduled)</option>
+        <option value="" data-admin-i18n="art_filter_all_status">அனைத்து நிலைகள் (All Status)</option>
+        <option value="PUBLISHED" <%= filters.status === 'PUBLISHED' ? 'selected' : '' %> data-admin-i18n="status_published">வெளியானது (Published)</option>
+        <option value="DRAFT" <%= filters.status === 'DRAFT' ? 'selected' : '' %> data-admin-i18n="status_draft">வரைவு (Draft)</option>
+        <option value="SCHEDULED" <%= filters.status === 'SCHEDULED' ? 'selected' : '' %> data-admin-i18n="status_scheduled">திட்டமிடப்பட்டது (Scheduled)</option>
       </select>
     </div>
 
-    <button type="submit" class="btn btn-secondary">வடிகட்டு (Filter)</button>
+    <button type="submit" class="btn btn-secondary" data-admin-i18n="art_btn_filter">வடிகட்டு (Filter)</button>
     <% if (filters.search || filters.categoryId || filters.status) { %>
-      <a href="/admin/articles" class="btn btn-secondary" style="color:#ef4444;">வடிகட்டலை நீக்கு</a>
+      <a href="/admin/articles" class="btn btn-secondary" style="color:#ef4444;" data-admin-i18n="art_btn_clear_filter">வடிகட்டலை நீக்கு</a>
     <% } %>
   </form>
 </div>
@@ -50,15 +52,15 @@
     <table class="admin-table">
       <thead>
         <tr>
-          <th style="width:70px;">படம்</th>
-          <th>தலைப்பு</th>
-          <th>பிரிவு</th>
-          <th>ஆசிரியர்</th>
-          <th>நிலை</th>
-          <th>சிறப்புகள்</th>
-          <th>பார்வைகள்</th>
-          <th>தேதி</th>
-          <th style="text-align:right;">செயல்கள்</th>
+          <th style="width:70px;" data-admin-i18n="th_image">படம்</th>
+          <th data-admin-i18n="th_title">தலைப்பு</th>
+          <th data-admin-i18n="th_category">பிரிவு</th>
+          <th data-admin-i18n="th_author">ஆசிரியர்</th>
+          <th data-admin-i18n="th_status">நிலை</th>
+          <th data-admin-i18n="th_highlights">சிறப்புகள்</th>
+          <th data-admin-i18n="th_views">பார்வைகள்</th>
+          <th data-admin-i18n="th_date">தேதி</th>
+          <th style="text-align:right;" data-admin-i18n="th_actions">செயல்கள்</th>
         </tr>
       </thead>
       <tbody>
@@ -86,11 +88,11 @@
               <td><%= art.author.name %></td>
               <td>
                 <% if (art.status === 'PUBLISHED') { %>
-                  <span class="badge badge-published">வெளியானது</span>
+                  <span class="badge badge-published" data-admin-i18n="status_published">வெளியானது</span>
                 <% } else if (art.status === 'DRAFT') { %>
-                  <span class="badge badge-draft">வரைவு</span>
+                  <span class="badge badge-draft" data-admin-i18n="status_draft">வரைவு</span>
                 <% } else { %>
-                  <span class="badge badge-scheduled">திட்டமிட்டவை</span>
+                  <span class="badge badge-scheduled" data-admin-i18n="status_scheduled">திட்டமிட்டவை</span>
                 <% } %>
               </td>
               <td>
@@ -114,13 +116,14 @@
                 <%= new Date(art.createdAt).toLocaleDateString() %>
               </td>
               <td style="text-align:right; white-space:nowrap;">
-                <a href="/news/<%= art.slug %>" target="_blank" class="btn btn-secondary btn-sm" title="முன்னோட்டம்">பார்</a>
-                <a href="/admin/articles/<%= art.id %>/edit" class="btn btn-secondary btn-sm" title="திருத்து">திருத்து</a>
+                <a href="/news/<%= art.slug %>" target="_blank" class="btn btn-secondary btn-sm" title="முன்னோட்டம்" data-admin-i18n="btn_view">பார்</a>
+                <a href="/admin/articles/<%= art.id %>/edit" class="btn btn-secondary btn-sm" title="திருத்து" data-admin-i18n="btn_edit">திருத்து</a>
                 <button type="button" 
                         class="btn btn-danger btn-sm btn-delete-article" 
                         data-id="<%= art.id %>" 
                         data-title="<%= art.title %>" 
-                        title="நீக்கு">
+                        title="நீக்கு"
+                        data-admin-i18n="btn_delete">
                   நீக்கு
                 </button>
               </td>
@@ -128,7 +131,7 @@
           <% }); %>
         <% } else { %>
           <tr>
-            <td colspan="9" style="text-align:center; padding:3rem; color:var(--admin-text-muted);">
+            <td colspan="9" style="text-align:center; padding:3rem; color:var(--admin-text-muted);" data-admin-i18n="art_empty">
               செய்திகள் எதுவும் கண்டறியப்படவில்லை.
             </td>
           </tr>

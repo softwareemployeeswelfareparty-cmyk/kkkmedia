@@ -804,3 +804,211 @@ textarea.form-control {
   background-color: rgba(200, 16, 46, 0.15);
   color: #ff4d6a;
 }
+
+/* ========================================================
+   Admin Language Switcher Dropdown (English & Tamil)
+   ======================================================== */
+.admin-lang-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.admin-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--admin-text-main);
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.admin-lang-btn:hover {
+  background: #f3f4f6;
+  border-color: #cbd5e1;
+}
+
+.admin-lang-globe {
+  color: var(--admin-primary);
+  flex-shrink: 0;
+}
+
+.admin-lang-current {
+  letter-spacing: -0.2px;
+}
+
+.admin-lang-chevron {
+  color: var(--admin-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.admin-lang-wrap.open .admin-lang-chevron {
+  transform: rotate(180deg);
+}
+
+.admin-lang-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 210px;
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 0.4rem;
+  z-index: 1000;
+  display: none;
+  animation: adminLangFadeIn 0.18s ease-out;
+}
+
+.admin-lang-wrap.open .admin-lang-dropdown {
+  display: block;
+}
+
+@keyframes adminLangFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-lang-header {
+  padding: 0.45rem 0.65rem 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+  border-bottom: 1px solid var(--admin-border);
+  margin-bottom: 0.3rem;
+}
+
+.admin-lang-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  background: transparent;
+  color: var(--admin-text-main);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-lang-option:hover {
+  background: #f3f4f6;
+  color: var(--admin-primary);
+}
+
+.admin-lang-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 22px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.admin-lang-texts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-lang-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: inherit;
+  line-height: 1.2;
+}
+
+.admin-lang-sub {
+  font-size: 0.72rem;
+  color: var(--admin-text-muted);
+}
+
+.admin-lang-check {
+  font-size: 0.9rem;
+  color: var(--admin-primary);
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.admin-lang-option.active {
+  background: rgba(200, 16, 46, 0.08);
+}
+
+.admin-lang-option.active .admin-lang-pill {
+  background: var(--admin-primary);
+  color: #ffffff;
+}
+
+.admin-lang-option.active .admin-lang-check {
+  opacity: 1;
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .admin-lang-btn {
+  background: #1a1e27;
+  border-color: var(--admin-border);
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .admin-lang-btn:hover {
+  background: #252b38;
+  border-color: #3b4458;
+}
+
+[data-theme="dark"] .admin-lang-dropdown {
+  background: #161920;
+  border-color: var(--admin-border);
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .admin-lang-header {
+  border-color: var(--admin-border);
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .admin-lang-option {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .admin-lang-option:hover {
+  background: #222836;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .admin-lang-pill {
+  background: #252b38;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .admin-lang-option.active {
+  background: rgba(200, 16, 46, 0.18);
+}
+
+[data-theme="dark"] .admin-lang-option.active .admin-lang-pill {
+  background: var(--admin-primary);
+  color: #ffffff;
+}
+

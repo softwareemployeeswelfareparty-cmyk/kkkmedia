@@ -2,8 +2,8 @@
 
 <div class="page-header-row">
   <div>
-    <h1 class="page-title">பிரிவுகள் மேலாண்மை (Categories)</h1>
-    <p class="page-subtitle">செய்திப் பிரிவுகளை உருவாக்க, திருத்த மற்றும் மறுவரிசைப்படுத்தலாம்.</p>
+    <h1 class="page-title" data-admin-i18n="cat_title">பிரிவுகள் மேலாண்மை (Categories)</h1>
+    <p class="page-subtitle" data-admin-i18n="cat_subtitle">செய்திப் பிரிவுகளை உருவாக்க, திருத்த மற்றும் மறுவரிசைப்படுத்தலாம்.</p>
   </div>
 </div>
 
@@ -12,36 +12,38 @@
   <!-- Add Category Form -->
   <div class="admin-card">
     <div class="card-header-padded">
-      <h2 style="font-size:1.1rem; font-weight:700;">புதிய பிரிவு சேர்க்க (Add Category)</h2>
+      <h2 style="font-size:1.1rem; font-weight:700;" data-admin-i18n="cat_form_add_title">புதிய பிரிவு சேர்க்க (Add Category)</h2>
     </div>
     <div class="card-body-padded">
       <form id="categoryForm" data-is-edit="false">
         <div class="form-group">
-          <label for="categoryNameTamil" class="form-label">பிரிவு பெயர் (தமிழ்) <span style="color:#ef4444;">*</span></label>
+          <label for="categoryNameTamil" class="form-label">
+            <span data-admin-i18n="cat_label_name_ta">பிரிவு பெயர் (தமிழ்)</span> <span style="color:#ef4444;">*</span>
+          </label>
           <input type="text" id="categoryNameTamil" class="form-control" placeholder="எ.கா: தமிழ்நாடு அரசியல்" required>
         </div>
 
         <div class="form-group">
-          <label for="categoryNameEnglish" class="form-label">பிரிவு பெயர் (English)</label>
+          <label for="categoryNameEnglish" class="form-label" data-admin-i18n="cat_label_name_en">பிரிவு பெயர் (English)</label>
           <input type="text" id="categoryNameEnglish" class="form-control" placeholder="e.g. Tamil Nadu Politics">
         </div>
 
         <div class="form-group">
-          <label for="categorySlug" class="form-label">URL Slug</label>
+          <label for="categorySlug" class="form-label" data-admin-i18n="th_slug">URL Slug</label>
           <input type="text" id="categorySlug" class="form-control" placeholder="e.g. tamil-nadu-politics">
         </div>
 
         <div class="form-group">
-          <label for="categoryDesc" class="form-label">விளக்கம் (Description)</label>
+          <label for="categoryDesc" class="form-label" data-admin-i18n="cat_label_desc">விளக்கம் (Description)</label>
           <textarea id="categoryDesc" class="form-control" style="min-height:70px;" placeholder="பிரிவு பற்றிய சிறு விளக்கம்..."></textarea>
         </div>
 
         <div class="form-group">
-          <label for="categoryOrder" class="form-label">காட்சி வரிசை (Display Order)</label>
+          <label for="categoryOrder" class="form-label" data-admin-i18n="cat_label_order">காட்சி வரிசை (Display Order)</label>
           <input type="number" id="categoryOrder" class="form-control" value="0">
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.65rem;">
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.65rem;" data-admin-i18n="cat_btn_save">
           + பிரிவைச் சேமி (Save Category)
         </button>
       </form>
@@ -51,19 +53,19 @@
   <!-- Categories Table -->
   <div class="admin-card">
     <div class="card-header-padded">
-      <h2 style="font-size:1.1rem; font-weight:700;">தற்போதுள்ள பிரிவுகள் (All Categories)</h2>
+      <h2 style="font-size:1.1rem; font-weight:700;" data-admin-i18n="cat_table_title">தற்போதுள்ள பிரிவுகள் (All Categories)</h2>
       <span style="font-size:0.85rem; color:var(--admin-text-muted);">மொத்தம்: <%= categories.length %></span>
     </div>
     <div class="table-responsive">
       <table class="admin-table">
         <thead>
           <tr>
-            <th style="width:50px;">வரிசை</th>
-            <th>பெயர் (தமிழ் & English)</th>
-            <th>Slug</th>
-            <th>செய்திகள் எண்ணிக்கை</th>
-            <th>நிலை</th>
-            <th style="text-align:right;">செயல்கள்</th>
+            <th style="width:50px;" data-admin-i18n="th_order">வரிசை</th>
+            <th data-admin-i18n="th_title">பெயர் (தமிழ் & English)</th>
+            <th data-admin-i18n="th_slug">Slug</th>
+            <th data-admin-i18n="th_article_count">செய்திகள் எண்ணிக்கை</th>
+            <th data-admin-i18n="th_status">நிலை</th>
+            <th style="text-align:right;" data-admin-i18n="th_actions">செயல்கள்</th>
           </tr>
         </thead>
         <tbody>
@@ -89,13 +91,15 @@
                 <td style="text-align:right; white-space:nowrap;">
                   <button type="button" 
                           class="btn btn-secondary btn-sm" 
-                          onclick="populateCategoryEdit('<%= cat.id %>', '<%= cat.nameTamil %>', '<%= cat.nameEnglish %>', '<%= cat.slug %>', '<%= cat.description || '' %>', '<%= cat.displayOrder %>')">
+                          onclick="populateCategoryEdit('<%= cat.id %>', '<%= cat.nameTamil %>', '<%= cat.nameEnglish %>', '<%= cat.slug %>', '<%= cat.description || '' %>', '<%= cat.displayOrder %>')"
+                          data-admin-i18n="btn_edit">
                     திருத்து
                   </button>
                   <button type="button" 
                           class="btn btn-danger btn-sm btn-delete-category" 
                           data-id="<%= cat.id %>" 
-                          data-name="<%= cat.nameTamil %>">
+                          data-name="<%= cat.nameTamil %>"
+                          data-admin-i18n="btn_delete">
                     நீக்கு
                   </button>
                 </td>
