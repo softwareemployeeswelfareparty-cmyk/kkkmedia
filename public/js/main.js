@@ -798,43 +798,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Helper to ensure original server-rendered text is preserved before any client mutation
   const preserveOriginalContent = () => {
+    // 1. Article title tags (card links and headings)
     document.querySelectorAll('[data-art-slug]').forEach(el => {
       if (!el.hasAttribute('data-orig-text')) {
         el.setAttribute('data-orig-text', el.textContent.trim());
       }
     });
 
+    // 2. Article excerpts
     document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
       if (!el.hasAttribute('data-orig-text')) {
         el.setAttribute('data-orig-text', el.textContent.trim());
       }
     });
 
-    // Capture article headline/subheadline only on actual news article pages with data-art-slug
-    const headlineEl = document.querySelector('article.article-container .article-headline[data-art-slug]');
+    // 3. Article container elements
+    const headlineEl = document.querySelector('article.article-container .article-headline');
     if (headlineEl && !headlineEl.hasAttribute('data-orig-text')) {
       headlineEl.setAttribute('data-orig-text', headlineEl.textContent.trim());
     }
 
-    const excerptEl = document.querySelector('article.article-container .article-subheadline[data-excerpt-slug]');
+    const excerptEl = document.querySelector('article.article-container .article-subheadline');
     if (excerptEl && !excerptEl.hasAttribute('data-orig-text')) {
       excerptEl.setAttribute('data-orig-text', excerptEl.textContent.trim());
     }
 
-    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current[data-art-slug]');
+    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current');
     if (breadcrumbEl && !breadcrumbEl.hasAttribute('data-orig-text')) {
       breadcrumbEl.setAttribute('data-orig-text', breadcrumbEl.textContent.trim());
     }
 
-    const contentEl = headlineEl ? document.querySelector('article.article-container .article-content') : null;
-    if (contentEl && !contentEl.hasAttribute('data-orig-html')) {
-      contentEl.setAttribute('data-orig-html', contentEl.innerHTML);
-    }
+    // 4. All content blocks in article-content (paragraphs, headings, lists, quotes)
+    document.querySelectorAll('article.article-container .article-content').forEach(contentEl => {
+      contentEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption').forEach(block => {
+        if (!block.hasAttribute('data-orig-text')) {
+          block.setAttribute('data-orig-text', block.innerText.trim());
+        }
+      });
+    });
 
-    document.querySelectorAll('.page-static-content').forEach(el => {
-      if (!el.hasAttribute('data-orig-html')) {
-        el.setAttribute('data-orig-html', el.innerHTML);
-      }
+    // 5. Static page blocks (About, Contact, Privacy, Terms, Disclaimer)
+    document.querySelectorAll('.page-static-content').forEach(staticEl => {
+      staticEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote').forEach(block => {
+        if (!block.hasAttribute('data-orig-text')) {
+          block.setAttribute('data-orig-text', block.innerText.trim());
+        }
+      });
     });
 
     const footerDescEl = document.querySelector('.footer-desc');
@@ -843,36 +852,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // 12. Dynamic Translation Service for CMS-created Articles
+  // 12. Full-Site Dynamic Translation Engine for Articles, Static Pages, & Cards
   let currentTranslationRequestId = 0;
+
+  const hashText = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return 'h' + Math.abs(hash);
+  };
 
   const dynamicTranslateElements = async (lang) => {
     const requestId = ++currentTranslationRequestId;
 
-    // Only run on actual news article pages with data-art-slug
-    const headlineEl = document.querySelector('article.article-container .article-headline[data-art-slug]');
-    const excerptEl = document.querySelector('article.article-container .article-subheadline[data-excerpt-slug]');
-    const contentEl = headlineEl ? document.querySelector('article.article-container .article-content') : null;
-    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current[data-art-slug]');
-
+    // --- A. IF TAMIL ('ta'), REVERT EVERYTHING TO ORIGINAL TAMIL TEXT ---
     if (lang === 'ta') {
+      const headlineEl = document.querySelector('article.article-container .article-headline');
       if (headlineEl && headlineEl.hasAttribute('data-orig-text')) {
         headlineEl.textContent = headlineEl.getAttribute('data-orig-text');
       }
+      const excerptEl = document.querySelector('article.article-container .article-subheadline');
       if (excerptEl && excerptEl.hasAttribute('data-orig-text')) {
         excerptEl.textContent = excerptEl.getAttribute('data-orig-text');
       }
+      const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current');
       if (breadcrumbEl && breadcrumbEl.hasAttribute('data-orig-text')) {
         breadcrumbEl.textContent = breadcrumbEl.getAttribute('data-orig-text');
       }
-      if (contentEl && contentEl.hasAttribute('data-orig-html')) {
-        contentEl.innerHTML = contentEl.getAttribute('data-orig-html');
-      }
-      document.querySelectorAll('.page-static-content').forEach(el => {
-        if (el.hasAttribute('data-orig-html')) {
-          el.innerHTML = el.getAttribute('data-orig-html');
+
+      // Restore article body content blocks
+      document.querySelectorAll('article.article-container .article-content p, article.article-container .article-content h2, article.article-container .article-content h3, article.article-container .article-content h4, article.article-container .article-content li, article.article-container .article-content blockquote, article.article-container .article-content figcaption').forEach(block => {
+        if (block.hasAttribute('data-orig-text')) {
+          block.textContent = block.getAttribute('data-orig-text');
         }
       });
+
+      // Restore static pages
+      document.querySelectorAll('.page-static-content p, .page-static-content h2, .page-static-content h3, .page-static-content h4, .page-static-content li, .page-static-content blockquote').forEach(block => {
+        if (block.hasAttribute('data-orig-text')) {
+          block.textContent = block.getAttribute('data-orig-text');
+        }
+      });
+
+      // Restore listing cards
+      document.querySelectorAll('[data-art-slug]').forEach(el => {
+        if (el.hasAttribute('data-orig-text')) {
+          el.textContent = el.getAttribute('data-orig-text');
+        }
+      });
+      document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
+        if (el.hasAttribute('data-orig-text')) {
+          el.textContent = el.getAttribute('data-orig-text');
+        }
+      });
+
       const footerDescEl = document.querySelector('.footer-desc');
       if (footerDescEl && footerDescEl.hasAttribute('data-orig-text')) {
         footerDescEl.textContent = footerDescEl.getAttribute('data-orig-text');
@@ -880,123 +915,172 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Detail article translation (en / ml)
+    // --- B. IF ENGLISH ('en') OR MALAYALAM ('ml') ---
+    const pendingItems = [];
+
+    // 1. Article Headline & Excerpt
+    const headlineEl = document.querySelector('article.article-container .article-headline');
+    const excerptEl = document.querySelector('article.article-container .article-subheadline');
+    const breadcrumbEl = document.querySelector('.article-breadcrumbs .breadcrumb-current');
+    const artSlug = headlineEl ? headlineEl.getAttribute('data-art-slug') : null;
+
     if (headlineEl) {
-      const artSlug = headlineEl.getAttribute('data-art-slug');
-      if (!artSlug) return;
-      const staticTitle = articlesDictionary[artSlug]?.[lang]?.title;
-      const staticTaTitle = articlesDictionary[artSlug]?.ta?.title?.trim();
-      const origTitle = (headlineEl.getAttribute('data-orig-text') || headlineEl.textContent).trim();
-
-      const needsDynamic = !staticTitle || (staticTaTitle && origTitle !== staticTaTitle);
-
-      if (needsDynamic) {
-        const origExcerpt = excerptEl ? (excerptEl.getAttribute('data-orig-text') || excerptEl.textContent).trim() : '';
-        const origContent = contentEl ? (contentEl.getAttribute('data-orig-html') || contentEl.innerHTML) : '';
-
-        const cacheKeyPrefix = `kkk_art_${artSlug || 'art'}_${lang}_`;
-        let cachedTitle = null;
-        let cachedExcerpt = null;
-        let cachedContent = null;
-        try {
-          cachedTitle = sessionStorage.getItem(cacheKeyPrefix + 'title');
-          cachedExcerpt = sessionStorage.getItem(cacheKeyPrefix + 'excerpt');
-          cachedContent = sessionStorage.getItem(cacheKeyPrefix + 'content');
-        } catch (e) {}
-
-        if (cachedTitle && (cachedExcerpt || !origExcerpt) && (cachedContent || !origContent)) {
-          if (headlineEl && cachedTitle) headlineEl.textContent = cachedTitle;
-          if (breadcrumbEl && cachedTitle) breadcrumbEl.textContent = cachedTitle.substring(0, 40) + '...';
-          if (excerptEl && cachedExcerpt) excerptEl.textContent = cachedExcerpt;
-          if (contentEl && cachedContent) contentEl.innerHTML = cachedContent;
+      const origHeadline = headlineEl.getAttribute('data-orig-text') || headlineEl.textContent.trim();
+      const staticTitle = artSlug && articlesDictionary[artSlug]?.[lang]?.title;
+      if (staticTitle) {
+        headlineEl.textContent = staticTitle;
+        if (breadcrumbEl) breadcrumbEl.textContent = staticTitle.substring(0, 40) + '...';
+      } else if (origHeadline) {
+        const cacheKey = `kkk_tr_${lang}_${hashText(origHeadline)}`;
+        let cached = null;
+        try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+        if (cached) {
+          headlineEl.textContent = cached;
+          if (breadcrumbEl) breadcrumbEl.textContent = cached.substring(0, 40) + '...';
         } else {
-          try {
-            const textsToTranslate = [];
-            if (origTitle) textsToTranslate.push(origTitle);
-            if (origExcerpt) textsToTranslate.push(origExcerpt);
-            if (origContent) textsToTranslate.push(origContent);
-
-            if (textsToTranslate.length > 0) {
-              const res = await fetch('/api/translate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  texts: textsToTranslate,
-                  targetLang: lang,
-                  sourceLang: 'ta'
-                })
-              });
-
-              if (res.ok && requestId === currentTranslationRequestId) {
-                const data = await res.json();
-                if (data && data.success && Array.isArray(data.translations)) {
-                  let idx = 0;
-                  if (origTitle && data.translations[idx]) {
-                    const transTitle = data.translations[idx++];
-                    headlineEl.textContent = transTitle;
-                    if (breadcrumbEl) breadcrumbEl.textContent = transTitle.substring(0, 40) + '...';
-                    try { sessionStorage.setItem(cacheKeyPrefix + 'title', transTitle); } catch (e) {}
-                  }
-                  if (origExcerpt && data.translations[idx]) {
-                    const transExcerpt = data.translations[idx++];
-                    if (excerptEl) excerptEl.textContent = transExcerpt;
-                    try { sessionStorage.setItem(cacheKeyPrefix + 'excerpt', transExcerpt); } catch (e) {}
-                  }
-                  if (origContent && data.translations[idx]) {
-                    const transContent = data.translations[idx++];
-                    if (contentEl) contentEl.innerHTML = transContent;
-                    try { sessionStorage.setItem(cacheKeyPrefix + 'content', transContent); } catch (e) {}
-                  }
-                }
-              }
+          pendingItems.push({
+            text: origHeadline,
+            cacheKey,
+            apply: (translated) => {
+              headlineEl.textContent = translated;
+              if (breadcrumbEl) breadcrumbEl.textContent = translated.substring(0, 40) + '...';
             }
-          } catch (err) {
-            console.warn('[KKKMedia] Article dynamic translation error:', err.message);
-          }
+          });
         }
       }
     }
 
-    // Cards translation on listing pages
-    const customCards = [];
-    document.querySelectorAll('[data-art-slug]').forEach(el => {
-      if (el.classList.contains('article-headline') || el.classList.contains('breadcrumb-current')) return;
+    if (excerptEl) {
+      const origExcerpt = excerptEl.getAttribute('data-orig-text') || excerptEl.textContent.trim();
+      const staticExcerpt = artSlug && articlesDictionary[artSlug]?.[lang]?.desc;
+      if (staticExcerpt) {
+        excerptEl.textContent = staticExcerpt;
+      } else if (origExcerpt) {
+        const cacheKey = `kkk_tr_${lang}_${hashText(origExcerpt)}`;
+        let cached = null;
+        try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+        if (cached) {
+          excerptEl.textContent = cached;
+        } else {
+          pendingItems.push({
+            text: origExcerpt,
+            cacheKey,
+            apply: (translated) => {
+              excerptEl.textContent = translated;
+            }
+          });
+        }
+      }
+    }
 
-      const slug = el.getAttribute('data-art-slug');
-      const staticTitle = articlesDictionary[slug]?.[lang]?.title;
-      const staticTaTitle = articlesDictionary[slug]?.ta?.title?.trim();
-      const origText = (el.getAttribute('data-orig-text') || el.textContent).trim();
+    // 2. Full Article Body Content Elements (paragraphs, headings, quotes, lists)
+    document.querySelectorAll('article.article-container .article-content p, article.article-container .article-content h2, article.article-container .article-content h3, article.article-container .article-content h4, article.article-container .article-content li, article.article-container .article-content blockquote, article.article-container .article-content figcaption').forEach(block => {
+      if (block.querySelector('img, iframe, video, audio')) return;
+      const text = (block.getAttribute('data-orig-text') || block.innerText).trim();
+      if (!text || text.length <= 1) return;
 
-      const needsDynamic = !staticTitle || (staticTaTitle && origText !== staticTaTitle);
-      if (needsDynamic) {
-        customCards.push({ el, origText, slug });
+      const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
+      let cached = null;
+      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+
+      if (cached) {
+        block.textContent = cached;
+      } else {
+        pendingItems.push({
+          text,
+          cacheKey,
+          apply: (translated) => {
+            block.textContent = translated;
+          }
+        });
       }
     });
 
-    if (customCards.length > 0) {
-      const textsToFetch = [];
-      const itemsToFetch = [];
+    // 3. Static Pages Content Elements (About Us, Contact, Terms, Privacy, Disclaimer)
+    document.querySelectorAll('.page-static-content p, .page-static-content h2, .page-static-content h3, .page-static-content h4, .page-static-content li, .page-static-content blockquote').forEach(block => {
+      if (block.querySelector('img, iframe, video, audio')) return;
+      const text = (block.getAttribute('data-orig-text') || block.innerText).trim();
+      if (!text || text.length <= 1) return;
 
-      customCards.forEach(item => {
-        const cardCacheKey = `kkk_card_${item.slug || 'slug'}_${lang}`;
-        let cached = null;
-        try { cached = sessionStorage.getItem(cardCacheKey); } catch (e) {}
+      const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
+      let cached = null;
+      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
 
-        if (cached) {
-          item.el.textContent = cached;
-        } else {
-          textsToFetch.push(item.origText);
-          itemsToFetch.push({ ...item, cardCacheKey });
+      if (cached) {
+        block.textContent = cached;
+      } else {
+        pendingItems.push({
+          text,
+          cacheKey,
+          apply: (translated) => {
+            block.textContent = translated;
+          }
+        });
+      }
+    });
+
+    // 4. Listing Article Cards (Titles and Excerpts on Home, Category, and Search)
+    document.querySelectorAll('[data-art-slug]').forEach(el => {
+      if (el.classList.contains('article-headline') || el.classList.contains('breadcrumb-current')) return;
+      const slug = el.getAttribute('data-art-slug');
+      const staticTitle = slug && articlesDictionary[slug]?.[lang]?.title;
+      if (staticTitle) {
+        el.textContent = staticTitle;
+      } else {
+        const text = (el.getAttribute('data-orig-text') || el.textContent).trim();
+        if (text && text.length > 2) {
+          const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
+          let cached = null;
+          try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+          if (cached) {
+            el.textContent = cached;
+          } else {
+            pendingItems.push({
+              text,
+              cacheKey,
+              apply: (translated) => { el.textContent = translated; }
+            });
+          }
         }
-      });
+      }
+    });
 
-      if (textsToFetch.length > 0) {
+    document.querySelectorAll('[data-excerpt-slug]').forEach(el => {
+      if (el.classList.contains('article-subheadline')) return;
+      const slug = el.getAttribute('data-excerpt-slug');
+      const staticExcerpt = slug && articlesDictionary[slug]?.[lang]?.desc;
+      if (staticExcerpt) {
+        el.textContent = staticExcerpt;
+      } else {
+        const text = (el.getAttribute('data-orig-text') || el.textContent).trim();
+        if (text && text.length > 2) {
+          const cacheKey = `kkk_tr_${lang}_${hashText(text)}`;
+          let cached = null;
+          try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
+          if (cached) {
+            el.textContent = cached;
+          } else {
+            pendingItems.push({
+              text,
+              cacheKey,
+              apply: (translated) => { el.textContent = translated; }
+            });
+          }
+        }
+      }
+    });
+
+    // 5. Batch Translate all pending items in chunks of 25 (fast, parallel, and resilient)
+    if (pendingItems.length > 0) {
+      const CHUNK_SIZE = 25;
+      for (let i = 0; i < pendingItems.length; i += CHUNK_SIZE) {
+        const chunk = pendingItems.slice(i, i + CHUNK_SIZE);
         try {
           const res = await fetch('/api/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              texts: textsToFetch,
+              texts: chunk.map(item => item.text),
               targetLang: lang,
               sourceLang: 'ta'
             })
@@ -1006,54 +1090,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data && data.success && Array.isArray(data.translations)) {
               data.translations.forEach((trans, idx) => {
-                const item = itemsToFetch[idx];
+                const item = chunk[idx];
                 if (item && trans) {
-                  item.el.textContent = trans;
-                  try { sessionStorage.setItem(item.cardCacheKey, trans); } catch (e) {}
+                  item.apply(trans);
+                  try { sessionStorage.setItem(item.cacheKey, trans); } catch (e) {}
                 }
               });
             }
           }
-        } catch (e) {}
-      }
-    }
-
-    // Dynamic translation for static pages content (about, contact intro, privacy, terms, disclaimer)
-    const staticContentEls = document.querySelectorAll('.page-static-content');
-    staticContentEls.forEach(async (el) => {
-      const pageSlug = el.getAttribute('data-page-slug') || 'page';
-      const origHtml = el.getAttribute('data-orig-html') || el.innerHTML;
-      if (!origHtml || !origHtml.trim()) return;
-
-      const cacheKey = `kkk_page_${pageSlug}_${lang}`;
-      let cached = null;
-      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-
-      if (cached) {
-        el.innerHTML = cached;
-      } else {
-        try {
-          const res = await fetch('/api/translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              texts: [origHtml],
-              targetLang: lang,
-              sourceLang: 'ta'
-            })
-          });
-          if (res.ok && requestId === currentTranslationRequestId) {
-            const data = await res.json();
-            if (data && data.success && Array.isArray(data.translations) && data.translations[0]) {
-              el.innerHTML = data.translations[0];
-              try { sessionStorage.setItem(cacheKey, data.translations[0]); } catch (e) {}
-            }
-          }
         } catch (err) {
-          console.warn('[KKKMedia] Static page translation error:', err.message);
+          console.warn('[KKKMedia] Dynamic translation error for chunk:', err.message);
         }
       }
-    });
+    }
   };
 
   const langSwitchBtn = document.getElementById('langSwitchBtn');
