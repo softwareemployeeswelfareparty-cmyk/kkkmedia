@@ -54,6 +54,11 @@
     })();
   </script>
 
+  <!-- Google AdSense Official Script -->
+  <% if (typeof settings !== 'undefined' && settings.adsense_enabled && settings.adsense_client_id) { %>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= settings.adsense_client_id %>" crossorigin="anonymous"></script>
+  <% } %>
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/png" href="<%= typeof settings !== 'undefined' && settings.site_favicon ? settings.site_favicon : '/images/favicon.png' %>">

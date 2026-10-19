@@ -20,8 +20,9 @@ router.get('/privacy-policy', publicController.getPrivacyPolicy);
 router.get('/terms', publicController.getTerms);
 router.get('/disclaimer', publicController.getDisclaimer);
 
-// SEO dynamic routes
+// SEO & Monetization dynamic routes
 router.get('/sitemap.xml', publicController.getSitemap);
 router.get('/robots.txt', publicController.getRobots);
+router.get('/ads.txt', publicController.getAdsTxt);
 
 module.exports = router;

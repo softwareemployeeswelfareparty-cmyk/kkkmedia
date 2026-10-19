@@ -468,6 +468,20 @@ Sitemap: ${appUrl}/sitemap.xml
   res.send(robots);
 };
 
+// Dynamic ads.txt for Google AdSense compliance
+const getAdsTxt = async (req, res, next) => {
+  try {
+    const settings = await settingsService.getSettingsMap();
+    let pubId = settings.adsense_client_id || 'ca-pub-1234567890123456';
+    pubId = pubId.replace(/^ca-/, ''); // e.g. pub-1234567890123456
+    const adsTxt = `google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`;
+    res.header('Content-Type', 'text/plain');
+    res.send(adsTxt);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getHome,
   getArticle,
@@ -481,4 +495,5 @@ module.exports = {
   getDisclaimer,
   getSitemap,
   getRobots,
+  getAdsTxt,
 };

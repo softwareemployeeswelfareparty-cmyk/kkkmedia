@@ -129,6 +129,17 @@
         <div class="form-group">
           <label class="form-label">Google AdSense Publisher ID</label>
           <input type="text" name="adsense_client_id" class="form-control" placeholder="ca-pub-1234567890123456" value="<%= settings.adsense_client_id || '' %>">
+          <div class="form-help">AdSense கணக்கில் உள்ள உங்கள் பப்ளிஷர் ஐடி (ca-pub-...).</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ad Unit Slot ID (விருப்பத்தேர்வு / Optional)</label>
+          <input type="text" name="adsense_slot_id" class="form-control" placeholder="1234567890" value="<%= settings.adsense_slot_id || '' %>">
+          <div class="form-help">குறிப்பிட்ட விளம்பர தொகுதி எண் (Ad Unit ID). காலியாக விட்டால் தானியங்கி விளம்பரங்கள் (Auto Ads) செயல்படும்.</div>
+        </div>
+
+        <div style="font-size:0.8rem; color:#64748b; background:#f1f5f9; padding:0.6rem 0.8rem; border-radius:6px; border-left:3px solid #0284c7;">
+          ℹ️ <strong>உண்மை விளம்பரங்களை இயக்க:</strong> கூகுள் அட்சென்ஸ் ஒப்புதல் (Approval) பெற்ற பின், பப்ளிஷர் ஐடியை உள்ளிட்டு சேமிக்கவும். தளம் நேரலையில் (Production Domain) இருக்கும் போது தானாகவே உண்மையான விளம்பரங்கள் தோன்றும். <a href="/ads.txt" target="_blank" style="color:#0284c7; text-decoration:underline;">ads.txt கோப்பைப் பார்க்க ↗</a>
         </div>
 
       </div>

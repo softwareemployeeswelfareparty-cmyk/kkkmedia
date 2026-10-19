@@ -43,6 +43,15 @@ describe('KKK Media — Automated Test Suite', () => {
       expect(res.text).toContain('Sitemap:');
     });
 
+    it('GET /ads.txt - should generate valid Google AdSense ads.txt', async () => {
+      const res = await request(app).get('/ads.txt');
+      expect(res.statusCode).toBe(200);
+      expect(res.headers['content-type']).toContain('text/plain');
+      expect(res.text).toContain('google.com');
+      expect(res.text).toContain('DIRECT');
+      expect(res.text).toContain('f08c47fec0942fa0');
+    });
+
     it('GET /non-existent-route-404 - should return 404 status', async () => {
       const res = await request(app).get('/non-existent-route-404');
       expect(res.statusCode).toBe(404);
