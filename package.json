@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "postinstall": "prisma generate",
+    "build": "npx prisma generate",
     "dev": "nodemon server.js",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
     "db:sync": "node scripts/sync-db.js",
