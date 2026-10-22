@@ -12,25 +12,51 @@ const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
+// Trust reverse proxies (Netlify Edge CDN and Render Web Services)
+app.set('trust proxy', 1);
+
 // Security Headers (Configured to allow Google Fonts, images, CDNs, and inline scripts for rich editor)
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://pagead2.googlesyndication.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:"],
         imgSrc: ["'self'", "data:", "https:", "http:", "blob:"],
-        frameSrc: ["'self'", "https://www.youtube.com", "https://youtube.com", "https://player.vimeo.com", "https://platform.twitter.com"],
-        connectSrc: ["'self'"],
+        frameSrc: ["'self'", "https://www.youtube.com", "https://youtube.com", "https://player.vimeo.com", "https://platform.twitter.com", "https://googleads.g.doubleclick.net"],
+        connectSrc: ["'self'", "https://*.supabase.co", "https://*.supabase.in"],
       },
     },
     crossOriginEmbedderPolicy: false,
   })
 );
 
-app.use(cors());
+// CORS configuration supporting Netlify frontend and custom domains
+const allowedOrigins = [
+  process.env.APP_URL,
+  'https://kkkmedia.netlify.app',
+  'https://kkkmedia-5.onrender.com',
+  'http://localhost:3000'
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.netlify.app') ||
+        origin.endsWith('.onrender.com')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 
 // Logging
 if (process.env.NODE_ENV !== 'test') {
@@ -53,7 +79,9 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Global locals for all views
 app.use((req, res, next) => {
-  res.locals.appUrl = process.env.APP_URL || 'http://localhost:3000';
+  const forwardedHost = req.headers['x-forwarded-host'] || req.get('host');
+  const forwardedProto = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : req.protocol);
+  res.locals.appUrl = process.env.APP_URL || `${forwardedProto}://${forwardedHost}`;
   res.locals.currentYear = new Date().getFullYear();
   res.locals.currentUser = null;
   res.locals.currentPath = req.path;
