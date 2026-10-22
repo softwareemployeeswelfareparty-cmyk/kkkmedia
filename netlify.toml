@@ -1,6 +1,9 @@
 # Netlify Edge Reverse Proxy Configuration for KKK Media
 # Connects Netlify Frontend (https://kkkmedia.netlify.app) to Render Backend
 
+[build]
+  publish = "public"
+
 [[redirects]]
   from = "/*"
   to = "https://kkkmedia-5.onrender.com/:splat"
