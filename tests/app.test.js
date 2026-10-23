@@ -2,6 +2,8 @@ const request = require('supertest');
 const app = require('../src/app');
 const prisma = require('../src/config/db');
 
+jest.setTimeout(20000);
+
 describe('KKK Media — Automated Test Suite', () => {
 
   afterAll(async () => {

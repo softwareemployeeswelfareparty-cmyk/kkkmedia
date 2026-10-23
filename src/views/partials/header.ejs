@@ -3,28 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'KKK Media — தமிழின் முன்னணி டிஜிட்டல் செய்தி தளம்' %></title>
+  <title><%= typeof title !== 'undefined' ? title : 'KKK Media — தமிழின் முன்னணி செய்தி தளம்' %></title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'KKK Media brings breaking Tamil news across Tamil Nadu politics, TVK, DMK, cinema, sports and world affairs.' %>">
+  <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'KKK Media: தமிழ்நாடு அரசியல், சினிமா, விளையாட்டு மற்றும் முக்கிய உலகச் செய்திகளை உடனுக்குடன் வழங்கும் முன்னணி செய்தி தளம்.' %>">
   <% if (typeof keywords !== 'undefined' && keywords) { %>
     <meta name="keywords" content="<%= keywords %>">
   <% } %>
-  <link rel="canonical" href="<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : appUrl + currentPath %>">
+  <link rel="canonical" href="<%= typeof canonicalUrl !== 'undefined' && !canonicalUrl.includes('localhost') ? canonicalUrl : (appUrl.replace(/\/$/, '') + (currentPath === '/' ? '' : currentPath)) %>">
   <meta name="robots" content="index, follow">
+
+  <!-- Hreflang Tags for Multilingual SEO -->
+  <link rel="alternate" hreflang="ta" href="<%= appUrl.replace(/\/$/, '') + (currentPath === '/' ? '' : currentPath) %>">
+  <link rel="alternate" hreflang="en" href="<%= appUrl.replace(/\/$/, '') + (currentPath === '/' ? '' : currentPath) %>">
+  <link rel="alternate" hreflang="x-default" href="<%= appUrl.replace(/\/$/, '') + (currentPath === '/' ? '' : currentPath) %>">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="<%= typeof article !== 'undefined' ? 'article' : 'website' %>">
-  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'KKK Media' %>">
-  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : '' %>">
-  <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : appUrl + currentPath %>">
+  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'KKK Media — தமிழின் முன்னணி செய்தி தளம்' %>">
+  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'KKK Media: தமிழ்நாடு அரசியல், சினிமா, விளையாட்டு மற்றும் முக்கிய உலகச் செய்திகளை உடனுக்குடன் வழங்கும் முன்னணி செய்தி தளம்.' %>">
+  <meta property="og:url" content="<%= typeof canonicalUrl !== 'undefined' && !canonicalUrl.includes('localhost') ? canonicalUrl : (appUrl.replace(/\/$/, '') + (currentPath === '/' ? '' : currentPath)) %>">
   <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : appUrl + '/images/kkkmedia-og.jpg' %>">
   <meta property="og:site_name" content="KKK Media">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'KKK Media' %>">
-  <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : '' %>">
+  <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'KKK Media — தமிழின் முன்னணி செய்தி தளம்' %>">
+  <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'KKK Media: தமிழ்நாடு அரசியல், சினிமா, விளையாட்டு மற்றும் முக்கிய உலகச் செய்திகளை உடனுக்குடன் வழங்கும் முன்னணி செய்தி தளம்.' %>">
   <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : appUrl + '/images/kkkmedia-og.jpg' %>">
 
   <!-- Schema.org Structured Data -->
@@ -36,6 +41,47 @@
   <% if (typeof schemaBreadcrumbs !== 'undefined') { %>
     <script type="application/ld+json">
       <%- schemaBreadcrumbs %>
+    </script>
+  <% } %>
+  <% if (typeof currentPath !== 'undefined' && currentPath === '/') { %>
+    <!-- NewsMediaOrganization & WebSite Schema on Homepage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "NewsMediaOrganization",
+          "@id": "<%= appUrl %>/#organization",
+          "name": "KKK Media",
+          "url": "<%= appUrl %>",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "<%= appUrl %>/#logo",
+            "url": "<%= appUrl %>/images/logo.png",
+            "caption": "KKK Media"
+          },
+          "sameAs": [
+            "<%= typeof settings !== 'undefined' && settings.social_facebook ? settings.social_facebook : 'https://facebook.com/kkkmediatamil' %>",
+            "<%= typeof settings !== 'undefined' && settings.social_twitter ? settings.social_twitter : 'https://x.com/kkkmediatamil' %>",
+            "<%= typeof settings !== 'undefined' && settings.social_instagram ? settings.social_instagram : 'https://instagram.com/kkkmediatamil' %>",
+            "<%= typeof settings !== 'undefined' && settings.social_youtube ? settings.social_youtube : 'https://youtube.com/@kkkmediatamil' %>",
+            "<%= typeof settings !== 'undefined' && settings.social_linkedin ? settings.social_linkedin : 'https://linkedin.com/company/kkkmedia' %>"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "<%= appUrl %>/#website",
+          "url": "<%= appUrl %>",
+          "name": "KKK Media",
+          "publisher": { "@id": "<%= appUrl %>/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "<%= appUrl %>/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
     </script>
   <% } %>
 
@@ -58,6 +104,10 @@
   <% if (typeof settings !== 'undefined' && settings.adsense_enabled && settings.adsense_client_id) { %>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= settings.adsense_client_id %>" crossorigin="anonymous"></script>
   <% } %>
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/main.css">
@@ -127,7 +177,7 @@
     <div class="container header-brand-row">
       <a href="/" class="logo-container" style="display:flex; align-items:center; gap:0.75rem; text-decoration:none;">
         <% if (typeof settings !== 'undefined' && settings.site_logo) { %>
-          <img src="<%= settings.site_logo %>" alt="KKK Media Logo" class="site-header-logo" style="width:48px; height:48px; border-radius:50%; object-fit:cover; box-shadow:0 0 10px rgba(200,16,46,0.35); flex-shrink:0;">
+          <img src="<%= settings.site_logo %>" alt="KKK Media Logo" class="site-header-logo" width="48" height="48" style="width:48px; height:48px; border-radius:50%; object-fit:cover; box-shadow:0 0 10px rgba(200,16,46,0.35); flex-shrink:0;">
         <% } else { %>
           <div class="logo-badge">KKK</div>
         <% } %>
@@ -234,7 +284,7 @@
     <div class="mobile-nav-header">
       <div class="logo-container" style="display:flex; align-items:center; gap:0.6rem;">
         <% if (typeof settings !== 'undefined' && settings.site_logo) { %>
-          <img src="<%= settings.site_logo %>" alt="KKK Media Logo" style="width:38px; height:38px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+          <img src="<%= settings.site_logo %>" alt="KKK Media Logo" width="38" height="38" style="width:38px; height:38px; border-radius:50%; object-fit:cover; flex-shrink:0;">
         <% } else { %>
           <div class="logo-badge" style="font-size:1.2rem;">KKK</div>
         <% } %>

@@ -48,9 +48,9 @@ const getHome = async (req, res, next) => {
     ]);
 
     res.render('public/index', {
-      title: `${settings.site_name} | ${settings.site_tagline}`,
-      metaDescription: settings.site_description,
-      canonicalUrl: `${process.env.APP_URL || 'http://localhost:3000'}/`,
+      title: `${settings.site_name} — தமிழின் முன்னணி செய்தி தளம்`,
+      metaDescription: settings.site_description || 'KKK Media: தமிழ்நாடு அரசியல், சினிமா, விளையாட்டு மற்றும் முக்கிய உலகச் செய்திகளை உடனுக்குடன் வழங்கும் முன்னணி செய்தி தளம்.',
+      canonicalUrl: `${res.locals.appUrl}/`,
       ogImage: featured[0]?.featuredImage || '/images/kkkmedia-og.jpg',
       settings,
       categories,

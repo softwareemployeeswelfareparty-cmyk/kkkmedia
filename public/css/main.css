@@ -76,7 +76,19 @@ ul {
   list-style: none;
 }
 
-/* Utility Containers */
+/* Utility Containers & Helpers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .container {
   width: 100%;
   max-width: var(--container-max-width);
@@ -222,6 +234,10 @@ ul {
   color: var(--charcoal-900);
   cursor: pointer;
   padding: 0.25rem;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Category Navigation Bar */
@@ -345,6 +361,8 @@ ul {
 .ad-banner-slot {
   margin: 1.5rem auto;
   text-align: center;
+  min-height: 90px;
+  contain: layout;
 }
 
 .ad-box {
@@ -352,12 +370,17 @@ ul {
   border: 1px dashed var(--grey-300);
   border-radius: var(--border-radius-sm);
   padding: 1.5rem;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
   min-width: 320px;
   max-width: 970px;
   width: 100%;
   color: var(--grey-500);
   font-size: 0.8rem;
+  box-sizing: border-box;
 }
 
 .ad-label {
@@ -398,6 +421,7 @@ ul {
 .featured-main-card img {
   width: 100%;
   height: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   transition: transform var(--transition-normal);
 }
@@ -471,6 +495,7 @@ ul {
 .side-hero-card img {
   width: 100%;
   height: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   transition: transform var(--transition-normal);
 }
@@ -1029,11 +1054,13 @@ ul {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   color: var(--white);
-  font-size: 1rem;
+  font-size: 1.1rem;
   transition: transform var(--transition-fast);
 }
 
@@ -1045,6 +1072,8 @@ ul {
 .share-btn.tw { background-color: #000000; }
 .share-btn.fb { background-color: #1877f2; }
 .share-btn.tg { background-color: #0088cc; }
+.share-btn.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.share-btn.in { background-color: #0a66c2; }
 .share-btn.cp { background-color: var(--charcoal-700); cursor: pointer; border: none; }
 
 .article-featured-image-wrap {
@@ -1420,7 +1449,9 @@ ul {
     display: none;
   }
   .mobile-menu-btn {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .category-nav-bar {
     display: none; /* Accessible through mobile drawer */
@@ -1457,8 +1488,10 @@ ul {
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid var(--grey-300);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
