@@ -111,6 +111,7 @@
                 <button type="button" class="btn-trans-mini" data-trans-target="fullContent" data-trans-dir="en2ta" title="கட்டுரையை தமிழில் மாற்று">EN ➔ தமிழ்</button>
                 <span style="border-left:1px solid var(--admin-border); height:16px; margin:0 0.2rem;"></span>
                 <!-- Quick Formatting Helper Pills -->
+                <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<p>', '</p>')" title="பத்தி (Paragraph)">¶ Para</button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<h2>', '</h2>')">H2</button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<h3>', '</h3>')">H3</button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="insertTag('<strong>', '</strong>')"><b>B</b></button>
@@ -124,6 +125,9 @@
                       style="min-height:380px; font-family:'Mukta Malar', sans-serif; font-size:1.05rem; line-height:1.7;" 
                       placeholder="செய்தியின் முழுமையான கட்டுரையை இங்கு எழுதவும். பத்திகள், தலைப்புகள் மற்றும் மேற்கோள்களை சேர்க்கலாம்..." 
                       required><%= isEdit ? article.fullContent : '' %></textarea>
+            <div class="form-help" style="margin-top:0.35rem; font-size:0.8rem; color:var(--admin-text-muted);">
+              💡 பத்திகளைப் பிரிக்க ஒரு வரி இடைவெளி (Enter 2 முறை) விடவும். வலைத்தளத்தில் பத்திகள் தானாகவே நேர்த்தியாக இடைவெளியுடன் தோன்றும்.
+            </div>
           </div>
 
         </div>

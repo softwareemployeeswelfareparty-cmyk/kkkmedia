@@ -2,6 +2,7 @@ const articleService = require('../services/articleService');
 const categoryService = require('../services/categoryService');
 const settingsService = require('../services/settingsService');
 const prisma = require('../config/db');
+const { formatArticleContent } = require('../utils/formatContent');
 
 // Helper to format date in Tamil style
 const formatTamilDate = (date) => {
@@ -170,6 +171,7 @@ const getArticle = async (req, res, next) => {
       schemaBreadcrumbs: JSON.stringify(schemaBreadcrumbs),
       formatTamilDate,
       calculateReadingTime,
+      formatArticleContent,
       currentUrl,
       activeNav: article.category.slug,
     });

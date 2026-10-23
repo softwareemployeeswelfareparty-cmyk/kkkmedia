@@ -9,6 +9,7 @@ const apiRoutes = require('./routes/apiRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
+const { formatArticleContent } = require('./utils/formatContent');
 
 const app = express();
 
@@ -21,12 +22,28 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://pagead2.googlesyndication.com"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
+          "https://pagead2.googlesyndication.com",
+          "https://translate.google.com",
+          "https://translate.googleapis.com"
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com",
+          "https://translate.googleapis.com"
+        ],
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:"],
-        imgSrc: ["'self'", "data:", "https:", "http:", "blob:"],
-        frameSrc: ["'self'", "https://www.youtube.com", "https://youtube.com", "https://player.vimeo.com", "https://platform.twitter.com", "https://googleads.g.doubleclick.net"],
-        connectSrc: ["'self'", "https://*.supabase.co", "https://*.supabase.in"],
+        imgSrc: ["'self'", "data:", "https:", "http:", "blob:", "https://www.google.com", "https://translate.google.com", "https://translate.googleapis.com"],
+        frameSrc: ["'self'", "https://www.youtube.com", "https://youtube.com", "https://player.vimeo.com", "https://platform.twitter.com", "https://googleads.g.doubleclick.net", "https://translate.google.com"],
+        connectSrc: ["'self'", "https://*.supabase.co", "https://*.supabase.in", "https://translate.googleapis.com"],
       },
     },
     crossOriginEmbedderPolicy: false,
@@ -85,6 +102,7 @@ app.use((req, res, next) => {
   res.locals.currentYear = new Date().getFullYear();
   res.locals.currentUser = null;
   res.locals.currentPath = req.path;
+  res.locals.formatArticleContent = formatArticleContent;
   next();
 });
 

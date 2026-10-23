@@ -644,12 +644,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.cookie = `googtrans=/ta/${lang}; path=/;`;
     document.cookie = `googtrans=/ta/${lang}; domain=${window.location.hostname}; path=/;`;
 
+    let retries = 0;
     const applySelect = () => {
       const select = document.querySelector('.goog-te-combo');
       if (select) {
         select.value = lang;
         select.dispatchEvent(new Event('change'));
-      } else {
+      } else if (retries < 15) {
+        retries++;
         setTimeout(applySelect, 250);
       }
     };
@@ -830,6 +832,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. All content blocks in article-content (paragraphs, headings, lists, quotes)
     document.querySelectorAll('article.article-container .article-content').forEach(contentEl => {
+      if (contentEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote').length === 0 && contentEl.textContent.trim()) {
+        const raw = contentEl.innerHTML;
+        if (!/<(p|div|h[1-6]|ul|ol|blockquote)[\s>]/i.test(raw)) {
+          const paras = raw.trim().split(/\n\s*\n+/);
+          contentEl.innerHTML = paras.map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('\n\n');
+        }
+      }
+
       const blocks = contentEl.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption');
       if (blocks.length > 0) {
         blocks.forEach(block => {
@@ -892,13 +902,23 @@ document.addEventListener('DOMContentLoaded', () => {
       let cached = null;
       try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
       if (cached) {
-        el.textContent = cached;
+        if (el.innerHTML.includes('<br>') || cached.includes('\n')) {
+          el.innerHTML = cached.replace(/\n/g, '<br>');
+        } else {
+          el.textContent = cached;
+        }
       } else {
         pendingItems.push({
           text: origText,
           cacheKey,
           targetLang,
-          apply: (trans) => { el.textContent = trans; }
+          apply: (trans) => {
+            if (el.innerHTML.includes('<br>') || trans.includes('\n')) {
+              el.innerHTML = trans.replace(/\n/g, '<br>');
+            } else {
+              el.textContent = trans;
+            }
+          }
         });
       }
     };
@@ -996,6 +1016,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      if (breadcrumbEl) {
+        const origBreadcrumb = breadcrumbEl.getAttribute('data-orig-text') || breadcrumbEl.textContent.trim();
+        const staticTitle = artSlug && articlesDictionary[artSlug]?.[lang]?.title;
+        if (staticTitle) {
+          breadcrumbEl.textContent = staticTitle.substring(0, 40) + '...';
+        } else if (origBreadcrumb) {
+          queueElement(breadcrumbEl, origBreadcrumb, lang);
+        }
+      }
+
       // 2. Full Article Body Content Elements
       document.querySelectorAll('article.article-container .article-content p, article.article-container .article-content h2, article.article-container .article-content h3, article.article-container .article-content h4, article.article-container .article-content li, article.article-container .article-content blockquote, article.article-container .article-content figcaption').forEach(block => {
         if (block.querySelector('img, iframe, video, audio')) return;
@@ -1055,7 +1085,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
           });
 
-          if (res.ok && requestId === currentTranslationRequestId) {
+          const currentLang = localStorage.getItem('kkk_lang') || document.documentElement.getAttribute('lang') || 'ta';
+          if (res.ok && currentLang === targetLanguage) {
             const data = await res.json();
             if (data && data.success && Array.isArray(data.translations)) {
               data.translations.forEach((trans, idx) => {

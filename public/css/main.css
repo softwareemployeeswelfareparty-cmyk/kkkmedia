@@ -1103,10 +1103,16 @@ ul {
   font-size: 1.15rem;
   line-height: 1.85;
   color: #212529;
+  word-break: break-word;
 }
 
 .article-content p {
   margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.article-content p:empty {
+  display: none;
 }
 
 .article-content p.lead {

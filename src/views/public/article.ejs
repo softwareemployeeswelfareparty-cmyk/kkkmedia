@@ -83,7 +83,7 @@
 
       <!-- Article Rich Content -->
       <div class="article-content">
-        <%- article.fullContent %>
+        <%- typeof formatArticleContent === 'function' ? formatArticleContent(article.fullContent) : article.fullContent %>
       </div>
 
       <!-- Tags Pills -->
